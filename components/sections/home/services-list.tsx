@@ -1,37 +1,36 @@
-import { complementaryServices, coreServices, serviceHref } from "@/content/services";
+import { complementaryServices, coreServices } from "@/content/services";
+import { servicesIntro } from "@/content/home";
+import { talkHref } from "@/content/site";
 import { Section } from "@/components/layout/section";
-import { SectionHeading } from "@/components/ui/section-heading";
-import { ServiceRow } from "@/components/ui/service-row";
+import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
+import { ServicesShowcase } from "./services-showcase";
 
-/** Horizontal service list — four core capabilities, then two complementary services. */
+/** Section 4 — four interactive service rows. Rows link to their detail page once published, otherwise to the conversation. */
 export function ServicesList() {
+  const rows = coreServices.map((s) => ({
+    ...s,
+    href: s.detailPublished ? `/services/${s.slug}` : talkHref,
+    linkLabel: s.detailPublished ? `Learn more about ${s.title}` : `Discuss ${s.title} with us`,
+  }));
   return (
     <Section id="services" tone="muted" aria-labelledby="services-heading">
-      <div className="grid-site mb-12 gap-y-6 lg:mb-16">
-        <SectionHeading
-          id="services-heading"
-          className="col-span-full lg:col-span-7"
-          eyebrow="What we build"
-          heading="Four ways we help founders ship."
-        />
-        <p className="text-body col-span-full self-end text-ink-muted lg:col-span-4 lg:col-start-9">
-          Each engagement covers product thinking and engineering together, so the first version is designed and built as one piece of work.
-        </p>
-      </div>
-      <div>
-        {coreServices.map((s, i) => (
-          <Reveal key={s.slug} delay={i * 0.06}>
-            <ServiceRow service={s} href={serviceHref(s)} />
-          </Reveal>
+      <Reveal className="mb-12 lg:mb-16">
+        <Eyebrow className="mb-4">{servicesIntro.eyebrow}</Eyebrow>
+        <h2 id="services-heading" className="text-h2 max-w-[18ch]">
+          {servicesIntro.heading}
+        </h2>
+      </Reveal>
+      <ServicesShowcase services={rows} />
+      <p className="text-body-sm mt-10 flex flex-wrap gap-x-3 gap-y-1 text-ink-muted">
+        <span className="font-semibold text-ink">{servicesIntro.alsoLabel}:</span>
+        {complementaryServices.map((s, i) => (
+          <span key={s.slug}>
+            {s.title}
+            {i < complementaryServices.length - 1 ? <span aria-hidden className="ml-3 text-line-strong">/</span> : null}
+          </span>
         ))}
-      </div>
-      <h3 className="text-eyebrow mt-16 mb-4 text-ink-muted">Complementary services</h3>
-      <div className="border-b border-line">
-        {complementaryServices.map((s) => (
-          <ServiceRow key={s.slug} service={s} href={serviceHref(s)} headingLevel="h4" />
-        ))}
-      </div>
+      </p>
     </Section>
   );
 }

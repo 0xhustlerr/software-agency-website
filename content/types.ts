@@ -21,6 +21,8 @@ export interface Service {
   tier: ServiceTier;
   /** One or two sentences: what the founder receives. */
   summary: string;
+  /** One-sentence benefit used on the homepage. */
+  benefit: string;
   /** Short scope tags (3–4). */
   tags: string[];
   /**
@@ -33,6 +35,26 @@ export interface Service {
 export interface ProcessStep {
   title: string;
   body: string;
+}
+
+export interface Pillar {
+  title: string;
+  body: string;
+}
+
+/**
+ * An original product concept used to show capability. Never client work:
+ * always rendered with a visible concept label and no case-study link.
+ */
+export interface ProductConcept {
+  slug: string;
+  name: string;
+  category: string;
+  /** The problem the concept explores. */
+  challenge: string;
+  /** What the concept demonstrates we can build. */
+  built: string;
+  tags: string[];
 }
 
 export type PublishStatus = "draft" | "approved";
@@ -54,6 +76,12 @@ export interface Project {
   title: string;
   summary: string;
   services: ServiceSlug[];
+  industry: string;
+  /** The business challenge, in a sentence or two. */
+  challenge: string;
+  /** What was built. */
+  built: string;
+  tags: string[];
   /** Real, verifiable outcomes only. */
   outcomes: { label: string; value: string }[];
   cover: ProjectMedia;
@@ -102,4 +130,6 @@ export interface Metric {
 export interface NavItem {
   label: string;
   href: string;
+  /** Homepage section this item points at, for the scroll-position indicator. */
+  sectionId?: string;
 }

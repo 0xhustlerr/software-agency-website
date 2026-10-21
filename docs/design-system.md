@@ -90,15 +90,17 @@ Focus: `focus-ring` (2px ground-colour gap + 2px `accent-ink`) on every interact
 
 | Route | Status |
 | --- | --- |
-| `/` | Built (skeleton with real copy) |
-| `/services`, `/services/[slug]` | Next — rows link only when `detailPublished` is true |
-| `/work`, `/work/[slug]` | Hidden until a project is approved with client sign-off |
-| `/about` | Next |
-| `/insights`, `/insights/[slug]` | Hidden until the first article is approved |
-| `/contact` | Next — form needs a delivery destination |
-| `/privacy` | Needs the policy text |
+| `/` | Built — full homepage |
+| `/services`, `/services/[slug]` | Next. Until published, links fall back to `/#services` |
+| `/work`, `/work/[slug]` | Until a case study is approved (with client sign-off), links fall back to `/#work` |
+| `/about` | Until published, links fall back to `/#approach` |
+| `/insights`, `/insights/[slug]` | Hidden from navigation until the first article is approved |
+| `/contact` | Until published, links fall back to `/#contact` (final CTA) |
+| `/privacy` | Footer link appears once the policy is written and the page is published |
 
-Homepage order: Hero (dark) → Positioning → Services (muted) → Product presentation → Process (muted) → Statement (dark) → Engineering foundations\* → Work\* → FAQ\* → Final CTA (dark). \*Pending content; hidden in production until supplied.
+All inner-page links go through `content/routes.ts`; flip `published` when a page ships.
+
+Homepage order: Header (sticky, dark) → Hero (dark, product concept composition) → Positioning (white) → Services (off-white, interactive rows) → Selected work (white; labelled concept + "taking shape" until real work is approved) → Journey (off-white, scroll-linked timeline) → Engineering (dark) → How we work together (white) → FAQ (off-white) → Final CTA (dark) → Footer (white).
 
 ## Code structure
 
@@ -106,12 +108,15 @@ Homepage order: Hero (dark) → Positioning → Services (muted) → Product pre
 app/                 routes, layout, fonts, globals.css (tokens), sitemap, robots
 components/layout/   SiteHeader, MobileNav, SiteFooter, Section, Container, Wordmark
 components/sections/ page sections (home/…)
-components/ui/       Button, Eyebrow, SectionHeading, ServiceRow, ProcessRail,
+components/ui/       Button, Eyebrow, SectionHeading, ServiceRow, ProcessRail, Accordion,
                      IllustrativeFrame, PendingContent, TextField, NodeGrid, Tag
-components/motion/   Reveal
-content/             typed copy and data (types.ts, site, navigation, services,
-                     process, home, projects, faqs, insights)
+components/illustrations/  DOM/SVG product concepts (Relay), service vignettes,
+                     architecture diagram, collaboration board — all labelled
+components/motion/   Reveal, ScaledCanvas, MotionProvider (reduced motion)
+hooks/               usePrefersReducedMotion (hydration-safe)
+content/             typed copy and data (types.ts, routes, site, navigation, services,
+                     process, home, concepts, projects, faqs, insights)
 lib/                 cn(), flags
 ```
 
-Server Components by default; client components only for the mobile menu (Radix Dialog) and scroll reveals.
+Server Components by default; client components only for the header (scroll state, active section), mobile menu (Radix Dialog), services showcase, hero pointer motion, journey progress, FAQ accordion and scroll reveals.

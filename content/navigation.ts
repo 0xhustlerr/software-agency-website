@@ -1,17 +1,52 @@
 import type { NavItem } from "./types";
-import { approvedProjects } from "./projects";
-import { publishedInsights } from "./insights";
+import { href } from "./routes";
+import { services } from "./services";
 import { faqs } from "./faqs";
+import { projectStartHref, emailHref } from "./site";
 
-/**
- * Only destinations with complete content are listed. Until the inner pages
- * exist, items point at homepage sections; swap to routes as pages ship.
- */
+function item(label: string, to: string | null, sectionId?: string): NavItem[] {
+  return to ? [{ label, href: to, sectionId }] : [];
+}
+
+/** Header links. Items without a page or a homepage section are left out (Insights until the first article). */
 export const mainNav: NavItem[] = [
-  { label: "Services", href: "/#services" },
-  { label: "Process", href: "/#process" },
-  { label: "Approach", href: "/#approach" },
-  ...(approvedProjects.length ? [{ label: "Work", href: "/work" }] : []),
-  ...(publishedInsights.length ? [{ label: "Insights", href: "/insights" }] : []),
-  ...(faqs.length ? [{ label: "FAQ", href: "/#faq" }] : []),
+  ...item("Services", href("services"), "services"),
+  ...item("Work", href("work"), "work"),
+  ...item("About", href("about"), "approach"),
+  ...item("Insights", href("insights")),
 ];
+
+export const footerNav: { title: string; items: NavItem[] }[] = [
+  {
+    title: "Company",
+    items: [
+      ...item("About", href("about")),
+      ...item("Work", href("work")),
+      ...item("How we work", "/#collaboration"),
+      ...item("Process", "/#process"),
+    ],
+  },
+  {
+    title: "Services",
+    items: services
+      .filter((s) => s.tier === "core")
+      .map((s) => ({ label: s.title, href: s.detailPublished ? `/services/${s.slug}` : "/#services" })),
+  },
+  {
+    title: "Resources",
+    items: [
+      ...item("Insights", href("insights")),
+      ...(faqs.length ? item("FAQ", "/#faq") : []),
+      ...item("Engineering", "/#engineering"),
+    ],
+  },
+  {
+    title: "Contact",
+    items: [
+      ...item("Start a project", projectStartHref ?? href("contact")),
+      ...item("Email us", emailHref),
+    ],
+  },
+];
+
+export const legalNav: NavItem[] = [...item("Privacy Policy", href("privacy"))];

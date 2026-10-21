@@ -7,6 +7,7 @@ export const services: Service[] = [
     index: "01",
     title: "MVP Development",
     tier: "core",
+    benefit: "Turn your idea into a focused, testable first product.",
     summary:
       "Define, design, build, and launch a focused first version — scoped to test what matters most with real users.",
     tags: ["Scoping", "Product design", "Build", "Launch"],
@@ -15,8 +16,9 @@ export const services: Service[] = [
   {
     slug: "custom-software",
     index: "02",
-    title: "Custom Software Development",
+    title: "Custom Software",
     tier: "core",
+    benefit: "Build software around your workflows and business goals.",
     summary:
       "Bespoke web applications and software platforms shaped around how your business actually works.",
     tags: ["Web applications", "Platforms", "Integrations"],
@@ -25,8 +27,9 @@ export const services: Service[] = [
   {
     slug: "saas-development",
     index: "03",
-    title: "SaaS Product Development",
+    title: "SaaS Platforms",
     tier: "core",
+    benefit: "Create scalable platforms designed for recurring users and growth.",
     summary:
       "Multi-user platforms with subscriptions, dashboards, and the integrations your customers expect.",
     tags: ["Accounts and roles", "Subscriptions", "Dashboards", "Integrations"],
@@ -35,8 +38,9 @@ export const services: Service[] = [
   {
     slug: "ai-development",
     index: "04",
-    title: "AI Product Development",
+    title: "AI-Powered Products",
     tier: "core",
+    benefit: "Integrate intelligent capabilities into useful applications.",
     summary:
       "AI-powered applications, automation, and intelligent workflows built into products people already use.",
     tags: ["AI features", "Automation", "Workflows"],
@@ -47,6 +51,7 @@ export const services: Service[] = [
     index: "05",
     title: "Product Design and Prototyping",
     tier: "complementary",
+    benefit: "Shape the experience before it is built.",
     summary: "UX and UI, workflows, wireframes, and interactive prototypes you can put in front of users.",
     tags: [],
     detailPublished: false,
@@ -56,6 +61,7 @@ export const services: Service[] = [
     index: "06",
     title: "Product Scaling and Engineering Support",
     tier: "complementary",
+    benefit: "Keep a growing product fast, stable, and moving.",
     summary: "Architecture improvement, integrations, cloud infrastructure, and ongoing product iteration.",
     tags: [],
     detailPublished: false,

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import * as m from "motion/react-m";
 import type { ReactNode } from "react";
 
 interface RevealProps {
@@ -13,14 +13,12 @@ interface RevealProps {
 
 const ease = [0.2, 0.7, 0.2, 1] as const;
 
-/** Rise-and-fade on first scroll into view. Reduced motion renders the end state. */
+/**
+ * Rise-and-fade on first scroll into view. Same markup on server and client;
+ * under reduced motion MotionProvider drops the rise and keeps a short fade.
+ */
 export function Reveal({ children, delay = 0, className, as = "div" }: RevealProps) {
-  const reduce = useReducedMotion();
-  const Tag = as === "li" ? motion.li : motion.div;
-  if (reduce) {
-    const Plain = as;
-    return <Plain className={className}>{children}</Plain>;
-  }
+  const Tag = as === "li" ? m.li : m.div;
   return (
     <Tag
       className={className}

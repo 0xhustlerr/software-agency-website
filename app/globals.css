@@ -299,3 +299,30 @@
     stroke-dashoffset: 0;
   }
 }
+
+/* ---------- Mobile navigation panel (Radix data-state) ---------- */
+
+@keyframes nm-fade-in {
+  from { opacity: 0; }
+}
+@keyframes nm-fade-out {
+  to { opacity: 0; }
+}
+@keyframes nm-panel-in {
+  from { opacity: 0; transform: translateY(-12px); }
+}
+@keyframes nm-panel-out {
+  to { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes nm-item-in {
+  from { opacity: 0; transform: translateY(6px); }
+}
+.nm-overlay[data-state="open"] { animation: nm-fade-in 220ms var(--ease-studio); }
+.nm-overlay[data-state="closed"] { animation: nm-fade-out 160ms ease-in; }
+.nm-panel[data-state="open"] { animation: nm-panel-in 280ms var(--ease-studio); }
+.nm-panel[data-state="closed"] { animation: nm-panel-out 160ms ease-in; }
+.nm-panel[data-state="open"] .nm-panel-item { animation: nm-item-in 320ms var(--ease-studio) both; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}

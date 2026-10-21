@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "primary" | "secondary" | "ghost";
+type Variant = "primary" | "secondary" | "ghost" | "contrast";
 type Size = "md" | "sm";
 
 const base =
@@ -12,6 +12,8 @@ const base =
 const variants: Record<Variant, string> = {
   primary: "rounded-sm bg-action text-on-action hover:bg-action-hover",
   secondary: "rounded-sm border border-line-strong text-ink hover:border-ink",
+  /** Ink fill — the header's "Let's Talk", so it never competes with a section's mint primary. */
+  contrast: "rounded-sm bg-ink text-surface hover:bg-accent hover:text-on-accent",
   ghost:
     "rounded-xs px-0 text-ink underline decoration-line-strong decoration-1 underline-offset-[6px] hover:decoration-ink",
 };
