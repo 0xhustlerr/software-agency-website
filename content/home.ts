@@ -5,6 +5,8 @@ import type { Pillar } from "./types";
 export const hero = {
   eyebrow: "From first idea to first users",
   headline: "Your idea deserves great engineering.",
+  /** Art-directed line breaks, kept at every width (the type scales to fit). */
+  headlineLines: ["Your idea", "deserves great", "engineering."],
   lead: "We partner with ambitious founders to design, build, and launch software products that are ready for the real world.",
   capabilities: ["MVPs", "SaaS Platforms", "AI Products", "Custom Software"],
 };
@@ -15,7 +17,7 @@ export const positioning = {
   body: "Building a startup takes more than writing code. We help you shape the right product, make smart technical decisions, and build a foundation that supports what comes next.",
   pillars: [
     {
-      title: "Product-first thinking",
+      title: "Product\u2011first thinking",
       body: "We start with your users and the problem worth solving, then decide what to build — and what to leave out.",
     },
     {
@@ -31,7 +33,7 @@ export const positioning = {
 
 export const servicesIntro = {
   eyebrow: "What we build",
-  heading: "From first concept to full-scale product.",
+  heading: "From first concept to full\u2011scale product.", // non-breaking hyphen: never "full- / scale"
   alsoLabel: "Also available",
 };
 
@@ -57,8 +59,8 @@ export const engineering = {
   themes: [
     { title: "Maintainable code", body: "Readable, reviewed, and documented, so any good engineer — including your future team — can pick it up." },
     { title: "Secure application design", body: "Authentication, permissions, and data protection designed in from the start, not added after launch." },
-    { title: "API-first integration", body: "Clear interfaces that let your product connect to payments, CRMs, and the tools your customers already use." },
-    { title: "Cloud-ready infrastructure", body: "Environments you can reproduce, deploy with confidence, and scale when usage grows." },
+    { title: "API\u2011first integration", body: "Clear interfaces that let your product connect to payments, CRMs, and the tools your customers already use." },
+    { title: "Cloud\u2011ready infrastructure", body: "Environments you can reproduce, deploy with confidence, and scale when usage grows." },
     { title: "Scalable system architecture", body: "Simple where it can be, flexible where it needs to be — sized for the next stage, not a hypothetical one." },
     { title: "Quality assurance and automated delivery", body: "Automated tests and deployment pipelines that catch problems before your users do." },
   ] satisfies Pillar[],
@@ -81,7 +83,7 @@ export const collaboration = {
     { title: "Transparent milestones", body: "Clear goals for each stage, with progress you can see and test." },
     { title: "Shared product priorities", body: "One backlog, ordered together against what matters most to your business." },
     { title: "Practical feedback cycles", body: "Regular reviews of working software, so feedback changes the product early." },
-    { title: "Long-term maintainability", body: "Documentation and handover built in, so the product never depends on us alone." },
+    { title: "Long\u2011term maintainability", body: "Documentation and handover built in, so the product never depends on us alone." },
     { title: "Flexible collaboration", body: "Engagements shaped around your stage, team, and how you prefer to work." },
   ] satisfies Pillar[],
 };
@@ -94,6 +96,7 @@ export const faqIntro = {
 
 export const finalCta = {
   heading: "Let's turn your idea into something real.",
+  headingLines: ["Let\u2019s turn", "your idea into", "something real."],
   body: "Tell us what you're building. We'll explore your goals, challenges, and the best way to move forward.",
   primary: "Start a Project",
   emailPrompt: "Prefer email?",

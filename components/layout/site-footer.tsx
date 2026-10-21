@@ -13,7 +13,8 @@ async function CopyrightYear() {
 
 function FooterLink({ href, children }: { href: string; children: React.ReactNode }) {
   const external = /^https?:/.test(href);
-  const cls = "text-body-sm rounded-xs text-ink-muted transition-colors duration-200 hover:text-ink";
+  // Phones: 10px vertical padding brings each link to a 44px touch target; the list gap shrinks to match.
+  const cls = "text-body-sm -my-2.5 inline-block rounded-xs py-2.5 text-ink-muted transition-colors duration-200 hover:text-ink sm:my-0 sm:py-0";
   if (href.startsWith("mailto:")) return <a href={href} className={cls}>{children}</a>;
   return external ? (
     <a href={href} className={cls} target="_blank" rel="noopener noreferrer">

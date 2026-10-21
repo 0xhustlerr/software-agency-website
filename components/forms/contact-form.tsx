@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { startTransition, useActionState, useEffect, useId, useRef, type FormEvent } from "react";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, CircleAlert } from "lucide-react";
 import { submitInquiry } from "@/app/contact/actions";
 import type { InquiryField, InquiryState } from "@/lib/contact/schema";
 import { budgetRanges, interestedServices, projectStages, startTimeframes } from "@/content/pages/contact";
@@ -22,7 +22,7 @@ interface ContactFormProps {
 const initial: InquiryState = { status: "idle" };
 
 const inputCls =
-  "w-full rounded-sm border border-line-strong bg-surface-raised px-4 font-sans text-base leading-6 text-ink placeholder:text-ink-muted transition-colors duration-200 hover:border-ink-muted focus:border-ink focus-visible:focus-ring disabled:cursor-not-allowed disabled:opacity-60 aria-invalid:border-danger";
+  "w-full rounded-sm border border-line-strong bg-surface-raised px-4 font-sans text-base leading-6 text-ink placeholder:text-ink-muted transition-[border-color,box-shadow] duration-200 hover:border-ink-muted focus:border-ink focus-visible:focus-ring disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-60 aria-invalid:border-danger aria-invalid:shadow-[inset_3px_0_0_var(--danger)]";
 
 export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactFormProps) {
   const [state, action, pending] = useActionState(submitInquiry, initial);
@@ -55,9 +55,11 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
 
   if (state.status === "sent") {
     return (
-      <div role="status" className="rounded-md border border-line bg-surface-raised p-6 shadow-frame sm:p-10">
+      <div role="status" className="nm-enter rounded-md border border-line bg-surface-raised p-6 shadow-frame sm:p-10">
         <span aria-hidden className="grid size-10 place-items-center rounded-full bg-accent text-on-accent">
-          <Check className="size-5" strokeWidth={2} />
+          <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12.5l4.5 4.5L19 7.5" pathLength={1} className="nm-draw" style={{ ["--reveal-delay" as string]: "250ms" }} />
+          </svg>
         </span>
         <h2 ref={doneRef} tabIndex={-1} className="text-h2 mt-5 outline-none">
           Thanks — we’ve received your message.
@@ -101,8 +103,9 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
 
   const err = (f: InquiryField) =>
     errors[f] ? (
-      <p id={id(`${f}-err`)} className="text-small text-danger">
-        {errors[f]}
+      <p id={id(`${f}-err`)} className="text-small flex items-start gap-1.5 text-danger">
+        <CircleAlert aria-hidden className="mt-[3px] size-3.5 shrink-0" strokeWidth={2} />
+        <span>{errors[f]}</span>
       </p>
     ) : null;
 
@@ -149,21 +152,21 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
           <label htmlFor={id("name")} className="text-label">
             Full name <span aria-hidden className="font-normal text-ink-muted">*</span>
           </label>
-          <input id={id("name")} name="name" type="text" autoComplete="name" required defaultValue={values.name} disabled={disabled} aria-invalid={errors.name ? true : undefined} aria-describedby={errors.name ? id("name-err") : undefined} className={cn(inputCls, "h-12")} />
+          <input id={id("name")} name="name" type="text" autoComplete="name" autoCapitalize="words" enterKeyHint="next" required defaultValue={values.name} disabled={disabled} aria-invalid={errors.name ? true : undefined} aria-describedby={errors.name ? id("name-err") : undefined} className={cn(inputCls, "h-12")} />
           {err("name")}
         </div>
         <div className="grid gap-2">
           <label htmlFor={id("email")} className="text-label">
             Work email <span aria-hidden className="font-normal text-ink-muted">*</span>
           </label>
-          <input id={id("email")} name="email" type="email" autoComplete="email" required placeholder="you@company.com" defaultValue={values.email} disabled={disabled} aria-invalid={errors.email ? true : undefined} aria-describedby={errors.email ? id("email-err") : undefined} className={cn(inputCls, "h-12")} />
+          <input id={id("email")} name="email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" spellCheck={false} enterKeyHint="next" required placeholder="you@company.com" defaultValue={values.email} disabled={disabled} aria-invalid={errors.email ? true : undefined} aria-describedby={errors.email ? id("email-err") : undefined} className={cn(inputCls, "h-12")} />
           {err("email")}
         </div>
         <div className="grid gap-2 sm:col-span-2">
           <label htmlFor={id("company")} className="text-label">
             Company or startup name <span className="font-normal text-ink-muted">(optional)</span>
           </label>
-          <input id={id("company")} name="company" type="text" autoComplete="organization" defaultValue={values.company} disabled={disabled} aria-invalid={errors.company ? true : undefined} className={cn(inputCls, "h-12")} />
+          <input id={id("company")} name="company" type="text" autoComplete="organization" enterKeyHint="next" defaultValue={values.company} disabled={disabled} aria-invalid={errors.company ? true : undefined} className={cn(inputCls, "h-12")} />
           {err("company")}
         </div>
         {choice("stage", "Project stage", projectStages)}
@@ -236,8 +239,12 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
         <button
           type="submit"
           disabled={disabled}
-          aria-disabled={disabled}
-          className="group inline-flex h-12 items-center gap-2 rounded-sm bg-action px-6 text-[0.9375rem] font-semibold text-on-action transition-colors duration-200 hover:bg-action-hover disabled:cursor-not-allowed disabled:opacity-40"
+          aria-busy={pending || undefined}
+          className={cn(
+            "group inline-flex h-12 w-full items-center justify-center gap-2 rounded-sm bg-action px-6 text-[0.9375rem] font-semibold text-on-action transition-[background-color,transform,box-shadow] duration-200 ease-studio hover:bg-action-hover active:translate-y-px active:shadow-[inset_0_2px_0_rgb(0_0_0/0.12)] min-[420px]:w-auto",
+            // Loading keeps full strength (it is working, not unavailable); only "not configured" fades.
+            pending ? "cursor-progress" : "disabled:cursor-not-allowed disabled:opacity-40",
+          )}
         >
           {pending ? (
             <>

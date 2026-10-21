@@ -33,7 +33,7 @@ export function Section({
       id={id}
       data-theme={theme}
       className={cn(
-        "relative scroll-mt-16 overflow-hidden",
+        "relative scroll-mt-(--header-h) overflow-hidden",
         tone === "muted" ? "bg-surface-muted" : "bg-surface",
         spacing === "lg" ? "section-y-lg" : spacing === "default" ? "section-y" : null,
         className,

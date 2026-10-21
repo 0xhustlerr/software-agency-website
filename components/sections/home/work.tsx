@@ -16,7 +16,13 @@ import { cn } from "@/lib/utils";
 /** The large image area of a feature: a navy stage with a blueprint grid. */
 function Stage({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div data-theme="dark" className={cn("relative overflow-hidden rounded-md bg-surface", className)}>
+    <div
+      data-theme="dark"
+      className={cn(
+        "relative overflow-hidden rounded-md bg-surface shadow-frame after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_0_0_1px_rgb(255_255_255/0.06)]",
+        className,
+      )}
+    >
       <svg aria-hidden className="absolute inset-0 h-full w-full">
         <defs>
           <pattern id="stage-grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -81,7 +87,15 @@ function ConceptFeature({ concept }: { concept: ProductConcept }) {
   return (
     <Reveal as="li" className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
       <figure className="m-0 lg:col-span-8">
-        <Stage>
+        {/* Phones: 4:3 crop on the dashboard so its interface stays legible. */}
+        <Stage className="sm:hidden">
+          <ScaledCanvas width={480} height={360} className="relative">
+            <div aria-hidden className="absolute top-[32px] left-[28px] w-[560px]">
+              <RelayDashboard />
+            </div>
+          </ScaledCanvas>
+        </Stage>
+        <Stage className="hidden sm:block">
           <ScaledCanvas width={760} height={580} className="relative">
             <div aria-hidden className="absolute top-[64px] left-[88px] w-[560px]">
               <RelayDashboard />

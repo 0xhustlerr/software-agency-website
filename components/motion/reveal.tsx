@@ -1,7 +1,5 @@
-"use client";
-
-import * as m from "motion/react-m";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface RevealProps {
   children: ReactNode;
@@ -9,24 +7,24 @@ interface RevealProps {
   delay?: number;
   className?: string;
   as?: "div" | "li";
+  /**
+   * view  — rise and fade the first time it scrolls into view (default).
+   * enter — plays once on first paint, for content above the fold (hero, page headings).
+   */
+  mode?: "view" | "enter";
 }
 
-const ease = [0.2, 0.7, 0.2, 1] as const;
-
 /**
- * Rise-and-fade on first scroll into view. Same markup on server and client;
- * under reduced motion MotionProvider drops the rise and keeps a short fade.
+ * Progressive-enhancement reveal. The markup is fully visible by default:
+ * - "view" is hidden only once JavaScript has run (html.js), and RevealController
+ *   reveals it on scroll. If the controller never starts, a CSS failsafe shows it.
+ * - "enter" is a pure CSS animation, so it never depends on JavaScript.
+ * Reduced motion and print show everything immediately. See globals.css → Reveal.
  */
-export function Reveal({ children, delay = 0, className, as = "div" }: RevealProps) {
-  const Tag = as === "li" ? m.li : m.div;
+export function Reveal({ children, delay = 0, className, as: Tag = "div", mode = "view" }: RevealProps) {
+  const style = delay ? ({ "--reveal-delay": `${Math.round(delay * 1000)}ms` } as CSSProperties) : undefined;
   return (
-    <Tag
-      className={className}
-      initial={{ opacity: 0, y: 14 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "0px 0px -10% 0px" }}
-      transition={{ duration: 0.55, ease, delay }}
-    >
+    <Tag className={cn(mode === "enter" ? "nm-enter" : undefined, className)} data-reveal={mode === "view" ? "" : undefined} style={style}>
       {children}
     </Tag>
   );

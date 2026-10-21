@@ -3,14 +3,13 @@
 import * as m from "motion/react-m";
 import { useMotionValue, useSpring, useTransform, type MotionValue } from "motion/react";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
-import type { ReactNode, PointerEvent } from "react";
+import type { CSSProperties, ReactNode, PointerEvent } from "react";
 import { ScaledCanvas } from "@/components/motion/scaled-canvas";
 import { RelayDashboard, RelayPhone, RelayWorkflow } from "@/components/illustrations/relay-concept";
 
 /** Design canvas; the whole composition scales to its container. */
 const W = 640;
 const H = 560;
-const ease = [0.2, 0.7, 0.2, 1] as const;
 
 function Layer({
   children,
@@ -18,28 +17,30 @@ function Layer({
   px,
   py,
   delay,
-  from,
+  enter,
   className,
 }: {
   children: ReactNode;
   depth: number;
   px: MotionValue<number>;
   py: MotionValue<number>;
+  /** Entrance delay (ms). */
   delay: number;
-  from: { x?: number; y?: number };
+  /** CSS entrance: rise from below, or slide in from the right. */
+  enter: { rise: number } | { fromX: number };
   className: string;
 }) {
   const x = useTransform(px, (v) => v * depth);
   const y = useTransform(py, (v) => v * depth);
+  const style =
+    "rise" in enter
+      ? ({ "--reveal-delay": `${delay}ms`, "--rise": `${enter.rise}px`, "--enter-dur": "700ms" } as CSSProperties)
+      : ({ "--reveal-delay": `${delay}ms`, "--from-x": `${enter.fromX}px`, "--enter-dur": "700ms" } as CSSProperties);
   return (
     <m.div className={className} style={{ x, y }}>
-      <m.div
-        initial={{ opacity: 0, x: from.x ?? 0, y: from.y ?? 0 }}
-        animate={{ opacity: 1, x: 0, y: 0 }}
-        transition={{ duration: 0.9, ease, delay }}
-      >
+      <div className={"rise" in enter ? "nm-enter" : "nm-enter-x"} style={style}>
         {children}
-      </m.div>
+      </div>
     </m.div>
   );
 }
@@ -67,16 +68,20 @@ export function HeroVisual() {
     my.set(0);
   }
 
-  // Same markup either way; reduced motion only shortens the draw to nothing.
-  const draw = {
-    initial: { pathLength: 0 },
-    animate: { pathLength: 1 },
-    transition: reduce ? { duration: 0 } : { duration: 1.4, ease, delay: 0.9 },
-  };
+  const d = (ms: number) => ({ "--reveal-delay": `${ms}ms` }) as CSSProperties;
 
   return (
     <figure className="relative m-0" aria-label="Product concept illustration: an operations dashboard, a mobile app view and an automation workflow for a sample product called Relay.">
-      <div onPointerMove={onMove} onPointerLeave={onLeave} aria-hidden>
+      {/* Phones: a 4:3 crop on the dashboard alone, larger and legible; side cards are left out. */}
+      <div aria-hidden className="sm:hidden">
+        <ScaledCanvas width={440} height={330} className="overflow-hidden rounded-md border border-line">
+          <div className="absolute inset-0 bg-[linear-gradient(var(--line)_1px,transparent_1px),linear-gradient(90deg,var(--line)_1px,transparent_1px)] bg-size-[40px_40px] opacity-60" />
+          <div className="nm-enter absolute top-[28px] left-[24px] w-[520px]" style={{ ...d(360), "--enter-dur": "700ms" } as CSSProperties}>
+            <RelayDashboard />
+          </div>
+        </ScaledCanvas>
+      </div>
+      <div onPointerMove={onMove} onPointerLeave={onLeave} aria-hidden className="hidden sm:block">
         <ScaledCanvas width={W} height={H}>
           {/* blueprint grid */}
           <svg className="absolute inset-0" width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
@@ -92,24 +97,23 @@ export function HeroVisual() {
                 <rect width={W} height={H} fill="url(#hero-fade)" />
               </mask>
             </defs>
-            <rect width={W} height={H} fill="url(#hero-grid)" mask="url(#hero-mask)" />
-            {/* connectors: workflow → dashboard → phone */}
-            <m.path d="M560 128 V 200 H 520" fill="none" className="stroke-accent-ink" strokeWidth="1.25" {...draw} />
-            <m.path d="M80 440 H 40 V 300 H 72" fill="none" className="stroke-accent-ink" strokeWidth="1.25" {...draw} />
-            <circle cx="560" cy="128" r="3.5" className="fill-surface stroke-accent-ink" strokeWidth="1.25" />
-            <circle cx="520" cy="200" r="4.5" className="fill-accent" />
-            <circle cx="40" cy="300" r="3.5" className="fill-surface stroke-accent-ink" strokeWidth="1.25" />
-            <circle cx="72" cy="300" r="4.5" className="fill-accent" />
-            <circle cx="80" cy="440" r="3.5" className="fill-surface stroke-accent-ink" strokeWidth="1.25" />
+            <rect width={W} height={H} fill="url(#hero-grid)" mask="url(#hero-mask)" className="nm-enter-fade" style={d(300)} />
+            {/* connectors through open space: workflow → dashboard, phone → dashboard */}
+            <path d="M604 214 V 300 H 592" pathLength={1} fill="none" className="nm-draw stroke-accent-ink" strokeWidth="1.25" style={d(1000)} />
+            <path d="M36 292 V 196 H 72" pathLength={1} fill="none" className="nm-draw stroke-accent-ink" strokeWidth="1.25" style={d(1080)} />
+            <circle cx="604" cy="214" r="3.5" className="fill-surface stroke-accent-ink" strokeWidth="1.25" />
+            <circle cx="592" cy="300" r="4.5" className="nm-enter-fade fill-accent" style={d(1500)} />
+            <circle cx="36" cy="292" r="3.5" className="fill-surface stroke-accent-ink" strokeWidth="1.25" />
+            <circle cx="72" cy="196" r="4.5" className="nm-enter-fade fill-accent" style={d(1580)} />
           </svg>
 
-          <Layer px={px} py={py} depth={4} delay={0.25} from={{ y: 28 }} className="absolute top-[64px] left-[72px] w-[520px]">
+          <Layer px={px} py={py} depth={4} delay={360} enter={{ rise: 24 }} className="absolute top-[64px] left-[72px] w-[520px]">
             <RelayDashboard />
           </Layer>
-          <Layer px={px} py={py} depth={11} delay={0.55} from={{ x: 24 }} className="absolute top-[12px] right-0 w-[206px]">
+          <Layer px={px} py={py} depth={11} delay={620} enter={{ fromX: 24 }} className="absolute top-[12px] right-0 w-[206px]">
             <RelayWorkflow />
           </Layer>
-          <Layer px={px} py={py} depth={8} delay={0.7} from={{ y: 32 }} className="absolute bottom-0 left-[8px] w-[150px]">
+          <Layer px={px} py={py} depth={8} delay={740} enter={{ rise: 28 }} className="absolute bottom-0 left-[8px] w-[150px]">
             <RelayPhone />
           </Layer>
         </ScaledCanvas>

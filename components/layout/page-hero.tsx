@@ -35,27 +35,27 @@ export function PageHero({ eyebrow, title, lead, crumbs, actions, aside, leadAsi
         {crumbs ? <Breadcrumbs items={crumbs} /> : null}
         <div className="grid grid-cols-1 items-end gap-12 lg:grid-cols-12 lg:gap-6">
           <div className={aside ? "lg:col-span-7" : "lg:col-span-8"}>
-            <Reveal>
+            <Reveal mode="enter">
               <Eyebrow>{eyebrow}</Eyebrow>
             </Reveal>
-            <Reveal delay={0.06}>
+            <Reveal mode="enter" delay={0.06}>
               <h1 id={id} className={`${titleClass} mt-5 text-ink`}>
                 {title}
               </h1>
             </Reveal>
             {lead && !leadAside ? (
-              <Reveal delay={0.12}>
+              <Reveal mode="enter" delay={0.12}>
                 <p className="text-lead mt-6 max-w-[48ch] text-ink-muted">{lead}</p>
               </Reveal>
             ) : null}
             {actions ? (
-              <Reveal delay={0.18} className="mt-8 flex flex-wrap gap-3">
+              <Reveal mode="enter" delay={0.18} className="mt-8 flex flex-wrap gap-3">
                 {actions}
               </Reveal>
             ) : null}
           </div>
           {lead && leadAside ? (
-            <Reveal delay={0.12} className="lg:col-span-4">
+            <Reveal mode="enter" delay={0.12} className="lg:col-span-4">
               <p className="text-lead text-ink-muted">{lead}</p>
             </Reveal>
           ) : null}

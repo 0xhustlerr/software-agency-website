@@ -3,6 +3,7 @@ import { site } from "@/content/site";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MotionProvider } from "@/components/motion/motion-provider";
+import { RevealController } from "@/components/motion/reveal-controller";
 import { inter, spaceGrotesk } from "./fonts";
 import "./globals.css";
 
@@ -30,7 +31,26 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" data-theme="light" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      data-theme="light"
+      data-scroll-behavior="smooth"
+      className={`${spaceGrotesk.variable} ${inter.variable}`}
+      // The inline script below adds "js" before first paint; React must not undo it.
+      suppressHydrationWarning
+    >
+      <head>
+        {/*
+          Marks JavaScript as available so scroll reveals may start hidden. Without JS nothing is hidden;
+          if the app has not started within 3s (failed bundle), the flag is removed and everything shows.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(d){d.classList.add('js');setTimeout(function(){if(!d.classList.contains('reveal-ready'))d.classList.remove('js')},3000)})(document.documentElement)",
+          }}
+        />
+      </head>
       {/* Browser extensions (e.g. Grammarly) inject attributes on <body> before hydration. */}
       <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
         <a
@@ -40,6 +60,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Skip to content
         </a>
         <MotionProvider>
+          <RevealController />
           <SiteHeader />
           <main id="main" className="flex-1">
             {children}
