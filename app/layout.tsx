@@ -31,7 +31,8 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" data-theme="light" data-scroll-behavior="smooth" className={`${spaceGrotesk.variable} ${inter.variable}`}>
-      <body className="flex min-h-dvh flex-col">
+      {/* Browser extensions (e.g. Grammarly) inject attributes on <body> before hydration. */}
+      <body className="flex min-h-dvh flex-col" suppressHydrationWarning>
         <a
           href="#main"
           className="sr-only z-50 rounded-sm bg-action px-4 py-2 text-on-action focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
