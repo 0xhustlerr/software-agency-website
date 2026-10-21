@@ -6,10 +6,11 @@ import type { ReactNode } from "react";
 const loadFeatures = () => import("./motion-features").then((mod) => mod.default);
 
 /**
- * Motion setup for the whole site:
- * - LazyMotion + `m` components (from "motion/react-m"); the DOM animation
- *   features load asynchronously after first paint.
- * - Reduced motion follows the OS setting: transforms are skipped, fades stay.
+ * Motion for React, used only where motion is driven by input: hero pointer
+ * drift and the scroll-linked process rail. Entrances and reveals are CSS
+ * (see Reveal), so content never waits on this bundle.
+ * - LazyMotion + `m` components; DOM features load after first paint.
+ * - Reduced motion follows the OS setting.
  */
 export function MotionProvider({ children }: { children: ReactNode }) {
   return (

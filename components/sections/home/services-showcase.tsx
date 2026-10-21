@@ -31,15 +31,28 @@ export function ServicesShowcase({ services }: ServicesShowcaseProps) {
                 onMouseEnter={() => setActive(s.slug)}
                 onFocus={() => setActive(s.slug)}
                 className={cn(
-                  "group -mx-3 grid grid-cols-[2.5rem_minmax(0,1fr)_1.5rem] items-start gap-x-3 rounded-sm px-3 py-7 transition-colors duration-300 ease-studio sm:grid-cols-[4rem_minmax(0,1fr)_2rem] sm:py-9 lg:-mx-4 lg:px-4",
-                  on ? "lg:bg-surface" : "hover:bg-surface",
+                  "group relative -mx-3 grid grid-cols-[2.5rem_minmax(0,1fr)_1.5rem] items-start gap-x-3 rounded-sm px-3 py-7 transition-colors duration-300 ease-studio sm:grid-cols-[4rem_minmax(0,1fr)_2rem] sm:py-9 lg:-mx-4 lg:px-4",
+                  on ? "hover:bg-surface lg:bg-surface" : "hover:bg-surface",
                 )}
               >
-                <span className={cn("text-mono pt-2 transition-colors duration-300", on ? "text-accent-ink" : "text-ink-muted")}>{s.index}</span>
+                {/* Divider draws in ink over the row's hairline on hover and keyboard focus. */}
+                <span
+                  aria-hidden
+                  className="absolute inset-x-3 -top-px h-px origin-left scale-x-0 bg-ink transition-transform duration-[450ms] ease-studio group-hover:scale-x-100 group-focus-visible:scale-x-100 lg:inset-x-4"
+                />
+                <span
+                  className={cn(
+                    "text-mono pt-2 transition-colors duration-300 group-hover:text-accent-ink group-focus-visible:text-accent-ink",
+                    on ? "text-ink-muted lg:text-accent-ink" : "text-ink-muted",
+                  )}
+                >
+                  {s.index}
+                </span>
                 <span className="min-w-0">
                   <span
                     className={cn(
                       "font-display block text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.05] font-semibold tracking-[-0.035em] transition-transform duration-300 ease-studio",
+                      "group-hover:translate-x-1 group-focus-visible:translate-x-1",
                       on && "lg:translate-x-1",
                     )}
                   >
@@ -52,8 +65,8 @@ export function ServicesShowcase({ services }: ServicesShowcaseProps) {
                   aria-hidden
                   strokeWidth={1.5}
                   className={cn(
-                    "mt-2.5 size-6 justify-self-end transition-[transform,color] duration-300 ease-studio group-hover:translate-x-1 group-focus-visible:translate-x-1",
-                    on ? "text-ink" : "text-ink-muted",
+                    "mt-2.5 size-6 justify-self-end transition-[transform,color] duration-300 ease-studio group-hover:translate-x-1 group-hover:text-ink group-focus-visible:translate-x-1 group-focus-visible:text-ink",
+                    on ? "text-ink-muted lg:text-ink" : "text-ink-muted",
                   )}
                 />
               </Link>

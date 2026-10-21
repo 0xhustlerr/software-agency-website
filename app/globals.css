@@ -104,6 +104,7 @@
 
 @theme {
   --container-max: 1280px;
+  --header-h: 4rem;
   --measure: 68ch;
 }
 
@@ -139,6 +140,7 @@
   font-size: clamp(1.5rem, 2vw, 1.75rem);
   line-height: 1.15;
   letter-spacing: -0.02em;
+  text-wrap: balance;
 }
 @utility text-h4 {
   font-family: var(--font-display);
@@ -146,6 +148,7 @@
   font-size: 1.25rem;
   line-height: 1.25;
   letter-spacing: -0.01em;
+  text-wrap: balance;
 }
 @utility text-eyebrow {
   font-family: var(--font-display);
@@ -254,6 +257,24 @@
   html {
     -webkit-text-size-adjust: 100%;
   }
+  @media (width >= 64rem) {
+    :root {
+      --header-h: 4.5rem;
+    }
+  }
+  p,
+  li,
+  dd,
+  figcaption {
+    text-wrap: pretty;
+  }
+  /* A focused field is never hidden under the sticky header (mobile keyboards scroll it into view). */
+  input,
+  select,
+  textarea,
+  [id] {
+    scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  }
   body {
     background: var(--surface);
     color: var(--ink);
@@ -277,6 +298,187 @@
   a {
     color: inherit;
     text-decoration: none;
+  }
+}
+
+/* ---------- Reveal and entrance (progressive enhancement) ----------
+ * Content is visible by default. Scroll reveals ([data-reveal]) start hidden
+ * only after the inline script marks html.js; RevealController then reveals
+ * them in view. If the app never starts, the inline script in app/layout.tsx
+ * removes html.js after 3s and everything shows.
+ * Entrances (.nm-enter, .nm-line) are CSS animations that need no JavaScript.
+ * Reduced motion and print: final state, no movement.
+ */
+@keyframes nm-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, var(--rise), 0);
+  }
+}
+@keyframes nm-line-rise {
+  from {
+    transform: translate3d(0, 108%, 0);
+  }
+}
+@keyframes nm-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes nm-rise-x {
+  from {
+    opacity: 0;
+    transform: translate3d(var(--from-x, 24px), 0, 0);
+  }
+}
+@keyframes nm-mark {
+  from {
+    transform: scaleX(0);
+  }
+}
+:root {
+  --rise: 14px;
+}
+@media (width < 40rem) {
+  :root {
+    --rise: 8px;
+  }
+}
+.nm-line,
+.nm-line-view {
+  display: block;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal] {
+    transition:
+      opacity 600ms var(--ease-studio) var(--reveal-delay, 0ms),
+      transform 600ms var(--ease-studio) var(--reveal-delay, 0ms);
+  }
+  html.js [data-reveal]:not([data-revealed]) {
+    opacity: 0;
+    transform: translate3d(0, var(--rise), 0);
+  }
+  .nm-enter {
+    animation: nm-rise var(--enter-dur, 600ms) var(--ease-studio) var(--reveal-delay, 0ms) both;
+  }
+  .nm-enter-fade {
+    animation: nm-fade var(--enter-dur, 500ms) ease-out var(--reveal-delay, 0ms) both;
+  }
+  .nm-enter-x {
+    animation: nm-rise-x var(--enter-dur, 700ms) var(--ease-studio) var(--reveal-delay, 0ms) both;
+  }
+  .nm-mark-draw {
+    transform-origin: left;
+    animation: nm-mark 450ms var(--ease-studio) var(--reveal-delay, 60ms) both;
+  }
+  /* A scaled illustration waits until it has been measured, then assembles. */
+  html.js .nm-scaled:not([data-scaled]) :is(.nm-enter, .nm-enter-x, .nm-enter-fade, .nm-draw) {
+    animation-play-state: paused;
+  }
+  /* Headline line reveal: each line clips its own rise. Padding keeps descenders. */
+  .nm-line {
+    overflow: hidden;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+  }
+  .nm-line > span {
+    display: block;
+    animation: nm-line-rise 700ms var(--ease-studio) var(--reveal-delay, 0ms) both;
+  }
+  .nm-draw {
+    stroke-dasharray: 1;
+    animation: nm-draw 700ms var(--ease-studio) var(--reveal-delay, 0ms) both;
+  }
+  /* Headline lines that rise when their revealed ancestor enters view. */
+  .nm-line-view {
+    overflow: hidden;
+    padding-bottom: 0.12em;
+    margin-bottom: -0.12em;
+  }
+  .nm-line-view > span {
+    display: block;
+    transition: transform 700ms var(--ease-studio) var(--reveal-delay, 0ms);
+  }
+  html.js [data-reveal]:not([data-revealed]) .nm-line-view > span {
+    transform: translate3d(0, 108%, 0);
+  }
+  /* Final CTA connector: across, then down, then the destination node fills. */
+  .nm-connector-h {
+    transform-origin: left;
+    transition: transform 500ms var(--ease-studio) 350ms;
+  }
+  .nm-connector-drop {
+    transform-origin: top;
+    transition: transform 400ms var(--ease-studio) 820ms;
+  }
+  .nm-connector-end {
+    transition:
+      opacity 300ms ease-out 1180ms,
+      transform 300ms var(--ease-studio) 1180ms;
+  }
+  html.js [data-reveal]:not([data-revealed]) .nm-connector-h {
+    transform: scaleX(0);
+  }
+  html.js [data-reveal]:not([data-revealed]) .nm-connector-drop {
+    transform: scaleY(0);
+  }
+  html.js [data-reveal]:not([data-revealed]) .nm-connector-end {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+}
+html.js .nm-scaled:not([data-scaled]) {
+  visibility: hidden;
+}
+@media print {
+  [data-reveal],
+  .nm-enter,
+  .nm-enter-fade,
+  .nm-enter-x,
+  .nm-line > span,
+  .nm-line-view > span {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+/* Blueprint accent: a faint grid that runs under the transparent header and fades out. */
+.nm-hero-grid {
+  background-image:
+    radial-gradient(50% 42% at 84% 0%, transparent 15%, var(--surface) 100%),
+    linear-gradient(color-mix(in srgb, var(--line) 65%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--line) 65%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+  background-repeat: no-repeat, repeat, repeat;
+  background-origin: border-box;
+}
+@media (width < 64rem) {
+  .nm-hero-grid {
+    background-image: radial-gradient(80% 30% at 90% 0%, transparent 10%, var(--surface) 100%),
+      linear-gradient(color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px);
+  }
+}
+
+/* ---------- Header over dark first sections ----------
+ * Pages that open on a dark section slide it under the sticky header, which
+ * starts transparent and turns solid once scrolled. The header height never
+ * changes, so nothing shifts. Pages without a dark opener keep a solid header.
+ */
+@supports selector(:has(*)) {
+  main:has(> [data-theme="dark"]:first-child) {
+    margin-top: calc(var(--header-h) * -1);
+  }
+  main:has(> [data-theme="dark"]:first-child) > [data-theme="dark"]:first-child {
+    border-top: var(--header-h) solid transparent;
+  }
+  body:has(main > [data-theme="dark"]:first-child) .site-header:not([data-scrolled]) {
+    background-color: transparent;
+    border-bottom-color: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 
@@ -309,18 +511,18 @@
   to { opacity: 0; }
 }
 @keyframes nm-panel-in {
-  from { opacity: 0; transform: translateY(-12px); }
+  from { opacity: 0; transform: translateY(12px); }
 }
 @keyframes nm-panel-out {
-  to { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 0; }
 }
 @keyframes nm-item-in {
   from { opacity: 0; transform: translateY(6px); }
 }
 .nm-overlay[data-state="open"] { animation: nm-fade-in 220ms var(--ease-studio); }
-.nm-overlay[data-state="closed"] { animation: nm-fade-out 160ms ease-in; }
+.nm-overlay[data-state="closed"] { animation: nm-fade-out 160ms ease-in forwards; }
 .nm-panel[data-state="open"] { animation: nm-panel-in 280ms var(--ease-studio); }
-.nm-panel[data-state="closed"] { animation: nm-panel-out 160ms ease-in; }
+.nm-panel[data-state="closed"] { animation: nm-panel-out 160ms ease-in forwards; }
 .nm-panel[data-state="open"] .nm-panel-item { animation: nm-item-in 320ms var(--ease-studio) both; }
 
 @media (prefers-reduced-motion: no-preference) {

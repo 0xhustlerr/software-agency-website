@@ -35,6 +35,8 @@ export interface Service {
 export interface ProcessStep {
   title: string;
   body: string;
+  /** What the founder has at the end of the stage. Shown under a rule as "You leave with". */
+  outcome?: string;
 }
 
 export interface Pillar {

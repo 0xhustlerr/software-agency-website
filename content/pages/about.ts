@@ -36,7 +36,7 @@ export const collaborationWays = [
   { title: "Direct access", body: "You work with the people designing and building your product — no layers in between." },
   { title: "Shared priorities", body: "One backlog, ordered together against what matters most to your business." },
   { title: "Working software at every review", body: "Regular reviews of real progress, so feedback changes the product early." },
-  { title: "Honest trade-offs", body: "When time, scope and quality pull against each other, you hear about it — with options." },
+  { title: "Honest trade\u2011offs", body: "When time, scope and quality pull against each other, you hear about it — with options." },
 ];
 
 export interface TeamMember {

@@ -15,12 +15,18 @@ export function ServiceRow({ service, href, headingLevel: H = "h3" }: ServiceRow
   const complementary = service.tier === "complementary";
   const inner = (
     <>
+      {href ? (
+        <span
+          aria-hidden
+          className="absolute inset-x-0 -top-px h-px origin-left scale-x-0 bg-ink transition-transform duration-[450ms] ease-studio group-hover:scale-x-100 group-focus-visible:scale-x-100"
+        />
+      ) : null}
       <span className={cn("text-mono text-ink-muted", complementary ? "pt-0.5" : "pt-2")}>{service.index}</span>
       <H
         className={cn(
           "transition-colors duration-200",
           complementary ? "text-h4" : "text-h3",
-          href && "group-hover:text-accent-ink",
+          href && "transition-[color,transform] duration-300 ease-studio group-hover:translate-x-1 group-hover:text-accent-ink group-focus-visible:translate-x-1",
         )}
       >
         {service.title}
@@ -38,12 +44,12 @@ export function ServiceRow({ service, href, headingLevel: H = "h3" }: ServiceRow
         ) : null}
       </div>
       <span aria-hidden className={cn("hidden justify-self-end sm:col-start-4 sm:row-start-1 sm:block", complementary ? "pt-1" : "pt-2")}>
-        {href ? <ArrowRight className="size-4 transition-transform duration-200 ease-studio group-hover:translate-x-[3px]" strokeWidth={1.75} /> : null}
+        {href ? <ArrowRight className="size-4 transition-transform duration-200 ease-studio group-hover:translate-x-1 group-focus-visible:translate-x-1" strokeWidth={1.75} /> : null}
       </span>
     </>
   );
   const cls = cn(
-    "group grid items-start gap-x-4 border-t border-line sm:gap-x-6",
+    "group relative grid items-start gap-x-4 border-t border-line sm:gap-x-6",
     "grid-cols-[2.5rem_minmax(0,1fr)] sm:grid-cols-[3.5rem_minmax(0,5fr)_minmax(0,6fr)_1.5rem]",
     complementary ? "py-6" : "py-8",
   );

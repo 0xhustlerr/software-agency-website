@@ -80,9 +80,22 @@ Space Grotesk (display, headings, eyebrow) and Inter (reading), self-hosted vari
 
 ## Motif and motion
 
-`NodeGrid`: faint grid, one orthogonal connector moving right and down, ending in a filled mint node. Once per viewport, decorative only.
+The motif is thin orthogonal lines joining small nodes, moving right and down, with the destination node filled mint. It does a job wherever it appears: the hero's blueprint grid running under the transparent header, connectors inside the hero composition, the process rail, the current-page marker in the nav (a short line arriving at a 4px node), and the final CTA path that lands on "Start a Project". `NodeGrid` remains for other pages. Once per viewport, never as filler pattern.
 
-Motion (Motion for React, `components/motion/reveal.tsx`): 14px rise + fade, 550ms, `cubic-bezier(0.2, 0.7, 0.2, 1)`, 60–80ms stagger, once. Hover moves arrows 3px. No parallax, loops or carousels. `prefers-reduced-motion` shows the end state.
+Motion is CSS first; content never waits for JavaScript.
+
+| Kind | Where | Timing |
+| --- | --- | --- |
+| Entrance (`Reveal mode="enter"`, `.nm-enter`, `.nm-line`) | Hero, inner-page headings | Pure CSS at first paint. Hero: eyebrow 0 → headline lines 120/200/280 → lead 460 → actions 580 → capabilities 680; composition 360–740, connectors draw at 1000ms |
+| Scroll reveal (`Reveal`, `[data-reveal]`) | Everything below the fold | 600ms rise (14px, 8px on phones) + fade, 60–80ms stagger, once. Hidden only after `html.js` is set; `RevealController` (one IntersectionObserver) reveals in view |
+| Scroll-linked | Process rail | Fill and stage state follow page position; never pins or captures scrolling |
+| Hover | Rows, buttons, frames | 150–300ms colour/background; arrows +3–4px; row divider draws 450ms; project images 1.02 inside a fixed clip |
+
+Only `transform` and `opacity` animate (plus paint-only colours). The header never changes height. No parallax stacks, loops, carousels or autoplay video.
+
+Fallbacks: without JavaScript nothing is hidden; if the app fails to start, the inline script in `app/layout.tsx` removes `html.js` after 3s so every reveal shows; `prefers-reduced-motion` and print render the final state.
+
+Header: sticky, one fixed height (`--header-h`, 64/72px). Over a page that opens on a dark section it starts transparent (the section slides under it via `:has()` in `globals.css`) and turns solid navy at 94% with blur, hairline and shadow after 8px of scroll.
 
 Focus: `focus-ring` (2px ground-colour gap + 2px `accent-ink`) on every interactive element.
 
