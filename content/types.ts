@@ -66,26 +66,51 @@ export interface ProjectMedia {
   height: number;
 }
 
+export interface ProjectOutcome {
+  /** The verified value, e.g. "38%". */
+  value: string;
+  /** What it measures. */
+  label: string;
+  /** How it was verified (kept for review; shown as a source line). */
+  source: string;
+}
+
+export interface ProjectCredit {
+  role: string;
+  name: string;
+}
+
 export interface Project {
   slug: string;
-  /** Only "approved" projects render or appear in navigation. */
+  /** Only "approved" projects with client sign-off render or appear in navigation. */
   status: PublishStatus;
-  client: string;
   /** Client sign-off is required before status can be "approved". */
   clientApproved: boolean;
+  /** Date the client approved publication (ISO). */
+  approvedAt?: string;
+  client: string;
   title: string;
+  /** One line on what was built and for whom. */
   summary: string;
   services: ServiceSlug[];
   industry: string;
-  /** The business challenge, in a sentence or two. */
+  /** Initial challenge, in a sentence or two. */
   challenge: string;
-  /** What was built. */
+  /** What was built (homepage card). */
   built: string;
+  /** Product approach: decisions and insights. */
+  approach: { title: string; body: string }[];
+  /** Engineering contribution. */
+  engineering: { title: string; body: string }[];
+  stack: string[];
+  /** Capability tags for cards. */
   tags: string[];
-  /** Real, verifiable outcomes only. */
-  outcomes: { label: string; value: string }[];
+  /** Verified outcomes only — leave empty rather than estimate. */
+  outcomes: ProjectOutcome[];
+  credits: ProjectCredit[];
   cover: ProjectMedia;
-  year?: number;
+  screenshots: (ProjectMedia & { caption?: string })[];
+  timeline?: string;
 }
 
 export interface Faq {
@@ -93,14 +118,38 @@ export interface Faq {
   answer: string;
 }
 
-export interface Insight {
+export const insightCategories = [
+  "Startup Engineering",
+  "MVP Development",
+  "Product Strategy",
+  "SaaS Architecture",
+  "Applied AI",
+  "Engineering Practices",
+] as const;
+
+export type InsightCategory = (typeof insightCategories)[number];
+
+/** Front matter of a Markdown/MDX file in content/insights/. */
+export interface InsightMeta {
   slug: string;
+  /** Only "approved" articles are published. */
   status: PublishStatus;
   title: string;
-  excerpt: string;
-  publishedAt: string; // ISO date
+  description: string;
+  category: InsightCategory;
   author: string;
-  tags: string[];
+  authorRole?: string;
+  /** ISO date. */
+  publishedAt: string;
+  updatedAt?: string;
+  featured?: boolean;
+  image?: ProjectMedia;
+  readingMinutes: number;
+}
+
+export interface Insight extends InsightMeta {
+  /** Rendered HTML from the approved Markdown body. */
+  html: string;
 }
 
 export interface Testimonial {

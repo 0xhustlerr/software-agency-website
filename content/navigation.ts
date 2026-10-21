@@ -23,7 +23,7 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
       ...item("About", href("about")),
       ...item("Work", href("work")),
       ...item("How we work", "/#collaboration"),
-      ...item("Process", "/#process"),
+      ...item("Contact", href("contact")),
     ],
   },
   {
@@ -36,8 +36,8 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
     title: "Resources",
     items: [
       ...item("Insights", href("insights")),
+      ...item("Engagement stages", "/services#stages"),
       ...(faqs.length ? item("FAQ", "/#faq") : []),
-      ...item("Engineering", "/#engineering"),
     ],
   },
   {
@@ -49,4 +49,4 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
   },
 ];
 
-export const legalNav: NavItem[] = [...item("Privacy Policy", href("privacy"))];
+export const legalNav: NavItem[] = [...item("Privacy Policy", href("privacy")), ...item("Contact", href("contact"))];

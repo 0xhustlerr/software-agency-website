@@ -2,8 +2,9 @@ import type { Project } from "./types";
 
 /**
  * Case studies. Add a project with status "draft" while it is being written;
- * switch to "approved" only with client sign-off and verifiable outcomes.
- * /work stays out of navigation until at least one project is approved.
+ * switch to "approved" only with client sign-off (clientApproved: true) and
+ * verified outcomes. Images go in public/work/<slug>/. Approved projects appear
+ * on the homepage, /work, related service pages and /work/<slug>.
  */
 export const projects: Project[] = [];
 

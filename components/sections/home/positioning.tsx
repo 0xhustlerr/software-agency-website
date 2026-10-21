@@ -14,7 +14,7 @@ export function Positioning() {
             {positioning.heading}
           </h2>
         </Reveal>
-        <Reveal delay={0.08} className="col-span-full sm:col-span-6 sm:col-start-3 lg:col-span-5 lg:col-start-8 lg:self-end">
+        <Reveal delay={0.08} className="col-span-full max-w-[46ch] sm:col-span-6 sm:col-start-3 lg:col-span-6 lg:col-start-7 lg:self-end">
           <p className="text-lead text-ink-muted">{positioning.body}</p>
         </Reveal>
       </div>

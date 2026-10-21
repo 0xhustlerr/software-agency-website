@@ -11,7 +11,7 @@ export const services: Service[] = [
     summary:
       "Define, design, build, and launch a focused first version — scoped to test what matters most with real users.",
     tags: ["Scoping", "Product design", "Build", "Launch"],
-    detailPublished: false,
+    detailPublished: true,
   },
   {
     slug: "custom-software",
@@ -22,7 +22,7 @@ export const services: Service[] = [
     summary:
       "Bespoke web applications and software platforms shaped around how your business actually works.",
     tags: ["Web applications", "Platforms", "Integrations"],
-    detailPublished: false,
+    detailPublished: true,
   },
   {
     slug: "saas-development",
@@ -33,7 +33,7 @@ export const services: Service[] = [
     summary:
       "Multi-user platforms with subscriptions, dashboards, and the integrations your customers expect.",
     tags: ["Accounts and roles", "Subscriptions", "Dashboards", "Integrations"],
-    detailPublished: false,
+    detailPublished: true,
   },
   {
     slug: "ai-development",
@@ -44,7 +44,7 @@ export const services: Service[] = [
     summary:
       "AI-powered applications, automation, and intelligent workflows built into products people already use.",
     tags: ["AI features", "Automation", "Workflows"],
-    detailPublished: false,
+    detailPublished: true,
   },
   {
     slug: "product-design",

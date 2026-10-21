@@ -90,15 +90,17 @@ Focus: `focus-ring` (2px ground-colour gap + 2px `accent-ink`) on every interact
 
 | Route | Status |
 | --- | --- |
-| `/` | Built — full homepage |
-| `/services`, `/services/[slug]` | Next. Until published, links fall back to `/#services` |
-| `/work`, `/work/[slug]` | Until a case study is approved (with client sign-off), links fall back to `/#work` |
-| `/about` | Until published, links fall back to `/#approach` |
-| `/insights`, `/insights/[slug]` | Hidden from navigation until the first article is approved |
-| `/contact` | Until published, links fall back to `/#contact` (final CTA) |
-| `/privacy` | Footer link appears once the policy is written and the page is published |
+| `/` | Published — full homepage |
+| `/services` | Published — overview, additional capabilities, engagement stages, FAQ |
+| `/services/[slug]` | Published for the four core services (`detailPublished` in `content/services.ts`); other slugs 404 |
+| `/work` | Published — concept work clearly labelled, "taking shape" until an approved case study exists |
+| `/work/[slug]` | Renders only approved case studies with client sign-off; returns 404 until then |
+| `/about` | Published — mission, philosophy, values, collaboration. Team section hidden while `team` is empty |
+| `/insights`, `/insights/[slug]` | Hidden (404 in production, absent from nav and sitemap) until the first article is approved |
+| `/contact` | Published — Resend-backed inquiry form; renders disabled until email delivery is configured |
+| `/privacy` | Draft. 404 and absent from the footer until `privacyPolicy.approved` is true in `content/legal.ts` |
 
-All inner-page links go through `content/routes.ts`; flip `published` when a page ships.
+All inner-page links go through `content/routes.ts` (`href()`, `isPublished()`). `proxy.ts` rewrites unknown `/services/*` and `/work/*` slugs to a real 404.
 
 Homepage order: Header (sticky, dark) → Hero (dark, product concept composition) → Positioning (white) → Services (off-white, interactive rows) → Selected work (white; labelled concept + "taking shape" until real work is approved) → Journey (off-white, scroll-linked timeline) → Engineering (dark) → How we work together (white) → FAQ (off-white) → Final CTA (dark) → Footer (white).
 
@@ -106,8 +108,10 @@ Homepage order: Header (sticky, dark) → Hero (dark, product concept compositio
 
 ```
 app/                 routes, layout, fonts, globals.css (tokens), sitemap, robots
-components/layout/   SiteHeader, MobileNav, SiteFooter, Section, Container, Wordmark
-components/sections/ page sections (home/…)
+components/layout/   SiteHeader, MobileNav, SiteFooter, Section, Container, Wordmark,
+                     PageHero, Breadcrumbs (with JSON-LD), PageSkeleton
+components/sections/ page sections (home/…, pages/…, insights/…), CtaBand
+components/forms/    ContactForm (client; server action in app/contact/actions.ts)
 components/ui/       Button, Eyebrow, SectionHeading, ServiceRow, ProcessRail, Accordion,
                      IllustrativeFrame, PendingContent, TextField, NodeGrid, Tag
 components/illustrations/  DOM/SVG product concepts (Relay), service vignettes,
@@ -115,8 +119,10 @@ components/illustrations/  DOM/SVG product concepts (Relay), service vignettes,
 components/motion/   Reveal, ScaledCanvas, MotionProvider (reduced motion)
 hooks/               usePrefersReducedMotion (hydration-safe)
 content/             typed copy and data (types.ts, routes, site, navigation, services,
-                     process, home, concepts, projects, faqs, insights)
-lib/                 cn(), flags
+                     process, home, concepts, projects, faqs, legal, service-details,
+                     pages/…); insights/*.md for articles
+lib/                 cn(), flags, metadata, format, insights (Markdown loader),
+                     contact/ (schema, config, rate limit, Resend delivery)
 ```
 
-Server Components by default; client components only for the header (scroll state, active section), mobile menu (Radix Dialog), services showcase, hero pointer motion, journey progress, FAQ accordion and scroll reveals.
+Server Components by default; client components only for the header (scroll state, active section), mobile menu (Radix Dialog), services showcase, hero pointer motion, journey progress, FAQ accordion, scroll reveals, work and insights filters, and the contact form.

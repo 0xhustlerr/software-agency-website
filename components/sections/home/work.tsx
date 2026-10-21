@@ -1,11 +1,9 @@
-import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { work } from "@/content/home";
 import { approvedProjects } from "@/content/projects";
 import { productConcepts } from "@/content/concepts";
 import { talkHref } from "@/content/site";
-import type { Project, ProductConcept } from "@/content/types";
+import type { ProductConcept } from "@/content/types";
+import { ProjectFeature } from "@/components/sections/pages/project-feature";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
@@ -75,37 +73,6 @@ function Details({
       </ul>
       {footer ? <div className="mt-8">{footer}</div> : null}
     </div>
-  );
-}
-
-/** An approved client case study. Alternates image side by index. */
-function ProjectFeature({ project, index }: { project: Project; index: number }) {
-  const flip = index % 2 === 1;
-  return (
-    <Reveal as="li" className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
-      <div className={cn("lg:col-span-8", flip && "lg:order-2 lg:col-start-5")}>
-        <Stage className="aspect-[4/3] lg:aspect-[16/11]">
-          <Image src={project.cover.src} alt={project.cover.alt} fill sizes="(min-width: 1024px) 66vw, 100vw" className="object-cover" />
-        </Stage>
-      </div>
-      <div className={cn("lg:col-span-4 lg:self-center", flip && "lg:order-1")}>
-        <Details
-          label={<p className="text-mono text-ink-muted">{project.industry}</p>}
-          name={project.title}
-          category={project.client}
-          challenge={project.challenge}
-          built={project.built}
-          builtLabel="What we built"
-          tags={project.tags}
-          footer={
-            <Link href={`/work/${project.slug}`} className="group text-label inline-flex items-center gap-2 rounded-xs text-ink underline decoration-line-strong underline-offset-[6px] hover:decoration-ink">
-              Read the case study
-              <ArrowRight aria-hidden className="size-4 transition-transform duration-200 group-hover:translate-x-[3px]" strokeWidth={1.75} />
-            </Link>
-          }
-        />
-      </div>
-    </Reveal>
   );
 }
 

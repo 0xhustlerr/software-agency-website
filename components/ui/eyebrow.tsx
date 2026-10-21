@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 interface EyebrowProps {
   children: ReactNode;
-  as?: "p" | "span" | "div";
+  as?: "p" | "span" | "div" | "h2" | "h3";
   /** The hairline-and-node mark. Default true. */
   mark?: boolean;
   className?: string;
