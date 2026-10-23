@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 import { useId, useState } from "react";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 export interface AccordionItem {
@@ -19,13 +20,15 @@ export function Accordion({ items, headingLevel = 3 }: { items: AccordionItem[];
   const [open, setOpen] = useState<Set<number>>(() => new Set());
   const H = headingLevel === 3 ? "h3" : "h4";
 
-  const toggle = (i: number) =>
+  const toggle = (i: number) => {
+    if (!open.has(i)) track("faq_open", { question: items[i].question.slice(0, 80), from: window.location.pathname });
     setOpen((prev) => {
       const next = new Set(prev);
       if (next.has(i)) next.delete(i);
       else next.add(i);
       return next;
     });
+  };
 
   return (
     <div className="border-b border-line">

@@ -25,7 +25,7 @@ Voice: professional but approachable, concrete, "we" and "you". Every claim is f
 
 Nexus Morrow is new. Never render client logos, testimonials, results, awards, headcounts, years in business, certifications, team photos or launches that have not been supplied and approved.
 
-- Interface visuals go inside `IllustrativeFrame`, which always shows **Illustrative concept**.
+- Interface visuals are always labelled as concepts: an "Interface concept" / "Product concept · not client work" tag or caption beside them, and the footer note "Interface visuals on this site are illustrative concepts."
 - Missing evidence is a `PendingContent` slot — visible in development, removed in production (`lib/flags.ts`).
 - Evidence lists in `content/site.ts → trust` start empty. A route without approved content is omitted from navigation (`content/navigation.ts`) and the sitemap.
 
@@ -80,13 +80,20 @@ Space Grotesk (display, headings, eyebrow) and Inter (reading), self-hosted vari
 
 ## Motif and motion
 
-The motif is thin orthogonal lines joining small nodes, moving right and down, with the destination node filled mint. It does a job wherever it appears: the hero's blueprint grid running under the transparent header, connectors inside the hero composition, the process rail, the current-page marker in the nav (a short line arriving at a 4px node), and the final CTA path that lands on "Start a Project". `NodeGrid` remains for other pages. Once per viewport, never as filler pattern.
+The motif is thin orthogonal lines joining small nodes, moving right and down, with the destination node filled mint. It does a job wherever it appears: the hero's blueprint grid running under the transparent header, connectors inside the hero composition, the process rail, the current-page marker in the nav (a short line arriving at a 4px node), and the final CTA path that lands on "Start a Project". `NodeGrid` remains for other pages. Once per viewport, never as filler pattern: it is not used as wallpaper (no decorative bands, no CTA-corner ornaments).
+
+**Signature:** the hero and final-CTA headlines end in a mint full stop (`MintStop`) — the destination node, set in type. Those two bookends only.
+
+**Connectors carry meaning.** On the homepage work feature, a connector runs from Relay's decision D2 to the screen that decision produced. Draw a connector only where it links cause to effect.
+
+**One visual, one place.** Never show the same illustration twice on a page: the hero shows Relay's dashboard, so the work section shows Relay's decision log and triage screen.
 
 Motion is CSS first; content never waits for JavaScript.
 
 | Kind | Where | Timing |
 | --- | --- | --- |
 | Entrance (`Reveal mode="enter"`, `.nm-enter`, `.nm-line`) | Hero, inner-page headings | Pure CSS at first paint. Hero: eyebrow 0 → headline lines 120/200/280 → lead 460 → actions 580 → capabilities 680; composition 360–740, connectors draw at 1000ms |
+| Settle (`Reveal mode="settle"`, `.nm-settle`) | Hero lead, inner-page h1 and lead | Same timing, transform only — never transparent. These are the Largest Contentful Paint elements; fading them in delayed LCP by 300–740ms on throttled mobile |
 | Scroll reveal (`Reveal`, `[data-reveal]`) | Everything below the fold | 600ms rise (14px, 8px on phones) + fade, 60–80ms stagger, once. Hidden only after `html.js` is set; `RevealController` (one IntersectionObserver) reveals in view |
 | Scroll-linked | Process rail | Fill and stage state follow page position; never pins or captures scrolling |
 | Hover | Rows, buttons, frames | 150–300ms colour/background; arrows +3–4px; row divider draws 450ms; project images 1.02 inside a fixed clip |
@@ -125,8 +132,9 @@ components/layout/   SiteHeader, MobileNav, SiteFooter, Section, Container, Word
                      PageHero, Breadcrumbs (with JSON-LD), PageSkeleton
 components/sections/ page sections (home/…, pages/…, insights/…), CtaBand
 components/forms/    ContactForm (client; server action in app/contact/actions.ts)
-components/ui/       Button, Eyebrow, SectionHeading, ServiceRow, ProcessRail, Accordion,
-                     IllustrativeFrame, PendingContent, TextField, NodeGrid, Tag
+components/ui/       Button, Eyebrow, Accordion, PendingContent, NodeGrid, Tag
+components/seo/      JsonLd (structured data script)
+components/analytics/ Analytics (Plausible loader + click tracking; inert unless configured)
 components/illustrations/  DOM/SVG product concepts (Relay), service vignettes,
                      architecture diagram, collaboration board — all labelled
 components/motion/   Reveal, ScaledCanvas, MotionProvider (reduced motion)
@@ -134,8 +142,8 @@ hooks/               usePrefersReducedMotion (hydration-safe)
 content/             typed copy and data (types.ts, routes, site, navigation, services,
                      process, home, concepts, projects, faqs, legal, service-details,
                      pages/…); insights/*.md for articles
-lib/                 cn(), flags, metadata, format, insights (Markdown loader),
-                     contact/ (schema, config, rate limit, Resend delivery)
+lib/                 cn(), flags, metadata, format, analytics (track()), insights (Markdown loader),
+                     contact/ (schema, limits, config, rate limit, Resend delivery)
 ```
 
 Server Components by default; client components only for the header (scroll state, active section), mobile menu (Radix Dialog), services showcase, hero pointer motion, journey progress, FAQ accordion, scroll reveals, work and insights filters, and the contact form.

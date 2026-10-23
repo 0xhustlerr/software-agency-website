@@ -3,7 +3,6 @@ import { aboutHero, collaborationWays, engineeringValues, mission, philosophy, t
 import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/layout/page-hero";
 import { Section } from "@/components/layout/section";
-import { Container } from "@/components/layout/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { NodeGrid } from "@/components/ui/node-grid";
 import { Reveal } from "@/components/motion/reveal";
@@ -11,7 +10,7 @@ import { RuledList, Split } from "@/components/sections/pages/split";
 import { CtaBand } from "@/components/sections/cta-band";
 
 export const metadata = pageMetadata({
-  title: "About",
+  title: "About our product engineering studio",
   description:
     "Nexus Morrow is a product engineering studio for founders — thoughtful about the product, serious about the engineering, and clear in how we communicate.",
   path: "/about",
@@ -51,15 +50,6 @@ export default function AboutPage() {
           </Reveal>
         </div>
       </Section>
-
-      {/* geometry composition */}
-      <div aria-hidden className="bg-surface">
-        <Container>
-          <div data-theme="dark" className="rounded-md bg-surface px-6 py-8 sm:px-12 sm:py-10">
-            <NodeGrid cols={14} rows={3} pitch={72} path={[[0, 2], [3, 2], [3, 1], [7, 1], [7, 2], [10, 2], [10, 0], [14, 0]]} />
-          </div>
-        </Container>
-      </div>
 
       {/* 2 · Philosophy */}
       <Section aria-labelledby="phil-h">

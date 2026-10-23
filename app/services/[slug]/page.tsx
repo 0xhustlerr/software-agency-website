@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: PageProps<"/services/[slug]">
   const { slug } = await params;
   const data = load(slug);
   if (!data) return {};
-  return pageMetadata({ title: data.detail.name, description: data.detail.lead, path: `/services/${slug}` });
+  return pageMetadata({ title: `${data.detail.name} for startups`, description: data.detail.lead, path: `/services/${slug}` });
 }
 
 export default function ServiceDetailPage({ params }: PageProps<"/services/[slug]">) {
@@ -73,7 +73,7 @@ async function ServiceDetailPageContent({ params }: { params: PageProps<"/servic
         aside={
           <figure className="m-0">
             <BlueprintStage tone="muted" className="aspect-[5/4]">
-              <div aria-hidden className="w-full max-w-[380px]">
+              <div aria-hidden className="w-full max-w-[380px] lg:scale-[1.15]">
                 <ServiceVisual slug={service.slug} />
               </div>
             </BlueprintStage>

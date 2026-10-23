@@ -5,6 +5,7 @@ import { emailHref, projectStartHref, site } from "@/content/site";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
 import { PendingContent } from "@/components/ui/pending-content";
+import { MintStop } from "@/components/ui/mint-stop";
 import { Reveal } from "@/components/motion/reveal";
 
 const delay = (ms: number) => ({ "--reveal-delay": `${ms}ms` }) as CSSProperties;
@@ -25,7 +26,9 @@ export function FinalCta() {
         >
           {finalCta.headingLines.map((line, i) => (
             <span key={line} className="nm-line-view" style={delay(i * 80)}>
-              <span>{line} </span>
+              <span>
+                <MintStop>{line}</MintStop>{" "}
+              </span>
             </span>
           ))}
         </h2>

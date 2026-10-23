@@ -11,10 +11,14 @@ npm install
 cp .env.example .env.local   # then fill in the values
 npm run dev      # http://localhost:3000
 npm run lint
+npm run typecheck
 npm run build && npm start
+npm run smoke    # with the server running; BASE_URL=https://nexusmorrow.com npm run smoke after deploy
 ```
 
 Requires Node.js 20.9 or newer.
+
+`npm run smoke` checks route status codes (including real 404s), canonical URLs, `og:image`, one `<h1>` per page, the sitemap and robots.txt. Expected statuses are in `scripts/smoke-routes.mjs`; update them when a page is published.
 
 ## Pages
 
@@ -49,7 +53,27 @@ Set these server-side environment variables (never prefix them with `NEXT_PUBLIC
 
 If any of them is missing, the form renders disabled with a notice, and the server action refuses to accept submissions. Nothing is silently discarded.
 
-The rate limiter (5 messages per 10 minutes per IP) is in memory. That works on a single server. On serverless or multi-instance hosting, each instance keeps its own count, so swap `lib/contact/rate-limit.ts` for a shared store (for example Upstash Redis) before relying on it.
+**The variables must be present at build time.** `/contact` is prerendered, so whether the form renders enabled is decided during `next build`. Set them in the host's environment for builds as well as runtime (on Vercel, the default), and rebuild after changing them. A Docker image built without them ships a disabled form.
+
+The rate limiter (5 messages per 10 minutes per IP) is in memory. That works on a single server. On serverless or multi-instance hosting, each instance keeps its own count, so swap `lib/contact/rate-limit.ts` for a shared store (for example Upstash Redis) before relying on it. It keys on the first `x-forwarded-for` address, which is trustworthy only behind a proxy that overwrites that header (Vercel does); if the app is exposed directly, clients can rotate it.
+
+If the form ever fails to reach the server (network loss, a 500), the visitor sees "We couldn't send your message" with every answer kept, and can retry.
+
+## Analytics
+
+Off by default: nothing is loaded or collected. Set `NEXT_PUBLIC_PLAUSIBLE_DOMAIN=nexusmorrow.com` at build time to load [Plausible](https://plausible.io) (cookieless) and send these events (`lib/analytics.ts`):
+
+| Event | When | Properties |
+| --- | --- | --- |
+| pageview | every page, including `/contact` | — |
+| `cta_click` | any link to `/contact` | button label, page |
+| `service_click` | any link to a service page | service slug, page |
+| `faq_open` | an FAQ question opened | question, page |
+| `inquiry_submit` | the form is submitted | — |
+| `inquiry_sent` | the server confirmed delivery | — |
+| `inquiry_error` | submission did not go through | outcome status only |
+
+Form contents are never sent. For a self-hosted or proxied script, also set `NEXT_PUBLIC_PLAUSIBLE_SRC`. Add the custom events as goals in Plausible to see them. Before enabling, update the privacy policy's analytics section.
 
 ## Insights
 

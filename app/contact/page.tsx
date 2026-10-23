@@ -8,8 +8,8 @@ import { Section } from "@/components/layout/section";
 import { ContactForm } from "@/components/forms/contact-form";
 
 export const metadata = pageMetadata({
-  title: "Contact",
-  description: "Tell us what you’re building. Whether you have an early idea, a prototype, or an existing product, we’d love to understand what you’re working on.",
+  title: "Contact: start a project conversation",
+  description: "Tell us what you’re building — an early idea, a prototype or a launched product. A person on our team reads every inquiry and replies by email.",
   path: "/contact",
 });
 
@@ -39,7 +39,8 @@ export default function ContactPage() {
               privacyHref={privacyHref}
             />
           </div>
-          <aside aria-labelledby="next-h" className="lg:col-span-4 lg:col-start-9">
+          {/* Not <aside>: a complementary landmark may not sit inside the section's region landmark. */}
+          <div className="lg:col-span-4 lg:col-start-9">
             <h2 id="next-h" className="text-h4">
               What happens next
             </h2>
@@ -67,7 +68,7 @@ export default function ContactPage() {
               <h3 className="text-label">Your information</h3>
               <p className="text-small mt-1.5 text-ink-muted">{formPrivacyNotice}</p>
             </div>
-          </aside>
+          </div>
         </div>
       </Section>
     </>

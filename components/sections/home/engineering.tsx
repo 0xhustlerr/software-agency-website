@@ -19,7 +19,18 @@ export function Engineering() {
         </Reveal>
         <Reveal delay={0.1} className="lg:col-span-7">
           <figure className="m-0">
-            <ScaledCanvas width={620} height={470}>
+            {/* Phones: the diagram alone (pipeline card below it), so its labels stay legible instead of shrinking to ~6px. */}
+            <div className="grid gap-4 sm:hidden">
+              <ScaledCanvas width={520} height={367}>
+                <div aria-hidden className="absolute top-0 left-0 w-[520px]">
+                  <ArchitectureDiagram />
+                </div>
+              </ScaledCanvas>
+              <div aria-hidden className="ml-auto w-full max-w-[300px]">
+                <PipelineCard />
+              </div>
+            </div>
+            <ScaledCanvas width={620} height={470} className="hidden sm:block">
               <div aria-hidden className="absolute top-0 left-0 w-[520px]">
                 <ArchitectureDiagram />
               </div>

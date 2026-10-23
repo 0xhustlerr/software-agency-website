@@ -320,6 +320,12 @@
     transform: translate3d(0, 108%, 0);
   }
 }
+/* Transform only: the largest above-the-fold text is visible from first paint (LCP), and just settles into place. */
+@keyframes nm-settle {
+  from {
+    transform: translate3d(0, var(--rise), 0);
+  }
+}
 @keyframes nm-fade {
   from {
     opacity: 0;
@@ -360,6 +366,9 @@
   }
   .nm-enter {
     animation: nm-rise var(--enter-dur, 600ms) var(--ease-studio) var(--reveal-delay, 0ms) both;
+  }
+  .nm-settle {
+    animation: nm-settle var(--enter-dur, 600ms) var(--ease-studio) var(--reveal-delay, 0ms) both;
   }
   .nm-enter-fade {
     animation: nm-fade var(--enter-dur, 500ms) ease-out var(--reveal-delay, 0ms) both;
@@ -433,6 +442,7 @@ html.js .nm-scaled:not([data-scaled]) {
 @media print {
   [data-reveal],
   .nm-enter,
+  .nm-settle,
   .nm-enter-fade,
   .nm-enter-x,
   .nm-line > span,

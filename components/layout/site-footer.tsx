@@ -61,19 +61,22 @@ export function SiteFooter() {
           ))}
         </nav>
       </Container>
-      <Container className="flex flex-col gap-3 border-t border-line py-6 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-small text-ink-muted">
-          © <CopyrightYear /> {site.legalName}. Interface visuals on this site are illustrative concepts.
-        </p>
-        {legalNav.length ? (
-          <ul className="flex gap-5">
-            {legalNav.map((l) => (
-              <li key={l.label}>
-                <FooterLink href={l.href}>{l.label}</FooterLink>
-              </li>
-            ))}
-          </ul>
-        ) : null}
+      {/* The rule sits on an inner element so it aligns with the content edge, not the gutters. */}
+      <Container>
+        <div className="flex flex-col gap-3 border-t border-line py-6 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-small text-ink-muted">
+            © <CopyrightYear /> {site.legalName}. Interface visuals on this site are illustrative concepts.
+          </p>
+          {legalNav.length ? (
+            <ul className="flex gap-5">
+              {legalNav.map((l) => (
+                <li key={l.label}>
+                  <FooterLink href={l.href}>{l.label}</FooterLink>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
       </Container>
     </footer>
   );

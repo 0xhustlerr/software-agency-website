@@ -2,7 +2,8 @@ import type { Faq, ServiceSlug } from "../types";
 
 export const servicesHero = {
   eyebrow: "Services",
-  title: "Everything you need to bring your product to life.",
+  /** Ties to the engagement stages below, instead of an "everything you need" overclaim. */
+  title: "The right engineering for the stage you’re at.",
   lead: "From early product decisions to production-ready engineering, we help founders build the right software at the right stage.",
 };
 
@@ -30,7 +31,7 @@ export const coreServiceFeatures: { slug: ServiceSlug; outcome: string; capabili
       "Roles, permissions and audit trails",
       "Data migration from spreadsheets and legacy tools",
     ],
-    linkLabel: "Explore Custom Software",
+    linkLabel: "Explore Custom Software Development",
   },
   {
     slug: "saas-development",
@@ -42,7 +43,7 @@ export const coreServiceFeatures: { slug: ServiceSlug; outcome: string; capabili
       "Multi-tenant data architecture where needed",
       "APIs, webhooks and integrations",
     ],
-    linkLabel: "Explore SaaS Development",
+    linkLabel: "Explore SaaS Product Development",
   },
   {
     slug: "ai-development",
@@ -54,7 +55,7 @@ export const coreServiceFeatures: { slug: ServiceSlug; outcome: string; capabili
       "Privacy-aware data handling and cost controls",
       "Human review and override workflows",
     ],
-    linkLabel: "Explore AI Development",
+    linkLabel: "Explore AI Product Development",
   },
 ];
 
@@ -96,7 +97,7 @@ export const engagementStages = [
     where: "Early users, real feedback and a growing backlog.",
     focus: "Learning from usage, closing gaps and strengthening foundations.",
     leaveWith: "A product that improves in step with what users need.",
-    fit: "SaaS Development · Iteration",
+    fit: "SaaS Product Development · Iteration",
   },
   {
     title: "Growth / Scale",

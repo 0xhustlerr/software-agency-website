@@ -6,11 +6,13 @@ import { PageSkeleton } from "@/components/layout/page-skeleton";
 import { getInsight, publishedInsights, relatedInsights } from "@/lib/insights";
 import { site } from "@/content/site";
 import { formatDate } from "@/lib/format";
+import { socialImage } from "@/lib/metadata";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { PostCard } from "@/components/sections/insights/post-card";
 import { CtaBand } from "@/components/sections/cta-band";
+import { JsonLd } from "@/components/seo/json-ld";
 
 /** Placeholder keeps the build valid while no article is approved (Cache Components needs one param). */
 const PLACEHOLDER = "__no-published-articles__";
@@ -37,9 +39,9 @@ export async function generateMetadata({ params }: PageProps<"/insights/[slug]">
       modifiedTime: a.updatedAt,
       authors: [a.author],
       section: a.category,
-      images: a.image ? [{ url: a.image.src, width: a.image.width, height: a.image.height, alt: a.image.alt }] : undefined,
+      images: [a.image ? { url: a.image.src, width: a.image.width, height: a.image.height, alt: a.image.alt } : socialImage],
     },
-    twitter: { card: "summary_large_image", title: a.title, description: a.description },
+    twitter: { card: "summary_large_image", title: a.title, description: a.description, images: [a.image ? a.image.src : socialImage] },
   };
 }
 
@@ -105,7 +107,7 @@ async function ArticlePageContent({ params }: { params: PageProps<"/insights/[sl
           </p>
         </Section>
       </article>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <JsonLd data={jsonLd} />
 
       {related.length ? (
         <Section tone="muted" aria-labelledby="rel-h">

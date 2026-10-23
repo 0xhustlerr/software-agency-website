@@ -14,8 +14,10 @@ import { WorkFilters } from "@/components/sections/pages/work-filters";
 import { CtaBand } from "@/components/sections/cta-band";
 
 export const metadata = pageMetadata({
-  title: "Work",
-  description: "Product case studies from Nexus Morrow — published only with client approval — and how we approach every engagement.",
+  title: approvedProjects.length ? "Case studies and engineering approach" : "Our work and engineering approach",
+  description: approvedProjects.length
+    ? "Product case studies from Nexus Morrow, published with client approval, and how we approach every engagement."
+    : "How Nexus Morrow designs and engineers products for founders, shown through a labelled product concept. Case studies are published only with client approval.",
   path: "/work",
 });
 

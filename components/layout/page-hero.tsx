@@ -38,13 +38,13 @@ export function PageHero({ eyebrow, title, lead, crumbs, actions, aside, leadAsi
             <Reveal mode="enter">
               <Eyebrow>{eyebrow}</Eyebrow>
             </Reveal>
-            <Reveal mode="enter" delay={0.06}>
+            <Reveal mode="settle" delay={0.06}>
               <h1 id={id} className={`${titleClass} mt-5 text-ink`}>
                 {title}
               </h1>
             </Reveal>
             {lead && !leadAside ? (
-              <Reveal mode="enter" delay={0.12}>
+              <Reveal mode="settle" delay={0.12}>
                 <p className="text-lead mt-6 max-w-[48ch] text-ink-muted">{lead}</p>
               </Reveal>
             ) : null}
@@ -55,7 +55,7 @@ export function PageHero({ eyebrow, title, lead, crumbs, actions, aside, leadAsi
             ) : null}
           </div>
           {lead && leadAside ? (
-            <Reveal mode="enter" delay={0.12} className="lg:col-span-4">
+            <Reveal mode="settle" delay={0.12} className="lg:col-span-4">
               <p className="text-lead text-ink-muted">{lead}</p>
             </Reveal>
           ) : null}

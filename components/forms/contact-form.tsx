@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { startTransition, useActionState, useEffect, useId, useRef, type FormEvent } from "react";
+import { useActionState, useEffect, useId, useRef, useState, useTransition, type FormEvent } from "react";
 import { ArrowRight, CircleAlert } from "lucide-react";
 import { submitInquiry } from "@/app/contact/actions";
 import type { InquiryField, InquiryState } from "@/lib/contact/schema";
+import { inquiryLimits } from "@/lib/contact/limits";
+import { track } from "@/lib/analytics";
 import { budgetRanges, interestedServices, projectStages, startTimeframes } from "@/content/pages/contact";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -25,27 +27,52 @@ const inputCls =
   "w-full rounded-sm border border-line-strong bg-surface-raised px-4 font-sans text-base leading-6 text-ink placeholder:text-ink-muted transition-[border-color,box-shadow] duration-200 hover:border-ink-muted focus:border-ink focus-visible:focus-ring disabled:cursor-not-allowed disabled:bg-surface-muted disabled:opacity-60 aria-invalid:border-danger aria-invalid:shadow-[inset_3px_0_0_var(--danger)]";
 
 export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactFormProps) {
-  const [state, action, pending] = useActionState(submitInquiry, initial);
+  // `formAction` serves the no-JavaScript post. With JavaScript, onSubmit calls the
+  // action itself so a network or server failure becomes a "failed" state instead
+  // of an error thrown into the page.
+  const [serverState, formAction, actionPending] = useActionState(submitInquiry, initial);
+  const [clientState, setClientState] = useState<InquiryState | null>(null);
+  const [sending, startSending] = useTransition();
+  const state = clientState ?? serverState;
+  const pending = sending || actionPending;
   const uid = useId();
   const id = (f: string) => `${uid}-${f}`;
   const summaryRef = useRef<HTMLDivElement>(null);
   const doneRef = useRef<HTMLHeadingElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const inFlight = useRef(false);
 
   const values = "values" in state ? state.values : {};
 
   // Submit through a transition instead of letting React reset the form after
   // the action: every answer (including selects and radios) stays exactly as
-  // typed on errors or failures. Without JavaScript, the form still posts via `action`.
+  // typed on errors or failures. Without JavaScript, the form still posts via `formAction`.
   function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    // A second click or Enter press before `pending` re-renders must not send a duplicate.
+    if (inFlight.current) return;
+    inFlight.current = true;
+    track("inquiry_submit");
     const data = new FormData(e.currentTarget);
-    startTransition(() => action(data));
+    startSending(async () => {
+      let next: InquiryState;
+      try {
+        next = await submitInquiry(state, data);
+      } catch {
+        const typed = [...data.entries()].filter((entry): entry is [string, string] => typeof entry[1] === "string");
+        next = { status: "failed", values: Object.fromEntries(typed) };
+      }
+      startSending(() => setClientState(next));
+    });
   }
   const errors: Partial<Record<InquiryField, string>> = state.status === "invalid" ? state.errors : {};
 
   // Move focus to the outcome so screen-reader and keyboard users hear it.
   useEffect(() => {
+    inFlight.current = false;
+    if (state.status === "sent") track("inquiry_sent");
+    else if (state.status !== "idle") track("inquiry_error", { reason: state.status });
+
     if (state.status === "sent") doneRef.current?.focus();
     else if (state.status === "invalid") {
       const first = formRef.current?.querySelector<HTMLElement>("[aria-invalid='true']");
@@ -128,7 +155,7 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
   );
 
   return (
-    <form ref={formRef} action={action} onSubmit={onSubmit} noValidate aria-labelledby={id("title")} className="rounded-md border border-line bg-surface-raised p-6 shadow-frame sm:p-10">
+    <form ref={formRef} action={formAction} onSubmit={onSubmit} noValidate aria-labelledby={id("title")} className="rounded-md border border-line bg-surface-raised p-6 shadow-frame sm:p-10">
       <h2 id={id("title")} className="text-h3">
         Project inquiry
       </h2>
@@ -152,21 +179,21 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
           <label htmlFor={id("name")} className="text-label">
             Full name <span aria-hidden className="font-normal text-ink-muted">*</span>
           </label>
-          <input id={id("name")} name="name" type="text" autoComplete="name" autoCapitalize="words" enterKeyHint="next" required defaultValue={values.name} disabled={disabled} aria-invalid={errors.name ? true : undefined} aria-describedby={errors.name ? id("name-err") : undefined} className={cn(inputCls, "h-12")} />
+          <input id={id("name")} name="name" type="text" autoComplete="name" autoCapitalize="words" enterKeyHint="next" required maxLength={inquiryLimits.name} defaultValue={values.name} disabled={disabled} aria-invalid={errors.name ? true : undefined} aria-describedby={errors.name ? id("name-err") : undefined} className={cn(inputCls, "h-12")} />
           {err("name")}
         </div>
         <div className="grid gap-2">
           <label htmlFor={id("email")} className="text-label">
             Work email <span aria-hidden className="font-normal text-ink-muted">*</span>
           </label>
-          <input id={id("email")} name="email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" spellCheck={false} enterKeyHint="next" required placeholder="you@company.com" defaultValue={values.email} disabled={disabled} aria-invalid={errors.email ? true : undefined} aria-describedby={errors.email ? id("email-err") : undefined} className={cn(inputCls, "h-12")} />
+          <input id={id("email")} name="email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" spellCheck={false} enterKeyHint="next" required maxLength={inquiryLimits.email} placeholder="you@company.com" defaultValue={values.email} disabled={disabled} aria-invalid={errors.email ? true : undefined} aria-describedby={errors.email ? id("email-err") : undefined} className={cn(inputCls, "h-12")} />
           {err("email")}
         </div>
         <div className="grid gap-2 sm:col-span-2">
           <label htmlFor={id("company")} className="text-label">
             Company or startup name <span className="font-normal text-ink-muted">(optional)</span>
           </label>
-          <input id={id("company")} name="company" type="text" autoComplete="organization" enterKeyHint="next" defaultValue={values.company} disabled={disabled} aria-invalid={errors.company ? true : undefined} className={cn(inputCls, "h-12")} />
+          <input id={id("company")} name="company" type="text" autoComplete="organization" enterKeyHint="next" maxLength={inquiryLimits.company} defaultValue={values.company} disabled={disabled} aria-invalid={errors.company ? true : undefined} className={cn(inputCls, "h-12")} />
           {err("company")}
         </div>
         {choice("stage", "Project stage", projectStages)}
@@ -204,6 +231,7 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
             id={id("description")}
             name="description"
             required
+            maxLength={inquiryLimits.description}
             rows={6}
             defaultValue={values.description}
             disabled={disabled}

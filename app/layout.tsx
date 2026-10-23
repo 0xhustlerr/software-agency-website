@@ -4,6 +4,7 @@ import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { RevealController } from "@/components/motion/reveal-controller";
+import { Analytics } from "@/components/analytics/analytics";
 import { inter, spaceGrotesk } from "./fonts";
 import "./globals.css";
 
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
     locale: "en_US",
   },
   twitter: { card: "summary_large_image" },
-  alternates: { canonical: "/" },
+  // No canonical here: it would be inherited by 404 and noindex pages. Each page sets its own.
 };
 
 export const viewport: Viewport = {
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           </main>
           <SiteFooter />
         </MotionProvider>
+        <Analytics />
       </body>
     </html>
   );

@@ -13,7 +13,8 @@ export const hero = {
 
 export const positioning = {
   eyebrow: "A different kind of development partner",
-  heading: "More than developers. Your product partners.",
+  /** Says what the partnership does, instead of the category cliché ("more than developers"). */
+  heading: "Decide what to build. Then build it properly.",
   body: "Building a startup takes more than writing code. We help you shape the right product, make smart technical decisions, and build a foundation that supports what comes next.",
   pillars: [
     {
@@ -39,7 +40,8 @@ export const servicesIntro = {
 
 export const work = {
   eyebrow: "Selected work",
-  heading: "Built with purpose. Designed for impact.",
+  /** Claims no delivered impact: until a case study is approved, this sits above a labelled concept. */
+  heading: "Products we design and engineer.",
   emptyState: {
     title: "Our work is taking shape.",
     body: "Nexus Morrow is a new studio. Case studies will appear here as our first client products launch and are approved for publication. Until then, the concept above shows the kind of product we design and engineer.",

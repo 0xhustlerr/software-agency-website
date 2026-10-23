@@ -18,7 +18,7 @@ import { ServicesHeroArt } from "@/components/illustrations/services-hero-art";
 import { CtaBand } from "@/components/sections/cta-band";
 
 export const metadata = pageMetadata({
-  title: "Services",
+  title: "Services: MVP, SaaS, AI and custom software development",
   description:
     "MVP development, custom software, SaaS and AI product development for startup founders — from early product decisions to production-ready engineering.",
   path: "/services",
@@ -58,7 +58,8 @@ export default function ServicesPage() {
               <article key={f.slug} aria-labelledby={`svc-${f.slug}`} className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-6">
                 <Reveal className={cn("lg:col-span-7", flip && "lg:order-2 lg:col-start-6")}>
                   <BlueprintStage className="aspect-[4/3]">
-                    <div aria-hidden className="w-full max-w-[400px] sm:scale-110">
+                    {/* DOM vignettes stay crisp when scaled; at 1:1 they left most of the stage empty. */}
+                    <div aria-hidden className="w-full max-w-[400px] sm:scale-[1.2] xl:scale-[1.35]">
                       <ServiceVisual slug={f.slug} />
                     </div>
                   </BlueprintStage>

@@ -49,4 +49,5 @@ export const footerNav: { title: string; items: NavItem[] }[] = [
   },
 ];
 
-export const legalNav: NavItem[] = [...item("Privacy Policy", href("privacy")), ...item("Contact", href("contact"))];
+/** Legal links only; Contact already sits in the Company column. */
+export const legalNav: NavItem[] = [...item("Privacy Policy", href("privacy"))];

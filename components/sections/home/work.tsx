@@ -9,9 +9,15 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Tag } from "@/components/ui/tag";
 import { Reveal } from "@/components/motion/reveal";
-import { RelayDashboard, RelayPhone, RelayWorkflow } from "@/components/illustrations/relay-concept";
+import { RelayDecisionLog, RelayTriagePhone } from "@/components/illustrations/relay-decisions";
 import { ScaledCanvas } from "@/components/motion/scaled-canvas";
 import { cn } from "@/lib/utils";
+
+/**
+ * Decision D2 (right edge of the log, at the row's middle) → the phone frame at the
+ * height of its AI suggestion, in canvas coordinates (measured from the rendered layout).
+ */
+const connector = { start: [464, 196] as const, end: [504, 258] as const, d: "M464 196 H 484 V 258 H 504" };
 
 /** The large image area of a feature: a navy stage with a blueprint grid. */
 function Stage({ children, className }: { children: React.ReactNode; className?: string }) {
@@ -86,30 +92,32 @@ function Details({
 function ConceptFeature({ concept }: { concept: ProductConcept }) {
   return (
     <Reveal as="li" className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
+      {/*
+        The hero already shows Relay's dashboard, so this shows the thinking behind it:
+        the decision log, and the triage screen decision D2 produced, joined by the motif.
+      */}
       <figure className="m-0 lg:col-span-8">
-        {/* Phones: 4:3 crop on the dashboard so its interface stays legible. */}
-        <Stage className="sm:hidden">
-          <ScaledCanvas width={480} height={360} className="relative">
-            <div aria-hidden className="absolute top-[32px] left-[28px] w-[560px]">
-              <RelayDashboard />
-            </div>
-          </ScaledCanvas>
+        {/* Phones: the log as real, fluid text rather than a scaled-down picture. */}
+        <Stage className="p-4 sm:hidden">
+          <RelayDecisionLog fluid className="relative" />
         </Stage>
         <Stage className="hidden sm:block">
-          <ScaledCanvas width={760} height={580} className="relative">
-            <div aria-hidden className="absolute top-[64px] left-[88px] w-[560px]">
-              <RelayDashboard />
+          <ScaledCanvas width={760} height={420} className="relative">
+            <div aria-hidden className="absolute top-[40px] left-[40px] w-[424px]">
+              <RelayDecisionLog />
             </div>
-            <div aria-hidden className="absolute top-[24px] right-[28px] w-[210px]">
-              <RelayWorkflow />
-            </div>
-            <div aria-hidden className="absolute bottom-[24px] left-[32px] w-[150px]">
-              <RelayPhone />
+            <svg aria-hidden className="absolute inset-0" width={760} height={420} viewBox="0 0 760 420">
+              <path d={connector.d} pathLength={1} fill="none" className="nm-draw stroke-accent-ink" strokeWidth="1.25" style={{ ["--reveal-delay" as string]: "400ms" }} />
+              <circle cx={connector.start[0]} cy={connector.start[1]} r="3.5" className="fill-surface stroke-accent-ink" strokeWidth="1.25" />
+              <circle cx={connector.end[0]} cy={connector.end[1]} r="4.5" className="fill-accent" />
+            </svg>
+            <div aria-hidden className="absolute top-[72px] right-[44px] w-[212px]">
+              <RelayTriagePhone />
             </div>
           </ScaledCanvas>
         </Stage>
         <figcaption className="text-small mt-3 text-ink-muted">
-          {concept.name} is an original product concept with sample data, created by Nexus Morrow to show the kind of product we build.
+          {concept.name} is an original product concept with sample data, created by Nexus Morrow: four product decisions, and the triage screen that decision D2 produced.
         </figcaption>
       </figure>
       <div className="lg:col-span-4 lg:self-center">
@@ -124,6 +132,11 @@ function ConceptFeature({ concept }: { concept: ProductConcept }) {
           challenge={concept.challenge}
           built={concept.built}
           builtLabel="What it demonstrates"
+          footer={
+            <Button href="/work" variant="ghost">
+              See the full concept
+            </Button>
+          }
           tags={concept.tags}
         />
       </div>

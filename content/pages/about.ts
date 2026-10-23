@@ -2,7 +2,8 @@
 
 export const aboutHero = {
   eyebrow: "About",
-  title: "Great products are built through great partnerships.",
+  /** Names what founders get (engineering rigour, plain language) instead of a generic partnership line. */
+  title: "Serious engineering, explained in plain language.",
   lead: "Nexus Morrow is a product engineering studio for founders — thoughtful about the product, serious about the engineering, and clear in how we communicate.",
 };
 

@@ -33,7 +33,9 @@ export function Section({
       id={id}
       data-theme={theme}
       className={cn(
-        "relative scroll-mt-(--header-h) overflow-hidden",
+        // overflow-clip, not overflow-hidden: hidden makes each section a scroll container,
+        // which silently disables position: sticky inside it (the services preview panel).
+        "relative scroll-mt-(--header-h) overflow-clip",
         tone === "muted" ? "bg-surface-muted" : "bg-surface",
         spacing === "lg" ? "section-y-lg" : spacing === "default" ? "section-y" : null,
         className,

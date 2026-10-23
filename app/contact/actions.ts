@@ -14,10 +14,15 @@ const FIELDS = ["name", "email", "company", "stage", "service", "budget", "start
  * nothing they typed is lost.
  */
 export async function submitInquiry(_prev: InquiryState, formData: FormData): Promise<InquiryState> {
-  const values = Object.fromEntries(FIELDS.map((f) => [f, String(formData.get(f) ?? "")]));
+  // Text only: a file posted in place of a field counts as empty, never as "[object File]".
+  const text = (key: string) => {
+    const v = formData.get(key);
+    return typeof v === "string" ? v : "";
+  };
+  const values = Object.fromEntries(FIELDS.map((f) => [f, text(f)]));
 
   // Honeypot: a hidden field people never see. Bots that fill it get a plain failure.
-  if (String(formData.get("website") ?? "").trim() !== "") {
+  if (text("website").trim() !== "") {
     return { status: "failed", values };
   }
 

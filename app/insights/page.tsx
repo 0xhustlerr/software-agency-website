@@ -14,7 +14,7 @@ import { InsightBrowser } from "@/components/sections/insights/insight-browser";
 import { CtaBand } from "@/components/sections/cta-band";
 
 export const metadata = pageMetadata({
-  title: "Insights",
+  title: "Insights for startup founders",
   description: "Practical notes for founders on scoping MVPs, SaaS architecture, applied AI and the engineering decisions that matter early.",
   path: "/insights",
 });

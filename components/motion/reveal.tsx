@@ -9,9 +9,11 @@ interface RevealProps {
   as?: "div" | "li";
   /**
    * view  — rise and fade the first time it scrolls into view (default).
-   * enter — plays once on first paint, for content above the fold (hero, page headings).
+   * enter — plays once on first paint, for content above the fold (eyebrows, actions).
+   * settle — like enter but never transparent, for the page's largest text (headline, lead),
+   *          so Largest Contentful Paint isn't held back by the animation.
    */
-  mode?: "view" | "enter";
+  mode?: "view" | "enter" | "settle";
 }
 
 /**
@@ -24,7 +26,7 @@ interface RevealProps {
 export function Reveal({ children, delay = 0, className, as: Tag = "div", mode = "view" }: RevealProps) {
   const style = delay ? ({ "--reveal-delay": `${Math.round(delay * 1000)}ms` } as CSSProperties) : undefined;
   return (
-    <Tag className={cn(mode === "enter" ? "nm-enter" : undefined, className)} data-reveal={mode === "view" ? "" : undefined} style={style}>
+    <Tag className={cn(mode === "enter" ? "nm-enter" : mode === "settle" ? "nm-settle" : undefined, className)} data-reveal={mode === "view" ? "" : undefined} style={style}>
       {children}
     </Tag>
   );

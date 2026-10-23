@@ -2,7 +2,6 @@ import { ArrowRight } from "lucide-react";
 import { emailHref, projectStartHref, site } from "@/content/site";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
-import { NodeGrid } from "@/components/ui/node-grid";
 import { Reveal } from "@/components/motion/reveal";
 
 interface CtaBandProps {
@@ -16,11 +15,9 @@ interface CtaBandProps {
 export function CtaBand({ heading, body, cta = "Start a Project", id = "cta" }: CtaBandProps) {
   return (
     <Section id={id} theme="dark" spacing="lg" aria-labelledby={`${id}-heading`}>
-      <div aria-hidden className="pointer-events-none absolute -top-6 right-0 hidden w-[34%] max-w-[480px] opacity-70 lg:block">
-        <NodeGrid cols={6} rows={4} pitch={72} grid={false} path={[[0, 1], [2, 1], [2, 3], [5, 3]]} />
-      </div>
+      {/* Two or three lines, not four: inner pages close firmly without competing with the homepage's final CTA. */}
       <Reveal>
-        <h2 id={`${id}-heading`} className="text-display relative max-w-[14ch] text-[clamp(2.75rem,6vw,6rem)] leading-[0.98]">
+        <h2 id={`${id}-heading`} className="text-display relative max-w-[20ch] text-[clamp(2.5rem,5vw,4.75rem)] leading-[1.0] text-balance">
           {heading}
         </h2>
       </Reveal>

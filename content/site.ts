@@ -4,8 +4,9 @@ import { href } from "./routes";
 export const site = {
   name: "Nexus Morrow",
   url: "https://nexusmorrow.com",
+  /** Default meta description (homepage, social cards, Organization structured data). */
   description:
-    "Nexus Morrow partners with startup founders to design, build, and launch software products that are ready for the real world.",
+    "Nexus Morrow is a product engineering studio for startup founders. We design, build and launch MVPs, SaaS platforms, AI products and custom software.",
   /** Short positioning line for the footer. */
   positioning: "A product engineering studio helping founders turn ambitious ideas into thoughtfully designed, reliable software.",
   /**

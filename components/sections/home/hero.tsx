@@ -4,6 +4,7 @@ import { primaryCta, secondaryCta } from "@/content/site";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
+import { MintStop } from "@/components/ui/mint-stop";
 import { HeroVisual } from "./hero-visual";
 
 /** Entrance timing (ms). CSS only: plays at first paint, never waits for JavaScript. */
@@ -36,11 +37,14 @@ export function Hero() {
           >
             {hero.headlineLines.map((line, i) => (
               <span key={line} className="nm-line" style={at(120 + i * 80)}>
-                <span>{line} </span>
+                <span>
+                  <MintStop>{line}</MintStop>{" "}
+                </span>
               </span>
             ))}
           </h1>
-          <p className="nm-enter text-lead mt-6 max-w-[42ch] text-ink-muted sm:mt-7 lg:mt-9" style={at(460)}>
+          {/* The lead is usually the Largest Contentful Paint on phones: visible at first paint, it only settles. */}
+          <p className="nm-settle text-lead mt-6 max-w-[42ch] text-ink-muted sm:mt-7 lg:mt-9" style={at(460)}>
             {hero.lead}
           </p>
           <div
