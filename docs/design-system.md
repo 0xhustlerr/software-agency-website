@@ -84,9 +84,9 @@ The motif is thin orthogonal lines joining small nodes, moving right and down, w
 
 **Signature:** the hero and final-CTA headlines end in a mint full stop (`MintStop`) — the destination node, set in type. Those two bookends only.
 
-**Connectors carry meaning.** On the homepage work feature, a connector runs from Relay's decision D2 to the screen that decision produced. Draw a connector only where it links cause to effect.
+**Connectors carry meaning.** In the hero composition, connectors join the workflow, dashboard and phone they feed. Draw a connector only where it links cause to effect.
 
-**One visual, one place.** Never show the same illustration twice on a page: the hero shows Relay's dashboard, so the work section shows Relay's decision log and triage screen.
+**One visual, one place.** Never show the same illustration twice on a page: the hero shows the sample Relay dashboard; the work section shows the product concepts' own images (`content/concepts.ts`, `public/concepts/`).
 
 Motion is CSS first; content never waits for JavaScript.
 
@@ -135,7 +135,7 @@ components/forms/    ContactForm (client; server action in app/contact/actions.t
 components/ui/       Button, Eyebrow, Accordion, PendingContent, NodeGrid, Tag
 components/seo/      JsonLd (structured data script)
 components/analytics/ Analytics (Plausible loader + click tracking; inert unless configured)
-components/illustrations/  DOM/SVG product concepts (Relay), service vignettes,
+components/illustrations/  DOM/SVG hero concept (Relay), service vignettes,
                      architecture diagram, collaboration board — all labelled
 components/motion/   Reveal, ScaledCanvas, MotionProvider (reduced motion)
 hooks/               usePrefersReducedMotion (hydration-safe)
