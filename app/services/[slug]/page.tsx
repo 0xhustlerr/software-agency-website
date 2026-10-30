@@ -73,7 +73,7 @@ async function ServiceDetailPageContent({ params }: { params: PageProps<"/servic
         aside={
           <figure className="m-0">
             <BlueprintStage tone="muted" className="aspect-[5/4]">
-              <div aria-hidden className="w-full max-w-[380px] lg:scale-[1.15]">
+              <div aria-hidden className="w-full">
                 <ServiceVisual slug={service.slug} />
               </div>
             </BlueprintStage>

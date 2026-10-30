@@ -96,10 +96,10 @@ Motion is CSS first; content never waits for JavaScript.
 | Settle (`Reveal mode="settle"`, `.nm-settle`) | Hero lead, inner-page h1 and lead | Same timing, transform only — never transparent. These are the Largest Contentful Paint elements; fading them in delayed LCP by 300–740ms on throttled mobile |
 | Scroll reveal (`Reveal`, `[data-reveal]`) | Everything below the fold | 600ms rise (14px, 8px on phones) + fade, 60–80ms stagger, once. Hidden only after `html.js` is set; `RevealController` (one IntersectionObserver) reveals in view |
 | Scroll-linked | Process rail | Fill and stage state follow page position; never pins or captures scrolling |
-| 3D scene (`.nm-stage`, `.nm-float`, `.nm-particle`, `.nm-sheen`, `.nm-bar`, `.nm-badge-3d`) | `/services` hero only | Tilted stage over a receding grid floor. Loops: camera sway 14s, card float 4.5–8s, particles 1.6–5s along the connectors, glass sheen 7s, concept label flips once every 8s. Reduced motion: still, but keeps the tilt |
+| 3D scene (`.nm-stage`, `.nm-float`, `.nm-particle`, `.nm-sheen`, `.nm-bar`, `.nm-badge-3d`) | `/services` hero and the four service scenes (`components/illustrations/scene.tsx`) | Tilted stage over a receding grid floor; each scene sways out of phase. Loops: camera sway 14s, card float 4.5–8s, particles 1.6–5s along the connectors, glass sheen 7s, concept label flips once every 8s. Reduced motion: still, but keeps the tilt |
 | Hover | Rows, buttons, frames | 150–300ms colour/background; arrows +3–4px; row divider draws 450ms; project images 1.02 inside a fixed clip |
 
-Only `transform` and `opacity` animate (plus paint-only colours). The header never changes height. No parallax stacks, loops, carousels or autoplay video — except the `/services` hero scene above, the one place motion loops.
+Only `transform` and `opacity` animate (plus paint-only colours). The header never changes height. No parallax stacks, loops, carousels or autoplay video — except the 3D scenes above (services hero and service illustrations), the only places motion loops.
 
 Fallbacks: without JavaScript nothing is hidden; if the app fails to start, the inline script in `app/layout.tsx` removes `html.js` after 3s so every reveal shows; `prefers-reduced-motion` and print render the final state.
 
