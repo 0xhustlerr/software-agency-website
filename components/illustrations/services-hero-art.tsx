@@ -1,6 +1,6 @@
 import { Activity, Check, FileText, MousePointer2, PenTool, Rocket } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Done, Glow, Header, Item, Particle, Scene, Wires, iconTile, slab, type Vars } from "./scene";
+import { ConceptBadge, Done, Glow, Header, Item, Particle, Scene, Wires, iconTile, slab, type Vars } from "./scene";
 
 /** Connector paths in stage coordinates (520 × 460). Particles travel the same paths. */
 const paths = {
@@ -202,11 +202,7 @@ export function ServicesHeroArt() {
           </div>
         </Item>
       </Scene>
-      <figcaption className="mt-4 flex justify-end [perspective:600px]">
-        <span className="nm-badge-3d rounded-[8px] border border-mint-400/40 bg-linear-to-b from-surface-raised to-surface-muted px-4.5 py-1.5 text-[16.5px] leading-7 font-semibold tracking-[0.12em] text-mint-400 uppercase shadow-[inset_0_1px_0_rgb(255_255_255/0.1),0_3px_0_#0d1626,0_5px_0_#0a111e,0_14px_24px_-8px_rgb(0_0_0/0.8),0_0_18px_-4px_rgb(109_225_210/0.45)]">
-          Product concept illustration
-        </span>
-      </figcaption>
+      <ConceptBadge>Product concept illustration</ConceptBadge>
     </figure>
   );
 }

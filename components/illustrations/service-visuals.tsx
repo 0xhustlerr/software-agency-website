@@ -163,7 +163,7 @@ function CustomVisual() {
 
       {/* Technician app */}
       <Item x={300} y={122} w={140} h={206} z={60} enter={1000} float="-9px" floatDur="6.5s" floatDelay="-1s">
-        <div className={cn(slab, "h-full rounded-[22px] border-white/15 px-3 pt-2.5")}>
+        <div className={cn(slab, "h-full rounded-[22px] px-3 pt-2.5")}>
           <div className="mx-auto h-1.5 w-12 rounded-full bg-white/15" />
           <div className="mt-2.5 flex items-center gap-1.5">
             <Smartphone className="size-3.5 text-mint-400" strokeWidth={2.25} />
