@@ -559,6 +559,11 @@ html.js .nm-scaled:not([data-scaled]) {
   html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar) {
     animation-play-state: paused;
   }
+  /* Scenes scrolled out of view stop looping (and save their entrance for when they arrive). */
+  .nm-scaled[data-offscreen] *,
+  .nm-scaled[data-offscreen] *::after {
+    animation-play-state: paused;
+  }
 }
 
 /* Blueprint accent: a faint grid that runs under the transparent header and fades out. */

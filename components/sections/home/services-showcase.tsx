@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Service } from "@/content/types";
 import { ServiceVisual } from "@/components/illustrations/service-visuals";
+import { Badge3D } from "@/components/illustrations/scene";
 import { cn } from "@/lib/utils";
 
 interface ServicesShowcaseProps {
@@ -96,7 +97,9 @@ export function ServicesShowcase({ services }: ServicesShowcaseProps) {
                 <ServiceVisual slug={s.slug} className="w-full" />
               </div>
             ))}
-            <span className="absolute bottom-3 left-4 font-mono text-[10px] text-ink-muted">Interface concept</span>
+            <span className="absolute bottom-3 left-4">
+              <Badge3D>Interface concept</Badge3D>
+            </span>
           </div>
         </div>
       </div>

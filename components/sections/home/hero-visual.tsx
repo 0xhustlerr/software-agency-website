@@ -27,8 +27,8 @@ const chartLine = series
   .map((v, i) => `${i ? "L" : "M"}${((i * chartW) / (series.length - 1)).toFixed(1)} ${(chartH - ((v - 30) / 50) * chartH).toFixed(1)}`)
   .join(" ");
 
-/** The Relay operations dashboard (420 × 344). */
-function Dashboard() {
+/** The Relay operations dashboard (420 × 344). `id` keeps its gradient unique: phone and desktop copies share the page. */
+function Dashboard({ id }: { id: string }) {
   return (
     <div className={cn(slab, "nm-sheen h-full rounded-[14px] bg-linear-to-b from-[#1d2a40] to-[#121b2b]")}>
       <div className="flex h-9 items-center gap-2 border-b border-white/[0.07] px-3.5">
@@ -64,7 +64,7 @@ function Dashboard() {
             <div className="relative mt-1.5" style={{ width: chartW, height: chartH }}>
               <svg className="absolute inset-0 overflow-visible" width={chartW} height={chartH} viewBox={`0 0 ${chartW} ${chartH}`} fill="none">
                 <defs>
-                  <linearGradient id="hv-area" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id={`${id}-area`} x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0" stopColor="var(--accent)" stopOpacity="0.45" />
                     <stop offset="1" stopColor="var(--accent)" stopOpacity="0" />
                   </linearGradient>
@@ -72,7 +72,7 @@ function Dashboard() {
                 {[15, 30, 45].map((y) => (
                   <line key={y} x1="0" x2={chartW} y1={y} y2={y} stroke="rgb(255 255 255 / 0.06)" />
                 ))}
-                <path d={`${chartLine} L ${chartW} ${chartH} L 0 ${chartH} Z`} fill="url(#hv-area)" />
+                <path d={`${chartLine} L ${chartW} ${chartH} L 0 ${chartH} Z`} fill={`url(#${id}-area)`} />
                 <path d={chartLine} pathLength={1} stroke="var(--accent)" strokeWidth="2" strokeLinejoin="round" className="nm-draw" style={{ "--reveal-delay": "1100ms" } as Vars} />
               </svg>
               <Particle d={chartLine} dur="5s" delay="2s" />
@@ -200,7 +200,7 @@ export function HeroVisual() {
           <Wires id="hvm" width={440} height={400} paths={[mobileWire]} ends={[[190, 374]]} delay={1100} />
           <Particle d={mobileWire} dur="1.6s" delay="2.2s" />
           <Item x={10} y={0} w={420} h={344} enter={360} float="-3px" floatDur="8s">
-            <Dashboard />
+            <Dashboard id="hvm" />
           </Item>
           <Item x={190} y={350} w={230} h={48} z={50} enter={900} float="-7px" floatDelay="-2s">
             <RoutedToast />
@@ -215,7 +215,7 @@ export function HeroVisual() {
           <Particle d={wires.workflow} dur="2.2s" delay="2.4s" />
           <Particle d={wires.toast} dur="1.8s" delay="3.2s" />
           <Item x={30} y={90} w={420} h={344} enter={360} float="-3px" floatDur="8s">
-            <Dashboard />
+            <Dashboard id="hv" />
           </Item>
           <Item x={430} y={0} w={170} h={196} z={50} enter={620} float="-8px" floatDur="7s" floatDelay="-2s">
             <WorkflowCard />
