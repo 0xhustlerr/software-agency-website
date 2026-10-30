@@ -2,8 +2,7 @@ import { engineering } from "@/content/home";
 import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
-import { ScaledCanvas } from "@/components/motion/scaled-canvas";
-import { ArchitectureDiagram, PipelineCard } from "@/components/illustrations/architecture";
+import { EngineeringArt } from "@/components/illustrations/architecture";
 
 /** Section 7 — dark engineering capabilities, explained for founders. */
 export function Engineering() {
@@ -18,32 +17,7 @@ export function Engineering() {
           <p className="text-lead mt-8 max-w-[36ch] text-ink-muted">{engineering.supporting}</p>
         </Reveal>
         <Reveal delay={0.1} className="lg:col-span-7">
-          <figure className="m-0">
-            {/* Phones: the diagram alone (pipeline card below it), so its labels stay legible instead of shrinking to ~6px. */}
-            <div className="grid gap-4 sm:hidden">
-              <ScaledCanvas width={520} height={367}>
-                <div aria-hidden className="absolute top-0 left-0 w-[520px]">
-                  <ArchitectureDiagram />
-                </div>
-              </ScaledCanvas>
-              <div aria-hidden className="ml-auto w-full max-w-[300px]">
-                <PipelineCard />
-              </div>
-            </div>
-            <ScaledCanvas width={620} height={470} className="hidden sm:block">
-              <div aria-hidden className="absolute top-0 left-0 w-[520px]">
-                <ArchitectureDiagram />
-              </div>
-              <div aria-hidden className="absolute right-0 bottom-0 w-[240px]">
-                <PipelineCard />
-              </div>
-            </ScaledCanvas>
-            <figcaption className="mt-4 flex justify-end">
-              <span className="rounded-xs border border-dashed border-line-strong px-2 text-[11px] leading-5 font-semibold tracking-[0.08em] text-ink-muted uppercase">
-                Architecture illustration
-              </span>
-            </figcaption>
-          </figure>
+          <EngineeringArt />
         </Reveal>
       </div>
 

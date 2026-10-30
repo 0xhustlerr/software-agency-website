@@ -117,11 +117,23 @@ export function Particle({ d, dur, delay }: { d: string; dur: string; delay: str
 /** The 3D label under a scene: a raised mint tile that flips once every few seconds. */
 export function ConceptBadge({ children }: { children: ReactNode }) {
   return (
-    <figcaption className="mt-4 flex justify-end [perspective:600px]">
-      <span className="nm-badge-3d rounded-[8px] border border-mint-400/40 bg-linear-to-b from-surface-raised to-surface-muted px-3 py-1 text-[12.5px] leading-6 font-semibold tracking-[0.1em] sm:px-4.5 sm:py-1.5 sm:text-[16.5px] sm:leading-7 sm:tracking-[0.12em] text-mint-400 uppercase shadow-[inset_0_1px_0_rgb(255_255_255/0.1),0_3px_0_#0d1626,0_5px_0_#0a111e,0_14px_24px_-8px_rgb(0_0_0/0.8),0_0_18px_-4px_rgb(109_225_210/0.45)]">
+    <figcaption className="mt-4 flex justify-end">
+      <Badge3D>{children}</Badge3D>
+    </figcaption>
+  );
+}
+
+/** The flipping 3D label on its own. Always dark, so it reads on light sections too. */
+export function Badge3D({ children }: { children: ReactNode }) {
+  return (
+    <span className="inline-block shrink-0 [perspective:600px]">
+      <span
+        data-theme="dark"
+        className="nm-badge-3d block rounded-[8px] border border-mint-400/40 bg-linear-to-b from-surface-raised to-surface-muted px-3 py-1 text-[12.5px] leading-6 font-semibold tracking-[0.1em] text-mint-400 uppercase shadow-[inset_0_1px_0_rgb(255_255_255/0.1),0_3px_0_#0d1626,0_5px_0_#0a111e,0_14px_24px_-8px_rgb(0_0_0/0.8),0_0_18px_-4px_rgb(109_225_210/0.45)] sm:px-4.5 sm:py-1.5 sm:text-[16.5px] sm:leading-7 sm:tracking-[0.12em]"
+      >
         {children}
       </span>
-    </figcaption>
+    </span>
   );
 }
 
