@@ -19,6 +19,7 @@ interface ScaledCanvasProps {
  * phones to wide desktops. The box reserves its aspect ratio (no layout
  * shift). With JavaScript it stays invisible until measured and any entrance
  * inside waits for that moment; without JavaScript it renders at design size.
+ * Off screen it is marked `data-offscreen`, which pauses its looping motion.
  */
 export function ScaledCanvas({ width, height, className, innerClassName, children }: ScaledCanvasProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -30,7 +31,13 @@ export function ScaledCanvas({ width, height, className, innerClassName, childre
     setScale(el.getBoundingClientRect().width / width);
     const ro = new ResizeObserver(([entry]) => setScale(entry.contentRect.width / width));
     ro.observe(el);
-    return () => ro.disconnect();
+    // Set directly on the element: visibility changes shouldn't re-render the scene.
+    const io = new IntersectionObserver(([entry]) => el.toggleAttribute("data-offscreen", !entry.isIntersecting), { rootMargin: "120px" });
+    io.observe(el);
+    return () => {
+      ro.disconnect();
+      io.disconnect();
+    };
   }, [width]);
 
   return (

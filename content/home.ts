@@ -40,11 +40,11 @@ export const servicesIntro = {
 
 export const work = {
   eyebrow: "Selected work",
-  /** Claims no delivered impact: until a case study is approved, this sits above a labelled concept. */
+  /** Claims no delivered impact: until a case study is approved, this sits above labelled concepts. */
   heading: "Products we design and engineer.",
   emptyState: {
     title: "Our work is taking shape.",
-    body: "Nexus Morrow is a new studio. Case studies will appear here as our first client products launch and are approved for publication. Until then, the concept above shows the kind of product we design and engineer.",
+    body: "Nexus Morrow is a new studio. Case studies will appear here as our first client products launch and are approved for publication. Until then, the concepts above show the kind of product we design and engineer.",
     cta: "Be one of our first partners",
   },
 };

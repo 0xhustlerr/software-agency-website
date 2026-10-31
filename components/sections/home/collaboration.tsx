@@ -2,8 +2,8 @@ import { collaboration } from "@/content/home";
 import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
-import { ScaledCanvas } from "@/components/motion/scaled-canvas";
 import { CollaborationBoard } from "@/components/illustrations/collaboration-board";
+import { Badge3D } from "@/components/illustrations/scene";
 
 /** Section 8 — founder-friendly approach: principles beside a collaboration workspace concept. */
 export function Collaboration() {
@@ -22,18 +22,17 @@ export function Collaboration() {
         {/* The frame hugs the illustration; no empty ground below it. */}
         <Reveal className="lg:col-span-7">
           <figure className="m-0">
-            <div className="rounded-md bg-surface-muted p-3 sm:p-6">
-              <ScaledCanvas width={560} height={440}>
-                <div aria-hidden className="absolute inset-0">
-                  <CollaborationBoard />
-                </div>
-              </ScaledCanvas>
+            {/* A navy stage, so the dark scene keeps its depth on a light section. */}
+            <div
+              data-theme="dark"
+              aria-hidden
+              className="rounded-md bg-surface p-3 sm:p-6"
+            >
+              <CollaborationBoard />
             </div>
             <figcaption className="mt-4 flex items-center justify-between gap-4">
               <span className="text-small text-ink-muted">A shared workspace: priorities, milestones, reviews and releases in one place.</span>
-              <span className="shrink-0 rounded-xs border border-dashed border-line-strong px-2 text-[11px] leading-5 font-semibold tracking-[0.08em] text-ink-muted uppercase">
-                Illustration
-              </span>
+              <Badge3D>Illustration</Badge3D>
             </figcaption>
           </figure>
         </Reveal>

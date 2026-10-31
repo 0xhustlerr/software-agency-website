@@ -20,12 +20,6 @@ export const takingShape = {
   ],
 };
 
-export const conceptCopy = {
-  problem: "Growing teams lose track of who owns which customer request once work spreads across email, chat, and spreadsheets.",
-  approach: "One intake for every channel, clear ownership, and a dashboard that shows where work is stuck.",
-  demonstrates: "Multi-tenant SaaS architecture, workflow automation, an AI triage assistant with human review, and a companion mobile view.",
-};
-
 export const engineeringApproach = [
   { title: "Start with the problem", body: "Users, constraints and the outcome that matters are agreed before anything is designed." },
   { title: "Design before code", body: "Flows and prototypes are tested early, when changing direction is still cheap." },

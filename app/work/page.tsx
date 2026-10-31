@@ -1,15 +1,14 @@
 import { approvedProjects } from "@/content/projects";
 import { productConcepts } from "@/content/concepts";
-import { conceptCopy, engineeringApproach, takingShape, workHero } from "@/content/pages/work";
+import { engineeringApproach, takingShape, workHero } from "@/content/pages/work";
 import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/layout/page-hero";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
-import { Tag } from "@/components/ui/tag";
 import { Reveal } from "@/components/motion/reveal";
-import { RelayComposition } from "@/components/illustrations/relay-composition";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
+import { ConceptFeature } from "@/components/sections/pages/concept-feature";
 import { WorkFilters } from "@/components/sections/pages/work-filters";
 import { CtaBand } from "@/components/sections/cta-band";
 
@@ -17,13 +16,12 @@ export const metadata = pageMetadata({
   title: approvedProjects.length ? "Case studies and engineering approach" : "Our work and engineering approach",
   description: approvedProjects.length
     ? "Product case studies from Nexus Morrow, published with client approval, and how we approach every engagement."
-    : "How Nexus Morrow designs and engineers products for founders, shown through a labelled product concept. Case studies are published only with client approval.",
+    : "How Nexus Morrow designs and engineers products for founders, shown through labelled product concepts. Case studies are published only with client approval.",
   path: "/work",
 });
 
 export default function WorkPage() {
   const hasWork = approvedProjects.length > 0;
-  const concept = productConcepts[0];
   const industries = Array.from(new Set(approvedProjects.map((p) => p.industry)));
 
   return (
@@ -67,46 +65,19 @@ export default function WorkPage() {
             </div>
           </Section>
 
-          {concept ? (
-            <Section theme="dark" aria-labelledby="concept-h">
-              <Reveal className="mb-12">
-                <span className="rounded-xs border border-dashed border-line-strong px-2 text-[11px] leading-5 font-semibold tracking-[0.08em] text-ink-muted uppercase">
-                  Product concept · not client work
-                </span>
-                <h2 id="concept-h" className="text-h1 mt-5">
-                  {concept.name}
+          {productConcepts.length ? (
+            <Section theme="dark" aria-labelledby="concepts-h">
+              <Reveal className="mb-14 lg:mb-20">
+                <Eyebrow>Product concepts</Eyebrow>
+                <h2 id="concepts-h" className="text-h1 mt-5 max-w-[18ch]">
+                  The kind of product we design and engineer.
                 </h2>
-                <p className="text-mono mt-2 text-ink-muted">{concept.category} · original concept with sample data</p>
               </Reveal>
-              <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:gap-6">
-                <figure className="m-0 lg:col-span-8">
-                  <RelayComposition tone="muted" />
-                  <figcaption className="text-small mt-3 text-ink-muted">
-                    {concept.name} is an original product concept created by Nexus Morrow. It is not a client project and has not been launched.
-                  </figcaption>
-                </figure>
-                <div className="self-center lg:col-span-4">
-                  <dl className="grid gap-6">
-                    {[
-                      ["The problem it explores", conceptCopy.problem],
-                      ["Product approach", conceptCopy.approach],
-                      ["What it demonstrates", conceptCopy.demonstrates],
-                    ].map(([k, v]) => (
-                      <div key={k} className="border-t border-line pt-4">
-                        <dt className="text-label mb-1.5">{k}</dt>
-                        <dd className="text-body-sm text-ink-muted">{v}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                  <ul aria-label="Capabilities" className="mt-6 flex flex-wrap gap-2">
-                    {concept.tags.map((t) => (
-                      <li key={t}>
-                        <Tag>{t}</Tag>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
+              <ul className="grid gap-20 lg:gap-28">
+                {productConcepts.map((c, i) => (
+                  <ConceptFeature key={c.slug} concept={c} index={i} />
+                ))}
+              </ul>
             </Section>
           ) : null}
         </>

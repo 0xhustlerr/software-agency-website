@@ -453,6 +453,119 @@ html.js .nm-scaled:not([data-scaled]) {
   }
 }
 
+/* ---------- 3D scene (services hero) ----------
+ * The stage holds a fixed 3D pose; with motion allowed, the camera sways,
+ * cards float, particles travel the connectors and light sweeps the glass.
+ * Float uses the `translate` property so it composes with each card's transform.
+ */
+@keyframes nm-sway {
+  from {
+    transform: rotateX(9deg) rotateY(-14deg) rotateZ(1.5deg);
+  }
+  to {
+    transform: rotateX(5deg) rotateY(-6deg) rotateZ(0.5deg);
+  }
+}
+@keyframes nm-float {
+  50% {
+    translate: 0 var(--float, -7px);
+  }
+}
+@keyframes nm-travel {
+  0% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  12%,
+  88% {
+    opacity: 1;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+@keyframes nm-sheen {
+  0% {
+    translate: -120% 0;
+  }
+  45%,
+  100% {
+    translate: 120% 0;
+  }
+}
+@keyframes nm-bar {
+  0%,
+  100% {
+    scale: 1 var(--from, 0.55);
+  }
+  50% {
+    scale: 1 1;
+  }
+}
+/* Concept label: rests readable, then one quick flip on its horizontal axis. */
+@keyframes nm-flip {
+  0%,
+  86% {
+    transform: rotateX(0deg);
+  }
+  100% {
+    transform: rotateX(360deg);
+  }
+}
+.nm-badge-3d {
+  transform-style: preserve-3d;
+  text-shadow:
+    0 1px 0 #0a7266,
+    0 2px 0 #085a51,
+    0 3px 6px rgb(0 0 0 / 0.6);
+}
+.nm-stage {
+  transform-style: preserve-3d;
+  transform: rotateX(7deg) rotateY(-10deg) rotateZ(1deg);
+}
+.nm-particle {
+  offset-rotate: 0deg;
+  opacity: 0;
+}
+.nm-sheen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.09) 50%, transparent 65%);
+  translate: -120% 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .nm-stage {
+    animation: nm-sway 14s ease-in-out infinite alternate;
+  }
+  .nm-float {
+    animation: nm-float var(--float-dur, 6s) ease-in-out var(--float-delay, 0s) infinite;
+  }
+  .nm-particle {
+    animation: nm-travel var(--dur, 3.2s) cubic-bezier(0.45, 0, 0.55, 1) var(--delay, 0s) infinite;
+  }
+  .nm-sheen::after {
+    animation: nm-sheen 7s ease-in-out var(--sheen-delay, 1.5s) infinite;
+  }
+  .nm-badge-3d {
+    animation: nm-flip 8s cubic-bezier(0.65, 0, 0.35, 1) 3s infinite;
+  }
+  .nm-bar {
+    transform-origin: bottom;
+    animation: nm-bar var(--dur, 3s) ease-in-out var(--delay, 0s) infinite;
+  }
+  html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar) {
+    animation-play-state: paused;
+  }
+  /* Scenes scrolled out of view stop looping (and save their entrance for when they arrive). */
+  .nm-scaled[data-offscreen] *,
+  .nm-scaled[data-offscreen] *::after {
+    animation-play-state: paused;
+  }
+}
+
 /* Blueprint accent: a faint grid that runs under the transparent header and fades out. */
 .nm-hero-grid {
   background-image:

@@ -84,21 +84,22 @@ The motif is thin orthogonal lines joining small nodes, moving right and down, w
 
 **Signature:** the hero and final-CTA headlines end in a mint full stop (`MintStop`) — the destination node, set in type. Those two bookends only.
 
-**Connectors carry meaning.** On the homepage work feature, a connector runs from Relay's decision D2 to the screen that decision produced. Draw a connector only where it links cause to effect.
+**Connectors carry meaning.** In the hero composition, connectors join the workflow, dashboard and phone they feed. Draw a connector only where it links cause to effect.
 
-**One visual, one place.** Never show the same illustration twice on a page: the hero shows Relay's dashboard, so the work section shows Relay's decision log and triage screen.
+**One visual, one place.** Never show the same illustration twice on a page: the homepage hero shows the sample Relay dashboard; the work section shows the product concepts' own images (`content/concepts.ts`, `public/concepts/`).
 
 Motion is CSS first; content never waits for JavaScript.
 
 | Kind | Where | Timing |
 | --- | --- | --- |
-| Entrance (`Reveal mode="enter"`, `.nm-enter`, `.nm-line`) | Hero, inner-page headings | Pure CSS at first paint. Hero: eyebrow 0 → headline lines 120/200/280 → lead 460 → actions 580 → capabilities 680; composition 360–740, connectors draw at 1000ms |
+| Entrance (`Reveal mode="enter"`, `.nm-enter`, `.nm-line`) | Hero, inner-page headings | Pure CSS at first paint. Hero: eyebrow 0 → headline lines 120/200/280 → lead 460 → actions 580 → capabilities 680; composition 360–1000, connectors draw at 1100ms |
 | Settle (`Reveal mode="settle"`, `.nm-settle`) | Hero lead, inner-page h1 and lead | Same timing, transform only — never transparent. These are the Largest Contentful Paint elements; fading them in delayed LCP by 300–740ms on throttled mobile |
 | Scroll reveal (`Reveal`, `[data-reveal]`) | Everything below the fold | 600ms rise (14px, 8px on phones) + fade, 60–80ms stagger, once. Hidden only after `html.js` is set; `RevealController` (one IntersectionObserver) reveals in view |
 | Scroll-linked | Process rail | Fill and stage state follow page position; never pins or captures scrolling |
+| 3D scene (`.nm-stage`, `.nm-float`, `.nm-particle`, `.nm-sheen`, `.nm-bar`, `.nm-badge-3d`) | Homepage hero, engineering and collaboration figures, `/services` hero and the four service scenes (`components/illustrations/scene.tsx`) | Tilted stage over a receding grid floor; each scene sways out of phase. Loops: camera sway 14s, card float 4.5–8s, particles 1.6–5s along the connectors, glass sheen 7s, concept label flips once every 8s. Reduced motion: still, but keeps the tilt |
 | Hover | Rows, buttons, frames | 150–300ms colour/background; arrows +3–4px; row divider draws 450ms; project images 1.02 inside a fixed clip |
 
-Only `transform` and `opacity` animate (plus paint-only colours). The header never changes height. No parallax stacks, loops, carousels or autoplay video.
+Only `transform` and `opacity` animate (plus paint-only colours). The header never changes height. No parallax stacks, loops, carousels or autoplay video — except the 3D scenes above, the only places motion loops.
 
 Fallbacks: without JavaScript nothing is hidden; if the app fails to start, the inline script in `app/layout.tsx` removes `html.js` after 3s so every reveal shows; `prefers-reduced-motion` and print render the final state.
 
@@ -135,7 +136,7 @@ components/forms/    ContactForm (client; server action in app/contact/actions.t
 components/ui/       Button, Eyebrow, Accordion, PendingContent, NodeGrid, Tag
 components/seo/      JsonLd (structured data script)
 components/analytics/ Analytics (Plausible loader + click tracking; inert unless configured)
-components/illustrations/  DOM/SVG product concepts (Relay), service vignettes,
+components/illustrations/  3D scene blocks (scene.tsx), service scenes,
                      architecture diagram, collaboration board — all labelled
 components/motion/   Reveal, ScaledCanvas, MotionProvider (reduced motion)
 hooks/               usePrefersReducedMotion (hydration-safe)

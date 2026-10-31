@@ -7,7 +7,7 @@ export function BlueprintStage({ children, className, tone = "dark" }: { childre
     <div
       data-theme="dark"
       className={cn(
-        "relative grid place-items-center overflow-hidden rounded-md p-6 sm:p-10",
+        "relative grid place-items-center overflow-hidden rounded-md p-2 sm:p-10",
         tone === "muted" ? "bg-surface-muted" : "bg-surface",
         "bg-[linear-gradient(var(--line)_1px,transparent_1px),linear-gradient(90deg,var(--line)_1px,transparent_1px)] bg-[size:40px_40px]",
         className,

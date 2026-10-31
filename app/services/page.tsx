@@ -13,6 +13,7 @@ import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/motion/reveal";
 import { ServiceVisual } from "@/components/illustrations/service-visuals";
 import { BlueprintStage } from "@/components/sections/pages/blueprint-stage";
+import { StageCard } from "@/components/sections/pages/stage-card";
 import { Split } from "@/components/sections/pages/split";
 import { ServicesHeroArt } from "@/components/illustrations/services-hero-art";
 import { CtaBand } from "@/components/sections/cta-band";
@@ -58,8 +59,7 @@ export default function ServicesPage() {
               <article key={f.slug} aria-labelledby={`svc-${f.slug}`} className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-6">
                 <Reveal className={cn("lg:col-span-7", flip && "lg:order-2 lg:col-start-6")}>
                   <BlueprintStage className="aspect-[4/3]">
-                    {/* DOM vignettes stay crisp when scaled; at 1:1 they left most of the stage empty. */}
-                    <div aria-hidden className="w-full max-w-[400px] sm:scale-[1.2] xl:scale-[1.35]">
+                    <div aria-hidden className="w-full">
                       <ServiceVisual slug={f.slug} />
                     </div>
                   </BlueprintStage>
@@ -127,25 +127,8 @@ export default function ServicesPage() {
         </div>
         <ol className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {engagementStages.map((st, i) => (
-            <Reveal as="li" key={st.title} delay={i * 0.06} className="rounded-md border border-line bg-surface p-6">
-              <div className="flex items-center justify-between">
-                <span className="text-mono text-ink-muted">{String(i + 1).padStart(2, "0")}</span>
-                <span aria-hidden className={cn("size-[9px] rounded-full border", i === 0 ? "border-accent bg-accent" : "border-accent-ink")} />
-              </div>
-              <h3 className="font-display mt-7 text-[1.375rem] leading-[1.15] font-semibold tracking-[-0.02em]">{st.title}</h3>
-              <dl className="mt-5 grid gap-3.5">
-                {[
-                  ["Where you are", st.where],
-                  ["What we focus on", st.focus],
-                  ["You leave with", st.leaveWith],
-                ].map(([k, v]) => (
-                  <div key={k}>
-                    <dt className="text-[0.75rem] font-semibold tracking-[0.08em] text-ink-muted uppercase">{k}</dt>
-                    <dd className="text-body-sm mt-1">{v}</dd>
-                  </div>
-                ))}
-              </dl>
-              <p className="mt-5 border-t border-line pt-3.5 font-mono text-xs text-accent-ink">{st.fit}</p>
+            <Reveal as="li" key={st.title} delay={i * 0.06}>
+              <StageCard stage={st} index={i} />
             </Reveal>
           ))}
         </ol>

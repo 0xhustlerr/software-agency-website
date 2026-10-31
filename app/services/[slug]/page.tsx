@@ -15,6 +15,7 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/motion/reveal";
 import { ServiceVisual } from "@/components/illustrations/service-visuals";
+import { ConceptBadge } from "@/components/illustrations/scene";
 import { BlueprintStage } from "@/components/sections/pages/blueprint-stage";
 import { RuledList, Split } from "@/components/sections/pages/split";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
@@ -73,15 +74,11 @@ async function ServiceDetailPageContent({ params }: { params: PageProps<"/servic
         aside={
           <figure className="m-0">
             <BlueprintStage tone="muted" className="aspect-[5/4]">
-              <div aria-hidden className="w-full max-w-[380px] lg:scale-[1.15]">
+              <div aria-hidden className="w-full">
                 <ServiceVisual slug={service.slug} />
               </div>
             </BlueprintStage>
-            <figcaption className="mt-4 flex justify-end">
-              <span className="rounded-xs border border-dashed border-line-strong px-2 text-[11px] leading-5 font-semibold tracking-[0.08em] text-ink-muted uppercase">
-                Interface concept
-              </span>
-            </figcaption>
+            <ConceptBadge>Interface concept</ConceptBadge>
           </figure>
         }
       />

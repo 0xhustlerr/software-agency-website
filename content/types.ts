@@ -45,18 +45,24 @@ export interface Pillar {
 }
 
 /**
- * An original product concept used to show capability. Never client work:
- * always rendered with a visible concept label and no case-study link.
+ * A product concept used to show capability. Never client work: always
+ * rendered with a visible concept label and no case-study link.
  */
 export interface ProductConcept {
   slug: string;
   name: string;
   category: string;
+  /** Short headline shown above the name. */
+  tagline: string;
   /** The problem the concept explores. */
-  challenge: string;
+  problem: string;
+  /** Product approach: how the concept answers the problem. */
+  approach: string;
   /** What the concept demonstrates we can build. */
-  built: string;
+  demonstrates: string;
   tags: string[];
+  /** Concept visual in public/concepts/. */
+  image: ProjectMedia;
 }
 
 export type PublishStatus = "draft" | "approved";

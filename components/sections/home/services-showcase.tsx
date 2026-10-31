@@ -5,6 +5,7 @@ import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Service } from "@/content/types";
 import { ServiceVisual } from "@/components/illustrations/service-visuals";
+import { Badge3D } from "@/components/illustrations/scene";
 import { cn } from "@/lib/utils";
 
 interface ServicesShowcaseProps {
@@ -89,14 +90,16 @@ export function ServicesShowcase({ services }: ServicesShowcaseProps) {
               <div
                 key={s.slug}
                 className={cn(
-                  "absolute inset-0 grid place-items-center p-8 transition-[opacity,transform] duration-500 ease-studio",
+                  "absolute inset-0 grid place-items-center p-5 transition-[opacity,transform] duration-500 ease-studio",
                   s.slug === active ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0",
                 )}
               >
-                <ServiceVisual slug={s.slug} className="w-full max-w-[360px]" />
+                <ServiceVisual slug={s.slug} className="w-full" />
               </div>
             ))}
-            <span className="absolute bottom-3 left-4 font-mono text-[10px] text-ink-muted">Interface concept</span>
+            <span className="absolute bottom-3 left-4">
+              <Badge3D>Interface concept</Badge3D>
+            </span>
           </div>
         </div>
       </div>
