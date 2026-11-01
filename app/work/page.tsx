@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
-import { ConceptCard } from "@/components/sections/pages/concept-feature";
+import { BentoGrid, CardCarousel, FullSlideshow, ListPreview } from "@/components/sections/pages/product-showcases";
 import { WorkFilters } from "@/components/sections/pages/work-filters";
 import { CtaBand } from "@/components/sections/cta-band";
 
@@ -31,11 +31,11 @@ const approachIcons = [Compass, PenTool, GitBranch, Wrench];
 
 const kinds: ConceptKind[] = ["saas", "mvp", "ai", "custom"];
 /** One section per kind, in the services' colours (`ink` is the readable shade on light grounds). */
-const groups: Record<ConceptKind, { label: string; heading: string; icon: LucideIcon; accent: string; ink: string; href: string; link: string }> = {
-  saas: { label: "SaaS Platforms", heading: "Products people subscribe to, built to scale.", icon: LayoutDashboard, accent: "#6de1d2", ink: "#0a7266", href: "/services/saas-development", link: "Explore SaaS development" },
-  mvp: { label: "MVPs", heading: "Focused first versions that do one job well.", icon: Rocket, accent: "#f6b26b", ink: "#b0661c", href: "/services/mvp-development", link: "Explore MVP development" },
-  ai: { label: "AI Products", heading: "AI that helps people, with them in control.", icon: Sparkles, accent: "#b794f6", ink: "#7b4fd0", href: "/services/ai-development", link: "Explore AI development" },
-  custom: { label: "Custom Software", heading: "Tools shaped around how a business works.", icon: Code2, accent: "#6ea8ff", ink: "#2f6fd6", href: "/services/custom-software", link: "Explore custom software" },
+const groups: Record<ConceptKind, { label: string; heading: string; icon: LucideIcon; accent: string; ink: string; href: string; link: string; dark: boolean }> = {
+  saas: { label: "SaaS Platforms", heading: "Products people subscribe to, built to scale.", icon: LayoutDashboard, accent: "#6de1d2", ink: "#0a7266", href: "/services/saas-development", link: "Explore SaaS development", dark: true },
+  mvp: { label: "MVPs", heading: "Focused first versions that do one job well.", icon: Rocket, accent: "#f6b26b", ink: "#b0661c", href: "/services/mvp-development", link: "Explore MVP development", dark: false },
+  ai: { label: "AI Products", heading: "AI that helps people, with them in control.", icon: Sparkles, accent: "#b794f6", ink: "#7b4fd0", href: "/services/ai-development", link: "Explore AI development", dark: false },
+  custom: { label: "Custom Software", heading: "Tools shaped around how a business works.", icon: Code2, accent: "#6ea8ff", ink: "#2f6fd6", href: "/services/custom-software", link: "Explore custom software", dark: true },
 };
 
 const byKind = (kind: ConceptKind) => productConcepts.filter((c) => c.kind === kind);
@@ -116,14 +116,14 @@ export default function WorkPage() {
             const items = byKind(kind);
             if (!items.length) return null;
             return (
-              <Section key={kind} theme={k % 2 === 0 ? "dark" : "light"} tone={k % 2 === 0 ? "default" : "muted"} aria-labelledby={`kind-${kind}`}>
+              <Section key={kind} theme={g.dark ? "dark" : "light"} tone={kind === "ai" ? "muted" : "default"} aria-labelledby={`kind-${kind}`} className={kind === "saas" ? "lg:flex lg:min-h-[calc(100svh-var(--header-h))] lg:flex-col lg:justify-center" : undefined}>
                 <Reveal className="mb-8 flex flex-wrap items-end justify-between gap-6 lg:mb-10">
                   <div className="flex items-center gap-5">
                     <span aria-hidden className="grid size-16 shrink-0 place-items-center rounded-[18px]" style={{ background: `linear-gradient(135deg, ${g.accent}, ${g.accent}99)`, boxShadow: `0 0 34px -4px ${g.accent}` }}>
                       <Icon className="size-8 text-navy-900" strokeWidth={2} />
                     </span>
                     <div>
-                      <p className="font-mono text-[0.8125rem] font-semibold tracking-[0.14em] uppercase" style={{ color: k % 2 === 0 ? g.accent : g.ink }}>
+                      <p className="font-mono text-[0.8125rem] font-semibold tracking-[0.14em] uppercase" style={{ color: g.dark ? g.accent : g.ink }}>
                         {g.label}
                       </p>
                       <h2 id={`kind-${kind}`} className="text-h2 mt-1">
@@ -135,13 +135,17 @@ export default function WorkPage() {
                     {g.link}
                   </Button>
                 </Reveal>
-                <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-                  {items.map((c, i) => (
-                    <ConceptCard key={c.slug} concept={c} index={i} />
-                  ))}
-                </ul>
+                {kind === "saas" ? (
+                  <FullSlideshow items={items} accent={g.accent} />
+                ) : kind === "mvp" ? (
+                  <CardCarousel items={items} accent={g.accent} />
+                ) : kind === "ai" ? (
+                  <BentoGrid items={items} />
+                ) : (
+                  <ListPreview items={items} accent={g.accent} />
+                )}
                 {k === kinds.length - 1 ? (
-                  <p className="text-small mt-6 text-ink-muted">Examples of the kinds of product we design and engineer. Not client work; we are not affiliated with these companies.</p>
+                  <p className="text-small mt-4 text-ink-muted">Examples of the kinds of product we design and engineer. Not client work; we are not affiliated with these companies.</p>
                 ) : null}
               </Section>
             );

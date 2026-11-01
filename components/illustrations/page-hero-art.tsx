@@ -44,8 +44,11 @@ const SLIDE_SECONDS = 6;
  * the product that solves it on the right. Anyone reads it as "problem in,
  * product out". Sized so the hero copy and the reel fit one screen.
  */
+/** The reel shows three products of each kind: twelve slides, matching its keyframes. */
+const reelProducts = (["saas", "mvp", "ai", "custom"] as const).flatMap((k) => productConcepts.filter((c) => c.kind === k).slice(0, 3));
+
 export function WorkHeroArt() {
-  const loop = SLIDE_SECONDS * productConcepts.length;
+  const loop = SLIDE_SECONDS * reelProducts.length;
   const delay = (i: number) => `${loop - i * SLIDE_SECONDS}s`;
   return (
     <figure className="m-0" aria-label="Problem to product: each slide shows a real problem in plain words and the product that solves it.">
@@ -55,7 +58,7 @@ export function WorkHeroArt() {
           aria-hidden
           className="relative h-[clamp(240px,calc(100svh-35rem),620px)] overflow-hidden rounded-[22px] border-[1.5px] border-mint-400/60 bg-[#0b1220] shadow-[0_0_80px_-20px_rgb(109_225_210/0.7),0_50px_90px_-40px_rgb(0_0_0/0.9)]"
         >
-          {productConcepts.map((c, i) => (
+          {reelProducts.map((c, i) => (
             <div key={c.slug} className="nm-reel absolute inset-0 grid grid-cols-1 sm:grid-cols-[minmax(0,5fr)_auto_minmax(0,7fr)]" style={{ "--reel": `${loop}s`, "--delay": delay(i), "--ro": i === 0 ? "1" : "0" } as Vars}>
               {/* the problem */}
               <div className="relative hidden flex-col justify-center gap-4 bg-linear-to-br from-[#2a1d24] to-[#141a28] p-7 sm:flex lg:p-9">
@@ -89,7 +92,7 @@ export function WorkHeroArt() {
             </div>
           ))}
           <div className="absolute right-5 bottom-5 hidden items-center gap-1.5 lg:flex">
-            {productConcepts.map((c, i) => (
+            {reelProducts.map((c, i) => (
               <span key={c.slug} className="nm-reel-dot block h-2 w-2 rounded-full bg-white/30" style={{ "--reel": `${loop}s`, "--delay": delay(i) } as Vars} />
             ))}
           </div>
