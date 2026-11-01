@@ -281,7 +281,7 @@ export function ProblemSlideshow({ items }: { items: ProductConcept[] }) {
       aria-label="Products and the problems they solve"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      className="relative grid h-[clamp(280px,calc(100svh-33rem),620px)] grid-cols-1 overflow-hidden rounded-[22px] border-[1.5px] bg-[#0b1220] sm:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+      className="relative grid h-[clamp(260px,calc(100svh-36rem),620px)] grid-cols-1 overflow-hidden rounded-[22px] border-[1.5px] bg-[#0b1220] sm:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
       style={{ borderColor: `${c.accent}99`, boxShadow: `0 0 80px -20px ${c.accent}, 0 50px 90px -40px rgb(0 0 0 / 0.9)`, transition: "border-color 600ms, box-shadow 600ms" }}
     >
       {/* the problem */}

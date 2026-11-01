@@ -49,7 +49,7 @@ export default function WorkPage() {
   return (
     <>
       <PageHero full eyebrow={workHero.eyebrow} title={workHero.title} lead={workHero.lead} leadAside>
-        <div className="mt-10 lg:mt-12">
+        <div className="mt-6 lg:mt-8">
           <WorkHeroArt />
         </div>
       </PageHero>
