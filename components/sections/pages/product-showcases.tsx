@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
 import type { ProductConcept } from "@/content/types";
 import { ProductDialog } from "./product-dialog";
+import { ConceptCard } from "./concept-feature";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { cn } from "@/lib/utils";
 
@@ -346,6 +347,76 @@ export function ProblemSlideshow({ items }: { items: ProductConcept[] }) {
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ---------- Homepage: every product on a tilted band you can drag ---------- */
+
+/**
+ * All products on an angled band. Press and drag (mouse) or swipe (touch) to
+ * move it left or right; a short click still opens the product. Arrow keys
+ * scroll it when focused.
+ */
+export function ProductStrip({ items }: { items: ProductConcept[] }) {
+  const track = useRef<HTMLUListElement>(null);
+  const drag = useRef({ down: false, startX: 0, startLeft: 0, moved: false });
+  const [grabbing, setGrabbing] = useState(false);
+
+  const onPointerDown = (e: React.PointerEvent<HTMLUListElement>) => {
+    if (e.pointerType !== "mouse" || e.button !== 0 || !track.current) return;
+    drag.current = { down: true, startX: e.clientX, startLeft: track.current.scrollLeft, moved: false };
+  };
+  const onPointerMove = (e: React.PointerEvent<HTMLUListElement>) => {
+    const d = drag.current;
+    if (!d.down || !track.current) return;
+    const dx = e.clientX - d.startX;
+    if (!d.moved && Math.abs(dx) > 5) {
+      d.moved = true;
+      setGrabbing(true);
+      track.current.setPointerCapture(e.pointerId);
+    }
+    if (d.moved) track.current.scrollLeft = d.startLeft - dx;
+  };
+  const end = (e: React.PointerEvent<HTMLUListElement>) => {
+    drag.current.down = false;
+    setGrabbing(false);
+    if (track.current?.hasPointerCapture(e.pointerId)) track.current.releasePointerCapture(e.pointerId);
+  };
+
+  return (
+    <div className="relative -mx-[8vw] py-10">
+      <div className="-rotate-[4deg]">
+        <ul
+          ref={track}
+          tabIndex={0}
+          aria-label="Products — drag to move"
+          onPointerDown={onPointerDown}
+          onPointerMove={onPointerMove}
+          onPointerUp={end}
+          onPointerCancel={end}
+          onClickCapture={(e) => {
+            // a drag is not a click: don't open the product
+            if (drag.current.moved) {
+              e.preventDefault();
+              e.stopPropagation();
+              drag.current.moved = false;
+            }
+          }}
+          onDragStart={(e) => e.preventDefault()}
+          className={cn(
+            "flex gap-5 overflow-x-auto px-[8vw] py-6 select-none [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-mint-400",
+            grabbing ? "cursor-grabbing" : "cursor-grab",
+          )}
+        >
+          {items.map((c) => (
+            <ConceptCard key={c.slug} concept={c} index={0} items={items} className="w-[300px] shrink-0" />
+          ))}
+        </ul>
+      </div>
+      {/* soft edges, so the band fades in and out */}
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-[14vw] bg-linear-to-r from-surface to-transparent" />
+      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-[14vw] bg-linear-to-l from-surface to-transparent" />
     </div>
   );
 }

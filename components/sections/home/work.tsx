@@ -1,13 +1,13 @@
 import { work } from "@/content/home";
 import { approvedProjects } from "@/content/projects";
-import { featuredConcepts } from "@/content/concepts";
+import { productConcepts } from "@/content/concepts";
 import { talkHref } from "@/content/site";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
-import { ConceptCard } from "@/components/sections/pages/concept-feature";
+import { ProductStrip } from "@/components/sections/pages/product-showcases";
 
 /** Section 5 — selected work. Approved case studies when they exist; otherwise labelled concepts and an honest "taking shape" state. */
 export function Work() {
@@ -34,11 +34,7 @@ export function Work() {
           ))}
         </ul>
       ) : (
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-          {featuredConcepts.map((c, i) => (
-            <ConceptCard key={c.slug} concept={c} index={i} items={featuredConcepts} />
-          ))}
-        </ul>
+        <ProductStrip items={productConcepts} />
       )}
       {!hasWork ? (
         <Reveal className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-[14px] border border-dashed border-line-strong/60 px-5 py-4">
