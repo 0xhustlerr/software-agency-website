@@ -520,6 +520,209 @@ html.js .nm-scaled:not([data-scaled]) {
     0 2px 0 #085a51,
     0 3px 6px rgb(0 0 0 / 0.6);
 }
+/* Homepage hero: spinning portal rings, a pulsing core and twinkling dust. */
+@keyframes nm-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes nm-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@keyframes nm-core {
+  0%,
+  100% {
+    opacity: 0.7;
+    scale: 0.92;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.06;
+  }
+}
+/* Showcase (homepage hero): one 16s clock, four 4s beats, one per product.
+ * The accent colour (--nm-hue) follows the product in front; the brain pulses,
+ * a burst rides the beam, the next card turns to the front of the carousel and
+ * materialises (scan line, colour, frame flash, slow zoom). Reduced motion
+ * shows the first product in front, still. */
+@property --nm-hue {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f6b26b;
+}
+@keyframes nm-hue {
+  0%,
+  22% {
+    --nm-hue: #f6b26b;
+  }
+  25%,
+  47% {
+    --nm-hue: #6de1d2;
+  }
+  50%,
+  72% {
+    --nm-hue: #b794f6;
+  }
+  75%,
+  97% {
+    --nm-hue: #6ea8ff;
+  }
+  100% {
+    --nm-hue: #f6b26b;
+  }
+}
+@keyframes nm-flow {
+  0%,
+  21% {
+    translate: 0 0 0;
+    rotate: y 0deg;
+    opacity: 1;
+  }
+  25%,
+  46% {
+    translate: calc(var(--dx) * -1) var(--dy) var(--dz);
+    rotate: y 38deg;
+    opacity: 0.6;
+  }
+  50%,
+  71% {
+    translate: 0 calc(var(--dy) * -2) calc(var(--dz) * 2);
+    rotate: y 0deg;
+    opacity: 0.3;
+  }
+  75%,
+  96% {
+    translate: var(--dx) var(--dy) var(--dz);
+    rotate: y -38deg;
+    opacity: 0.6;
+  }
+  100% {
+    translate: 0 0 0;
+    rotate: y 0deg;
+    opacity: 1;
+  }
+}
+@keyframes nm-unveil {
+  0% {
+    clip-path: inset(0 0 0 0);
+  }
+  6%,
+  22% {
+    clip-path: inset(100% 0 0 0);
+  }
+  25%,
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+@keyframes nm-scan {
+  0% {
+    top: -2%;
+    opacity: 0;
+  }
+  0.6% {
+    opacity: 1;
+  }
+  6% {
+    top: 100%;
+    opacity: 1;
+  }
+  7%,
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+@keyframes nm-flash {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  16%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes nm-kb {
+  0% {
+    scale: 1;
+  }
+  22%,
+  24% {
+    scale: 1.08;
+  }
+  25%,
+  100% {
+    scale: 1;
+  }
+}
+@keyframes nm-rail {
+  0%,
+  22% {
+    opacity: 1;
+    scale: 1.15;
+  }
+  25%,
+  100% {
+    opacity: 0.35;
+    scale: 0.9;
+  }
+}
+@keyframes nm-burst {
+  0%,
+  76% {
+    stroke-dashoffset: 0.2;
+    opacity: 0;
+  }
+  78% {
+    opacity: 1;
+  }
+  96% {
+    stroke-dashoffset: -1;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -1;
+    opacity: 0;
+  }
+}
+@keyframes nm-think {
+  0%,
+  62%,
+  100% {
+    scale: 1;
+    filter: brightness(1);
+  }
+  78% {
+    scale: 1.06;
+    filter: brightness(1.45);
+  }
+}
+.nm-flow {
+  translate: var(--sx, 0) var(--sy, 0) var(--sz, 0);
+  rotate: y var(--sr, 0deg);
+  opacity: var(--so, 1);
+}
+.nm-unveil {
+  clip-path: var(--uv, inset(0 0 0 0));
+}
+.nm-scan,
+.nm-flash,
+.nm-burst {
+  opacity: 0;
+}
+.nm-rail {
+  opacity: var(--ro, 0.35);
+  scale: var(--rs, 0.9);
+}
 .nm-stage {
   transform-style: preserve-3d;
   transform: rotateX(7deg) rotateY(-10deg) rotateZ(1deg);
@@ -556,7 +759,43 @@ html.js .nm-scaled:not([data-scaled]) {
     transform-origin: bottom;
     animation: nm-bar var(--dur, 3s) ease-in-out var(--delay, 0s) infinite;
   }
-  html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar) {
+  .nm-spin {
+    animation: nm-spin var(--dur, 12s) linear infinite var(--dir, normal);
+  }
+  .nm-twinkle {
+    animation: nm-twinkle var(--dur, 3s) ease-in-out var(--delay, 0s) infinite;
+  }
+  .nm-core {
+    animation: nm-core 3.2s ease-in-out infinite;
+  }
+  .nm-hue-cycle {
+    animation: nm-hue 16s linear infinite;
+  }
+  .nm-flow {
+    animation: nm-flow 16s var(--ease-studio) var(--delay, 0s) infinite;
+  }
+  .nm-unveil {
+    animation: nm-unveil 16s linear var(--delay, 0s) infinite;
+  }
+  .nm-scan {
+    animation: nm-scan 16s linear var(--delay, 0s) infinite;
+  }
+  .nm-flash {
+    animation: nm-flash 16s ease-out var(--delay, 0s) infinite;
+  }
+  .nm-kb {
+    animation: nm-kb 16s ease-out var(--delay, 0s) infinite;
+  }
+  .nm-rail {
+    animation: nm-rail 16s var(--ease-studio) var(--delay, 0s) infinite;
+  }
+  .nm-burst {
+    animation: nm-burst 4s linear infinite;
+  }
+  .nm-think {
+    animation: nm-think 4s ease-in-out infinite;
+  }
+  html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar, .nm-hue-cycle, .nm-flow, .nm-unveil, .nm-scan, .nm-flash, .nm-kb, .nm-rail, .nm-burst, .nm-think) {
     animation-play-state: paused;
   }
   /* Scenes scrolled out of view stop looping (and save their entrance for when they arrive). */

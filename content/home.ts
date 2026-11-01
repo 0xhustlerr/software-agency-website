@@ -3,11 +3,11 @@ import type { Pillar } from "./types";
 /** Homepage copy, in narrative order. One messaging line: "Your idea deserves great engineering." */
 
 export const hero = {
-  eyebrow: "From first idea to first users",
+  eyebrow: "Product engineering studio for founders",
   headline: "Your idea deserves great engineering.",
   /** Art-directed line breaks, kept at every width (the type scales to fit). */
-  headlineLines: ["Your idea", "deserves great", "engineering."],
-  lead: "We partner with ambitious founders to design, build, and launch software products that are ready for the real world.",
+  headlineLines: ["Your idea deserves", "great engineering."],
+  lead: "We help you decide what to build, then design, build and launch it — from your first idea to your first users.",
   capabilities: ["MVPs", "SaaS Platforms", "AI Products", "Custom Software"],
 };
 

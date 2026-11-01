@@ -1,234 +1,335 @@
-import { Sparkles, Workflow } from "lucide-react";
+import Image from "next/image";
+import type { ReactNode } from "react";
+import { Code2, LayoutDashboard, Lightbulb, Rocket, Sparkles, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { ConceptBadge, Glow, Item, Particle, Scene, Wires, iconTile, slab, type Vars } from "@/components/illustrations/scene";
+import { Badge3D, Item, Scene, type Vars } from "@/components/illustrations/scene";
 
 /**
- * "Relay" — an original operations-SaaS product concept used to show what the
- * studio designs and builds. Not a client product; all data is sample data.
+ * Your idea → the product, told only in pictures. One 16s clock, four 4s
+ * beats, one per product (MVPs, SaaS platforms, AI products, custom software).
+ * In every beat the brain pulses, a burst of light rides the beam through the
+ * studio's portal, and the next product turns to the front of a 3D carousel
+ * and materialises in the spotlight. The brain, beam and spotlight take the
+ * product's colour, so idea and product read as the same thing.
+ *
+ * Photos (free licences, no attribution required, stored in public/hero/):
+ * brain: Unsplash h6R3zA7vZI4 · MVP sketches: Unsplash weRQAu9TA-A ·
+ * SaaS dashboard: Unsplash JKUTrJ4vK00 · AI assistant: Unsplash BlWbfrQrI5k ·
+ * custom software: Unsplash LJ9KY8pIH3E.
  */
-const navItems = ["Overview", "Requests", "Automations", "Customers", "Reports"];
 
-const kpis = [
-  { label: "Open requests", value: "128", delta: "−12" },
-  { label: "First reply", value: "2h 14m", delta: "−18m" },
-  { label: "Auto-routed", value: "63%", delta: "+9 pts" },
+const products: { src: string; label: string; promise: string; icon: LucideIcon; position: string; accent: string; grade: string }[] = [
+  { src: "/hero/product-mvp.webp", label: "MVPs", promise: "From sketch to first users", icon: Rocket, position: "center 45%", accent: "#f6b26b", grade: "from-[#f6b26b]/35 to-[#e8734a]/20" },
+  { src: "/hero/product-saas.webp", label: "SaaS Platforms", promise: "Built to scale and grow", icon: LayoutDashboard, position: "center", accent: "#6de1d2", grade: "from-[#6de1d2]/25 to-[#3fa7c9]/15" },
+  { src: "/hero/product-ai.webp", label: "AI Products", promise: "Intelligence users can trust", icon: Sparkles, position: "center 45%", accent: "#b794f6", grade: "from-[#b794f6]/35 to-[#7c6cf0]/20" },
+  { src: "/hero/product-custom.webp", label: "Custom Software", promise: "Shaped around how you work", icon: Code2, position: "center 40%", accent: "#6ea8ff", grade: "from-[#6ea8ff]/30 to-[#3d5afe]/15" },
 ];
 
-const rows = [
-  { id: "RQ-2041", title: "Billing address change", owner: "AK", status: "Routed", on: true },
-  { id: "RQ-2040", title: "SSO setup for new team", owner: "MJ", status: "In review" },
-];
+/**
+ * Where each card starts on the clock (card 0 in front; card 1 next, on the
+ * right; card 2 at the back; card 3 just left, on the left), as a delay into
+ * the 16s cycle, plus its still position for reduced motion.
+ */
+const start = [
+  { delay: "0s", place: "front" },
+  { delay: "-12s", place: "right" },
+  { delay: "-8s", place: "back" },
+  { delay: "-4s", place: "left" },
+] as const;
 
-/** Requests resolved, sample series (0–100), drawn in chart coordinates (272 × 60). */
-const series = [38, 44, 41, 52, 49, 58, 55, 63, 60, 71, 68, 76];
-const chartW = 272;
-const chartH = 60;
-const chartLine = series
-  .map((v, i) => `${i ? "L" : "M"}${((i * chartW) / (series.length - 1)).toFixed(1)} ${(chartH - ((v - 30) / 50) * chartH).toFixed(1)}`)
-  .join(" ");
-
-/** The Relay operations dashboard (420 × 344). `id` keeps its gradient unique: phone and desktop copies share the page. */
-function Dashboard({ id }: { id: string }) {
+/** The idea: the brain photo (black baked into transparency) masks a white-to-accent gradient; it pulses on each beat. */
+function IdeaBrain({ size }: { size: number }) {
+  const mask = "url(/hero/brain-glow.webp) center / contain no-repeat";
   return (
-    <div className={cn(slab, "nm-sheen h-full rounded-[14px] bg-linear-to-b from-[#1d2a40] to-[#121b2b]")}>
-      <div className="flex h-9 items-center gap-2 border-b border-white/[0.07] px-3.5">
-        <span className={cn(iconTile, "size-5 rounded-[5px]")}>
-          <span className="size-1.5 rounded-full bg-navy-900" />
-        </span>
-        <span className="font-display text-[13px] font-semibold text-ink">Relay</span>
-        <span className="ml-auto mr-auto rounded-[5px] bg-white/[0.06] px-6 py-0.5 font-mono text-[10px] text-ink-muted">app.relay.example</span>
-        <span className="w-[62px]" />
+    <div className="nm-think relative" style={{ width: size, height: size }}>
+      <div className="absolute inset-[12%] rounded-full blur-[26px]" style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--nm-hue) 55%, transparent), transparent 70%)" }} />
+      <div className="absolute inset-0" style={{ filter: "drop-shadow(0 0 14px var(--nm-hue))" }}>
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #ffffff 10%, var(--nm-hue) 60%)", mask, WebkitMask: mask }} />
       </div>
-      <div className="grid grid-cols-[100px_1fr]">
-        <ul className="grid content-start gap-0.5 border-r border-white/[0.07] px-2 py-3">
-          {navItems.map((n, i) => (
-            <li key={n} className={cn("flex items-center gap-2 rounded-[6px] px-2 py-1.5 text-[11px] font-medium", i === 0 ? "bg-mint-400/12 text-ink" : "text-ink-muted")}>
-              <span className={cn("size-1.5 rounded-[2px]", i === 0 ? "bg-mint-400" : "bg-white/20")} />
-              {n}
-            </li>
-          ))}
-        </ul>
-        <div className="min-w-0 p-3.5">
-          <p className="font-display text-[14px] font-semibold tracking-[-0.01em] text-ink">Operations this week</p>
-          <div className="mt-2.5 grid grid-cols-3 gap-1.5">
-            {kpis.map((k) => (
-              <div key={k.label} className="rounded-[8px] border border-white/[0.07] bg-white/[0.03] px-2 py-1.5">
-                <p className="truncate text-[9.5px] text-ink-muted">{k.label}</p>
-                <p className="font-display mt-0.5 text-[18px] leading-tight font-semibold tracking-[-0.02em] whitespace-nowrap text-ink">{k.value}</p>
-                <p className="font-mono text-[9px] text-mint-400">{k.delta}</p>
+    </div>
+  );
+}
+
+/** The studio: three spinning rings around a core lit in the current product's colour. */
+function Portal({ size }: { size: number }) {
+  return (
+    <div className="relative" style={{ width: size, height: size }}>
+      <div className="absolute -inset-1/2 rounded-full bg-[conic-gradient(from_0deg,transparent,rgb(109_225_210/0.18),transparent_20%,rgb(63_167_201/0.16),transparent_45%,rgb(109_225_210/0.14),transparent_70%)] blur-[18px]" />
+      <div className="nm-core absolute inset-[28%] rounded-full blur-[6px]" style={{ background: "radial-gradient(circle, #ffffff, var(--nm-hue) 38%, transparent 70%)" }} />
+      <div className="absolute inset-0 [transform-style:preserve-3d] [transform:rotateY(62deg)]">
+        {[
+          { inset: "0%", dur: "9s", dir: "normal", cls: "border-t-transparent border-l-transparent border-mint-400" },
+          { inset: "12%", dur: "6s", dir: "reverse", cls: "border-b-transparent border-mint-400/80" },
+          { inset: "24%", dur: "4s", dir: "normal", cls: "border-r-transparent border-[#3fa7c9]" },
+        ].map((r) => (
+          <div
+            key={r.inset}
+            className={cn("nm-spin absolute rounded-full border-[3px] shadow-[0_0_18px_rgb(109_225_210/0.55),inset_0_0_18px_rgb(109_225_210/0.35)]", r.cls)}
+            style={{ inset: r.inset, "--dur": r.dur, "--dir": r.dir } as Vars}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** The beam: a solid light from the brain, through the portal, into the front card, with a burst on every beat. */
+function Beam({ d, w, h }: { d: string; w: number; h: number }) {
+  return (
+    <svg className="absolute inset-0 overflow-visible" width={w} height={h} viewBox={`0 0 ${w} ${h}`} fill="none" aria-hidden style={{ filter: "drop-shadow(0 0 6px var(--nm-hue))" }}>
+      <path d={d} stroke="var(--nm-hue)" strokeOpacity="0.55" strokeWidth="3" strokeLinecap="round" />
+      <path d={d} stroke="#ffffff" strokeOpacity="0.5" strokeWidth="1" strokeLinecap="round" />
+      <path d={d} pathLength={1} stroke="#ffffff" strokeWidth="6" strokeLinecap="round" strokeDasharray="0.16 1.2" className="nm-burst" />
+    </svg>
+  );
+}
+
+/**
+ * The carousel: four photo cards around the front spot, turning one place per
+ * beat. Direct stage children, so the 3D sorts them. `dx/dz` set the spread.
+ */
+function Carousel({ cx, cy, w, h, dx, dz }: { cx: number; cy: number; w: number; h: number; dx: number; dz: number }) {
+  const still = {
+    front: { sx: "0px", sy: "0px", sz: "0px", sr: "0deg", so: "1" },
+    right: { sx: `${dx}px`, sy: "6px", sz: `${dz}px`, sr: "-38deg", so: "0.6" },
+    back: { sx: "0px", sy: "-12px", sz: `${dz * 2}px`, sr: "0deg", so: "0.3" },
+    left: { sx: `${-dx}px`, sy: "6px", sz: `${dz}px`, sr: "38deg", so: "0.6" },
+  };
+  return (
+    <>
+      {products.map((p, i) => {
+        const st = start[i];
+        const s = still[st.place];
+        const front = st.place === "front";
+        const Icon = p.icon;
+        return (
+          <div
+            key={p.src}
+            className="nm-flow absolute"
+            style={
+              {
+                left: cx - w / 2,
+                top: cy - h / 2,
+                width: w,
+                height: h,
+                "--dx": `${dx}px`,
+                "--dy": "6px",
+                "--dz": `${dz}px`,
+                "--sx": s.sx,
+                "--sy": s.sy,
+                "--sz": s.sz,
+                "--sr": s.sr,
+                "--so": s.so,
+                "--delay": st.delay,
+              } as Vars
+            }
+          >
+            <div
+              className="relative h-full overflow-hidden rounded-[16px] border-[1.5px] bg-[#0b1220]"
+              style={{
+                borderColor: `${p.accent}99`,
+                boxShadow: `inset 0 1px 0 rgb(255 255 255 / 0.1), 0 0 60px -10px ${p.accent}88, 0 40px 70px -24px rgb(0 0 0 / 0.85)`,
+                WebkitBoxReflect: "below 10px linear-gradient(transparent 62%, rgb(255 255 255 / 0.22))",
+              }}
+            >
+              <div className="nm-kb absolute inset-0" style={{ "--delay": st.delay } as Vars}>
+                <Image src={p.src} alt="" fill sizes="(min-width: 1024px) 32vw, 60vw" className="object-cover" style={{ objectPosition: p.position }} />
               </div>
-            ))}
-          </div>
-          <div className="mt-2 rounded-[8px] border border-white/[0.07] bg-white/[0.03] px-2.5 py-2">
-            <p className="text-[10px] font-medium text-ink">Requests resolved</p>
-            <div className="relative mt-1.5" style={{ width: chartW, height: chartH }}>
-              <svg className="absolute inset-0 overflow-visible" width={chartW} height={chartH} viewBox={`0 0 ${chartW} ${chartH}`} fill="none">
-                <defs>
-                  <linearGradient id={`${id}-area`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="var(--accent)" stopOpacity="0.45" />
-                    <stop offset="1" stopColor="var(--accent)" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                {[15, 30, 45].map((y) => (
-                  <line key={y} x1="0" x2={chartW} y1={y} y2={y} stroke="rgb(255 255 255 / 0.06)" />
-                ))}
-                <path d={`${chartLine} L ${chartW} ${chartH} L 0 ${chartH} Z`} fill={`url(#${id}-area)`} />
-                <path d={chartLine} pathLength={1} stroke="var(--accent)" strokeWidth="2" strokeLinejoin="round" className="nm-draw" style={{ "--reveal-delay": "1100ms" } as Vars} />
-              </svg>
-              <Particle d={chartLine} dur="5s" delay="2s" />
-            </div>
-          </div>
-          <div className="mt-2 overflow-hidden rounded-[8px] border border-white/[0.07]">
-            {rows.map((r, i) => (
-              <div key={r.id} className={cn("flex items-center gap-2 px-2.5 py-1.5 text-[10px]", i > 0 && "border-t border-white/[0.07]")}>
-                <span className="shrink-0 font-mono text-ink-muted">{r.id}</span>
-                <span className="min-w-0 flex-1 truncate font-medium text-ink">{r.title}</span>
-                <span className="grid size-[18px] shrink-0 place-items-center rounded-full bg-white/10 text-[8px] font-semibold text-ink">{r.owner}</span>
-                <span className={cn("w-[58px] shrink-0 rounded-[5px] py-0.5 text-center text-[9px] font-medium", r.on ? "bg-mint-400/15 text-mint-400" : "bg-white/[0.06] text-ink-muted")}>
-                  {r.status}
+              <div className={cn("absolute inset-0 bg-linear-to-br mix-blend-color", p.grade)} />
+              <div className="absolute inset-0 bg-linear-to-t from-[#0b1220]/95 via-[#0b1220]/20 to-transparent" />
+              {/* not yet built: grey and dim until the scan line passes */}
+              <div className="nm-unveil absolute inset-0 backdrop-brightness-[0.45] backdrop-grayscale" style={{ "--uv": front ? "inset(100% 0 0 0)" : "inset(0 0 0 0)", "--delay": st.delay } as Vars} />
+              <div className="nm-scan absolute inset-x-0 h-[3px]" style={{ background: p.accent, boxShadow: `0 0 18px 4px ${p.accent}`, "--delay": st.delay } as Vars} />
+              <span
+                className="absolute top-3 right-3.5 rounded-full border bg-[#0b1220]/70 px-2.5 py-0.5 font-mono text-[12px] font-semibold tracking-[0.12em]"
+                style={{ color: p.accent, borderColor: `${p.accent}66` }}
+              >
+                {String(i + 1).padStart(2, "0")} / {String(products.length).padStart(2, "0")}
+              </span>
+              <div className="absolute inset-x-3 bottom-3 flex items-center gap-3 overflow-hidden rounded-[12px] border border-white/10 bg-[#0b1220]/75 px-3 py-2.5 text-left backdrop-blur-md">
+                <span aria-hidden className="absolute inset-x-0 top-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${p.accent}, transparent)` }} />
+                <span className="grid size-10 shrink-0 place-items-center rounded-[10px]" style={{ background: `linear-gradient(135deg, ${p.accent}, ${p.accent}99)`, boxShadow: `0 0 22px ${p.accent}88` }}>
+                  <Icon aria-hidden className="size-5 text-[#0b1220]" strokeWidth={2.25} />
+                </span>
+                <span className="min-w-0">
+                  <span className="font-display block text-[20px] leading-tight font-semibold tracking-[-0.02em] text-white">{p.label}</span>
+                  <span className="mt-0.5 block truncate text-[13px] font-medium" style={{ color: p.accent }}>
+                    {p.promise}
+                  </span>
                 </span>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const flow = [
-  { label: "Request received", meta: "Email · form · chat" },
-  { label: "Classify intent", meta: "AI assist", ai: true },
-  { label: "Route to owner", meta: "Rules · workload" },
-  { label: "Notify customer", meta: "Template" },
-];
-
-/** The intake automation, with a request travelling down its steps (170 × 196). */
-function WorkflowCard() {
-  return (
-    <div className={cn(slab, "h-full px-3.5 py-3")}>
-      <div className="flex items-center gap-2">
-        <span className={iconTile}>
-          <Workflow className="size-3.5" strokeWidth={2.25} />
-        </span>
-        <span className="text-[12px] font-semibold text-ink">Automation</span>
-      </div>
-      <ol className="relative mt-3 grid gap-2.5">
-        <span aria-hidden className="absolute top-2 bottom-2 left-[5px] w-px bg-white/15" />
-        <Particle d="M5.5 6 V 120" dur="3s" delay="1.8s" />
-        {flow.map((s, i) => (
-          <li key={s.label} className="relative flex items-start gap-2.5">
-            <span className={cn("relative mt-0.5 size-[11px] shrink-0 rounded-full border", i === flow.length - 1 ? "border-mint-400 bg-mint-400" : "border-mint-400/70 bg-surface-raised")} />
-            <div className="min-w-0">
-              <p className="text-[11px] leading-tight font-medium whitespace-nowrap text-ink">
-                {s.label}
-                {s.ai ? <span className="ml-1.5 rounded-[4px] bg-mint-400/15 px-1 font-mono text-[8.5px] text-mint-400">AI</span> : null}
-              </p>
-              <p className="text-[9.5px] text-ink-muted">{s.meta}</p>
             </div>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}
-
-/** The companion mobile view (150 × 244). */
-function Phone() {
-  return (
-    <div className={cn(slab, "h-full rounded-[24px] px-3 pt-2.5")}>
-      <div className="flex items-center justify-between font-mono text-[8.5px] text-ink-muted">
-        <span>9:41</span>
-        <span className="h-1.5 w-10 rounded-full bg-white/15" />
-        <span>●●</span>
-      </div>
-      <p className="mt-2 text-[9.5px] text-ink-muted">Good morning</p>
-      <p className="font-display text-[14px] leading-tight font-semibold text-ink">Your queue</p>
-      <div className="mt-2 grid gap-1.5">
-        {[
-          { t: "Billing address", s: "Due today", on: true },
-          { t: "SSO setup", s: "Waiting on IT" },
-          { t: "Renewal question", s: "New" },
-        ].map((r) => (
-          <div key={r.t} className={cn("rounded-[8px] px-2 py-1.5", r.on ? "bg-mint-400/12 ring-1 ring-mint-400/40" : "bg-white/[0.05]")}>
-            <p className="truncate text-[10px] font-medium text-ink">{r.t}</p>
-            <p className="mt-0.5 flex items-center gap-1 text-[8.5px] text-ink-muted">
-              <i className={cn("size-1 rounded-full", r.on ? "bg-mint-400" : "bg-white/30")} />
-              {r.s}
-            </p>
+            {/* frame flash as the product materialises */}
+            <div className="nm-flash pointer-events-none absolute inset-0 rounded-[16px]" style={{ boxShadow: `0 0 0 2px ${p.accent}, 0 0 60px 6px ${p.accent}`, "--delay": st.delay } as Vars} />
           </div>
-        ))}
-      </div>
-      <span className="mt-2.5 block rounded-[8px] bg-mint-400 py-1.5 text-center text-[10px] font-semibold text-navy-900">New request</span>
-    </div>
+        );
+      })}
+    </>
   );
 }
 
-/** A request the product routed on its own. */
-function RoutedToast() {
+/** The spotlight from the portal onto the front card, in the product's colour. */
+function Spotlight({ x, y, w, h }: { x: number; y: number; w: number; h: number }) {
   return (
-    <div className={cn(slab, "flex h-full items-center gap-2.5 px-3")}>
-      <span className={iconTile}>
-        <Sparkles className="size-3.5" strokeWidth={2.25} />
-      </span>
-      <div className="min-w-0">
-        <p className="text-[11.5px] font-semibold whitespace-nowrap text-ink">RQ-2042 auto-routed</p>
-        <p className="font-mono text-[9.5px] text-ink-muted">to AK · in 0.4s</p>
-      </div>
-    </div>
+    <div
+      className="absolute blur-[14px]"
+      style={{
+        left: x,
+        top: y,
+        width: w,
+        height: h,
+        clipPath: "polygon(0 42%, 0 58%, 100% 100%, 100% 0)",
+        background: "linear-gradient(90deg, color-mix(in srgb, var(--nm-hue) 45%, transparent), color-mix(in srgb, var(--nm-hue) 12%, transparent) 70%, transparent)",
+        transform: "translateZ(-220px)",
+      }}
+    />
   );
 }
 
-const wires = {
-  workflow: "M515 196 V 250 Q 515 256 509 256 H 450",
-  toast: "M280 434 V 466 Q 280 472 286 472 H 300",
-};
-const mobileWire = "M180 344 V 368 Q 180 374 186 374 H 190";
+/** The glossy floor the products stand on. */
+function Floor({ cx, y, w }: { cx: number; y: number; w: number }) {
+  return (
+    <>
+      <div className="absolute h-[120px] rounded-[50%] blur-[16px]" style={{ left: cx - w / 2, top: y, width: w, background: "radial-gradient(closest-side, color-mix(in srgb, var(--nm-hue) 30%, transparent), transparent)", transform: "translateZ(-60px)" }} />
+      <div className="absolute h-px" style={{ left: cx - w / 2, top: y + 22, width: w, background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--nm-hue) 70%, transparent), transparent)", transform: "translateZ(-60px)" }} />
+    </>
+  );
+}
+
+/** A glass pill under each side; the product one glows and carries the four-product rail. */
+function Pill({ children, icon: Icon, on, rail }: { children: string; icon: LucideIcon; on?: boolean; rail?: ReactNode }) {
+  return (
+    <p className="flex justify-center">
+      <span
+        className={cn(
+          "font-display flex items-center gap-2.5 rounded-full border py-2 pl-2 text-[20px] font-semibold tracking-[-0.01em]",
+          rail ? "pr-2.5" : "pr-5",
+          on ? "border-mint-400/60 bg-mint-400/10 text-white shadow-[0_0_30px_-6px_rgb(109_225_210/0.7)]" : "border-white/15 bg-white/[0.05] text-ink-muted",
+        )}
+      >
+        <span className={cn("grid size-8 place-items-center rounded-full", on ? "bg-linear-to-br from-mint-400 to-[#3fa7c9] text-navy-900 shadow-[0_0_16px_rgb(109_225_210/0.8)]" : "bg-white/10 text-ink")}>
+          <Icon aria-hidden className="size-4" strokeWidth={2.5} />
+        </span>
+        {children}
+        {rail}
+      </span>
+    </p>
+  );
+}
+
+/** The four products as icons; the one in front lights up and grows. */
+function Rail() {
+  return (
+    <span className="ml-1.5 flex items-center gap-1.5 border-l border-white/15 pl-3">
+      {products.map((p, i) => {
+        const Icon = p.icon;
+        const front = start[i].place === "front";
+        return (
+          <span
+            key={p.src}
+            className="nm-rail grid size-7 place-items-center rounded-full"
+            style={{ background: p.accent, boxShadow: `0 0 14px ${p.accent}aa`, "--delay": start[i].delay, "--ro": front ? "1" : "0.35", "--rs": front ? "1.15" : "0.9" } as Vars}
+          >
+            <Icon aria-hidden className="size-3.5 text-[#0b1220]" strokeWidth={2.5} />
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+/** Twinkling dust, deterministic so server and client agree. */
+function Dust({ w, h, n }: { w: number; h: number; n: number }) {
+  return (
+    <>
+      {Array.from({ length: n }, (_, i) => {
+        const x = ((Math.sin(i * 12.9898) * 43758.5453) % 1 + 1) % 1;
+        const y = ((Math.sin(i * 78.233) * 12345.6789) % 1 + 1) % 1;
+        return (
+          <span
+            key={i}
+            className="nm-twinkle absolute size-[3px] rounded-full bg-white"
+            style={{ left: Math.round(x * w), top: Math.round(y * h), opacity: 0.4, "--dur": `${2.4 + (i % 5) * 0.6}s`, "--delay": `${-(i % 7) * 0.5}s`, transform: `translateZ(${-90 + (i % 4) * 20}px)` } as Vars}
+          />
+        );
+      })}
+    </>
+  );
+}
+
+/** Everything inside shares the 16s clock: the wrapper animates the accent colour. */
+function Clock({ children }: { children: ReactNode }) {
+  return <div className="nm-hue-cycle absolute inset-0 [transform-style:preserve-3d]">{children}</div>;
+}
+
+const wideBeam = "M300 225 C 400 225, 440 245, 530 245 S 720 205, 790 200";
+const compactBeam = "M240 130 C 290 130, 330 120, 410 120 S 350 280, 330 322";
 
 /**
- * Hero composition: the Relay dashboard, its intake automation and companion
- * phone on a tilted 3D stage, joined by the connected-node system. Assembles
- * from 360ms (after the headline), then sways and floats; still with reduced motion.
+ * Hero composition. Wide screens get the left-to-right story; narrower ones a
+ * stacked arrangement of the same pieces, so nothing becomes tiny.
  */
 export function HeroVisual() {
   return (
-    <figure className="relative m-0" aria-label="Product concept illustration: an operations dashboard, a mobile app view and an automation workflow for a sample product called Relay.">
-      {/* Phones: the dashboard and its routed request only, large enough to read. */}
-      <div className="sm:hidden">
-        <Scene width={440} height={400}>
-          <Glow x={60} y={40} size={300} />
-          <Wires id="hvm" width={440} height={400} paths={[mobileWire]} ends={[[190, 374]]} delay={1100} />
-          <Particle d={mobileWire} dur="1.6s" delay="2.2s" />
-          <Item x={10} y={0} w={420} h={344} enter={360} float="-3px" floatDur="8s">
-            <Dashboard id="hvm" />
-          </Item>
-          <Item x={190} y={350} w={230} h={48} z={50} enter={900} float="-7px" floatDelay="-2s">
-            <RoutedToast />
-          </Item>
+    <figure className="relative m-0" aria-label="From idea to product: a glowing brain sends a beam of light through the studio, and in turn an MVP, a SaaS platform, an AI product and custom software step forward, built.">
+      <div className="hidden lg:block">
+        <Scene width={1200} height={470}>
+          <Clock>
+            <div className="absolute top-[40px] left-[380px] size-[460px] rounded-full bg-mint-400/[0.08] blur-[90px]" style={{ transform: "translateZ(-160px)" }} />
+            <Dust w={1200} h={470} n={26} />
+            <Spotlight x={600} y={40} w={560} h={330} />
+            <Floor cx={955} y={330} w={620} />
+
+            <Item x={10} y={50} w={320} h={320} z={20} enter={200} float="-8px" floatDur="7s">
+              <IdeaBrain size={320} />
+            </Item>
+            <Item x={430} y={145} w={200} h={200} z={10} enter={350} float="0px">
+              <Portal size={200} />
+            </Item>
+            <Beam d={wideBeam} w={1200} h={470} />
+
+            <Carousel cx={955} cy={200} w={330} h={220} dx={225} dz={-160} />
+
+            <Item x={10} y={398} w={320} z={60} enter={500} float="0px">
+              <Pill icon={Lightbulb}>Your idea</Pill>
+            </Item>
+            <Item x={735} y={412} w={440} enter={800} float="0px">
+              <Pill icon={Rocket} on rail={<Rail />}>
+                Your product
+              </Pill>
+            </Item>
+          </Clock>
         </Scene>
       </div>
-      <div className="hidden sm:block">
-        <Scene width={600} height={500}>
-          <Glow x={140} y={80} size={340} />
-          <Glow x={0} y={280} size={240} tone="blue" />
-          <Wires id="hv" width={600} height={500} paths={Object.values(wires)} ends={[[450, 256], [300, 472]]} delay={1100} />
-          <Particle d={wires.workflow} dur="2.2s" delay="2.4s" />
-          <Particle d={wires.toast} dur="1.8s" delay="3.2s" />
-          <Item x={30} y={90} w={420} h={344} enter={360} float="-3px" floatDur="8s">
-            <Dashboard id="hv" />
-          </Item>
-          <Item x={430} y={0} w={170} h={196} z={50} enter={620} float="-8px" floatDur="7s" floatDelay="-2s">
-            <WorkflowCard />
-          </Item>
-          <Item x={0} y={256} w={150} h={244} z={70} enter={740} float="-10px" floatDur="6s" floatDelay="-1s">
-            <Phone />
-          </Item>
-          <Item x={300} y={448} w={240} h={48} z={40} enter={1000} float="-6px" floatDur="5.5s" floatDelay="-3s">
-            <RoutedToast />
-          </Item>
+
+      <div className="lg:hidden">
+        <Scene width={640} height={660}>
+          <Clock>
+            <Dust w={640} h={660} n={16} />
+            <Floor cx={330} y={530} w={520} />
+            <Item x={-10} y={0} w={260} h={260} z={20} enter={200} float="-8px" floatDur="7s">
+              <IdeaBrain size={260} />
+            </Item>
+            <Item x={330} y={40} w={160} h={160} z={10} enter={350} float="0px">
+              <Portal size={160} />
+            </Item>
+            <Beam d={compactBeam} w={640} h={660} />
+            <Carousel cx={330} cy={420} w={300} h={200} dx={170} dz={-140} />
+            <Item x={-10} y={262} w={260} enter={500} float="0px">
+              <Pill icon={Lightbulb}>Your idea</Pill>
+            </Item>
+            <Item x={110} y={600} w={440} enter={800} float="0px">
+              <Pill icon={Rocket} on rail={<Rail />}>
+                Your product
+              </Pill>
+            </Item>
+          </Clock>
         </Scene>
       </div>
-      <ConceptBadge>Product concept illustration</ConceptBadge>
+      {/* In the scene's corner on desktop, so the hero fits one screen; below it on smaller screens. */}
+      <figcaption className="mt-3 flex justify-end lg:absolute lg:top-0 lg:left-0 lg:mt-0">
+        <Badge3D>From idea to product</Badge3D>
+      </figcaption>
     </figure>
   );
 }
