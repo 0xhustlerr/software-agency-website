@@ -381,6 +381,10 @@
     transform-origin: left;
     animation: nm-mark 450ms var(--ease-studio) var(--reveal-delay, 60ms) both;
   }
+  /* Drawings inside a scroll reveal wait until it comes into view, then draw. */
+  html.js [data-reveal]:not([data-revealed]) :is(.nm-draw, .nm-enter-fade) {
+    animation-play-state: paused;
+  }
   /* A scaled illustration waits until it has been measured, then assembles. */
   html.js .nm-scaled:not([data-scaled]) :is(.nm-enter, .nm-enter-x, .nm-enter-fade, .nm-draw) {
     animation-play-state: paused;
