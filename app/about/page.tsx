@@ -4,7 +4,7 @@ import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/layout/page-hero";
 import { IconCard, tints } from "@/components/ui/icon-card";
 import { SpecCards } from "@/components/sections/pages/service-sections";
-import { FlaskConical, Layers, ListOrdered, MessagesSquare, MonitorCheck, Quote, Scale, ShieldCheck, Sprout, Target } from "lucide-react";
+import { FlaskConical, Layers, Lightbulb, ListOrdered, MessagesSquare, MonitorCheck, Quote, Scale, ShieldCheck, Sprout, Target } from "lucide-react";
 import { AboutHeroArt } from "@/components/illustrations/page-hero-art";
 import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/ui/eyebrow";
@@ -43,12 +43,32 @@ export default function AboutPage() {
 
       {/* 1 · Mission + why we exist */}
       <Section spacing="lg" aria-labelledby="mission-h">
-        <Reveal>
-          <Eyebrow>Mission</Eyebrow>
-          <h2 id="mission-h" className="font-display mt-6 max-w-[26ch] text-[clamp(2rem,4.4vw,3.75rem)] leading-[1.08] font-semibold tracking-[-0.035em] text-balance">
-            {mission.statement} <span className="text-ink-muted">{mission.muted}</span>
-          </h2>
-        </Reveal>
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-6">
+          <Reveal className="lg:col-span-6">
+            <Eyebrow>Mission</Eyebrow>
+            <h2 id="mission-h" className="font-display mt-6 max-w-[26ch] text-[clamp(2rem,3.8vw,3.25rem)] leading-[1.08] font-semibold tracking-[-0.035em] text-balance">
+              {mission.statement} <span className="text-ink-muted">{mission.muted}</span>
+            </h2>
+          </Reveal>
+          {/* A founder with a big idea: the person this studio exists for. Photo: Unsplash ylB9gcLv2I4. */}
+          <Reveal delay={0.08} className="lg:col-span-6">
+            <figure className="relative m-0">
+              <div aria-hidden className="relative aspect-[16/11] overflow-hidden rounded-[22px] border-[1.5px] border-mint-400/60 shadow-[0_0_70px_-20px_rgb(109_225_210/0.7),0_40px_70px_-34px_rgb(16_24_39/0.55)]">
+                <Image src="/img/about/founder.webp" alt="" fill sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" style={{ objectPosition: "50% 35%" }} />
+                <div className="absolute inset-0 bg-linear-to-t from-navy-900/70 via-transparent to-transparent" />
+              </div>
+              <span className="absolute -bottom-5 left-5 flex items-center gap-3 rounded-[14px] border-[1.5px] border-mint-400/60 bg-navy-900/90 py-2.5 pr-5 pl-2.5 shadow-[0_20px_40px_-16px_rgb(0_0_0/0.6)] backdrop-blur-md">
+                <span className="grid size-10 place-items-center rounded-[10px] bg-linear-to-br from-[#f6b26b] to-[#e8734a] shadow-[0_0_18px_rgb(246_178_107/0.6)]">
+                  <Lightbulb aria-hidden className="size-5 text-navy-900" strokeWidth={2.25} />
+                </span>
+                <span>
+                  <span className="font-display block text-[17px] leading-tight font-semibold text-white">Your idea, taken seriously</span>
+                  <span className="block text-[13px] font-medium text-mint-400">From first sketch to real users</span>
+                </span>
+              </span>
+            </figure>
+          </Reveal>
+        </div>
         <div className="mt-24 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-6">
           <div className="lg:col-span-4">
             <Eyebrow as="h3">Why we exist</Eyebrow>

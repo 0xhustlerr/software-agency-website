@@ -1,6 +1,6 @@
 import { work } from "@/content/home";
 import { approvedProjects } from "@/content/projects";
-import { productConcepts } from "@/content/concepts";
+import { featuredConcepts } from "@/content/concepts";
 import { talkHref } from "@/content/site";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
 import { Section } from "@/components/layout/section";
@@ -23,7 +23,7 @@ export function Work() {
       <ul className="grid gap-20 lg:gap-28">
         {hasWork
           ? approvedProjects.slice(0, 3).map((p, i) => <ProjectFeature key={p.slug} project={p} index={i} />)
-          : productConcepts.map((c, i) => <ConceptFeature key={c.slug} concept={c} index={i} />)}
+          : featuredConcepts.map((c, i) => <ConceptFeature key={c.slug} concept={c} index={i} />)}
       </ul>
       {!hasWork ? (
         <Reveal className="mt-20 grid grid-cols-1 gap-8 border-t border-line pt-10 lg:mt-28 lg:grid-cols-12 lg:gap-6">
