@@ -837,10 +837,10 @@ html.js .nm-scaled:not([data-scaled]) {
     animation: nm-pin 16s var(--ease-studio) var(--delay, 0s) infinite;
   }
   .nm-reel {
-    animation: nm-reel 48s linear var(--delay, 0s) infinite;
+    animation: nm-reel var(--reel, 48s) linear var(--delay, 0s) infinite;
   }
   .nm-reel-dot {
-    animation: nm-reel-dot 48s linear var(--delay, 0s) infinite;
+    animation: nm-reel-dot var(--reel, 48s) linear var(--delay, 0s) infinite;
   }
   .nm-flow {
     animation: nm-flow 16s var(--ease-studio) var(--delay, 0s) infinite;

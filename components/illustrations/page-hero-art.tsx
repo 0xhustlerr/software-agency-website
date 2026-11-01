@@ -1,14 +1,14 @@
 /**
  * Hero pictures for the inner pages. Each tells its page's main idea in its own
  * medium, so no two heroes look alike:
- * /work: a showreel of every product · /about: jargon becoming plain
+ * /work: problem → product, slide by slide · /about: jargon becoming plain
  * words · /contact: a photo with glass interface cards. Decorative (aria-hidden inside).
  *
  * Contact photo (free licence, no attribution required): Unsplash UK78i6vK3sc.
  */
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { MessageSquareText, Send, ShieldCheck, Smile, User, Zap, type LucideIcon } from "lucide-react";
+import { ArrowRight, CircleAlert, MessageSquareText, Send, ShieldCheck, Smile, User, Zap, type LucideIcon } from "lucide-react";
 import { productConcepts } from "@/content/concepts";
 import type { ProductConcept } from "@/content/types";
 import { cn } from "@/lib/utils";
@@ -32,54 +32,70 @@ function Glass({ accent, className, children }: { accent: string; className?: st
   );
 }
 
-/* ---------- /work: a showreel of every product we've designed ---------- */
+/* ---------- /work: every product starts with a problem worth solving ---------- */
 
 const kindLabel: Record<ProductConcept["kind"], string> = { saas: "SaaS Platform", mvp: "MVP", ai: "AI Product", custom: "Custom Software" };
 
+/** One slide per product, 6s each (the reel's keyframes are in twelfths of the loop). */
+const SLIDE_SECONDS = 6;
+
 /**
- * All product concepts, one after another (4s each): photo or screen with a
- * slow zoom, its name, kind and tagline, and a progress dot per product.
- * Anyone reads it as "look at everything they build". Full width, sized so
- * the hero copy and the reel fit one screen.
+ * The page's idea, slide by slide: a real problem in plain words on the left,
+ * the product that solves it on the right. Anyone reads it as "problem in,
+ * product out". Sized so the hero copy and the reel fit one screen.
  */
 export function WorkHeroArt() {
-  const n = productConcepts.length;
-  const step = 48 / n;
+  const loop = SLIDE_SECONDS * productConcepts.length;
+  const delay = (i: number) => `${loop - i * SLIDE_SECONDS}s`;
   return (
-    <figure className="m-0" aria-label={`A slideshow of products: ${productConcepts.map((c) => c.name).join(", ")}.`}>
+    <figure className="m-0" aria-label="Problem to product: each slide shows a real problem in plain words and the product that solves it.">
       <div className="relative">
         <div aria-hidden className="absolute -inset-8 rounded-[40px] bg-[radial-gradient(closest-side,rgb(109_225_210/0.2),transparent)] blur-[30px]" />
         <div
           aria-hidden
-          className="relative h-[clamp(220px,calc(100svh-35rem),620px)] overflow-hidden rounded-[22px] border-[1.5px] border-mint-400/60 bg-[#0b1220] shadow-[0_0_80px_-20px_rgb(109_225_210/0.7),0_50px_90px_-40px_rgb(0_0_0/0.9)]"
+          className="relative h-[clamp(240px,calc(100svh-35rem),620px)] overflow-hidden rounded-[22px] border-[1.5px] border-mint-400/60 bg-[#0b1220] shadow-[0_0_80px_-20px_rgb(109_225_210/0.7),0_50px_90px_-40px_rgb(0_0_0/0.9)]"
         >
           {productConcepts.map((c, i) => (
-            <div key={c.slug} className="nm-reel absolute inset-0" style={{ "--delay": `${-i * step + 48}s`, "--ro": i === 0 ? "1" : "0" } as Vars}>
-              <Image src={c.image.src} alt="" fill priority={i < 2} sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover" style={{ objectPosition: "50% 0%" }} />
-              <div className="absolute inset-0 bg-linear-to-t from-[#0b1220] via-[#0b1220]/45 to-transparent" />
-              <div className="absolute bottom-6 left-6 flex items-center gap-4 sm:bottom-8 sm:left-8">
-                <span className="grid size-14 shrink-0 place-items-center rounded-[15px] font-display text-[24px] font-bold text-[#0b1220]" style={{ background: `linear-gradient(135deg, ${c.accent}, ${c.accent}99)`, boxShadow: `0 0 26px ${c.accent}aa` }}>
-                  {c.name[0]}
+            <div key={c.slug} className="nm-reel absolute inset-0 grid grid-cols-1 sm:grid-cols-[minmax(0,5fr)_auto_minmax(0,7fr)]" style={{ "--reel": `${loop}s`, "--delay": delay(i), "--ro": i === 0 ? "1" : "0" } as Vars}>
+              {/* the problem */}
+              <div className="relative hidden flex-col justify-center gap-4 bg-linear-to-br from-[#2a1d24] to-[#141a28] p-7 sm:flex lg:p-9">
+                <span className="flex items-center gap-2 font-mono text-[12px] font-semibold tracking-[0.14em] text-[#f08a6b] uppercase">
+                  <CircleAlert className="size-4" strokeWidth={2.5} /> The problem
                 </span>
-                <span>
-                  <span className="block font-mono text-[12px] font-semibold tracking-[0.14em] uppercase" style={{ color: c.accent }}>
-                    {kindLabel[c.kind]} · {c.category}
+                <p className="font-display text-[clamp(1.25rem,2vw,1.75rem)] leading-snug font-medium tracking-[-0.01em] text-white">“{c.problem}”</p>
+              </div>
+              {/* the turn: problem → product */}
+              <div className="relative z-10 hidden items-center sm:flex">
+                <span className="-mx-6 grid size-12 place-items-center rounded-full bg-mint-400 text-navy-900 shadow-[0_0_0_6px_#0b1220,0_0_30px_rgb(109_225_210/0.8)]">
+                  <ArrowRight className="size-6" strokeWidth={2.5} />
+                </span>
+              </div>
+              {/* the product */}
+              <div className="relative">
+                <Image src={c.image.src} alt="" fill priority={i < 2} sizes="(min-width: 1280px) 700px, 100vw" className="object-cover" style={{ objectPosition: "50% 0%" }} />
+                <div className="absolute inset-0 bg-linear-to-t from-[#0b1220] via-[#0b1220]/30 to-transparent" />
+                <div className="absolute bottom-5 left-5 flex items-center gap-3.5 sm:left-9">
+                  <span className="grid size-12 shrink-0 place-items-center rounded-[13px] font-display text-[22px] font-bold text-[#0b1220]" style={{ background: `linear-gradient(135deg, ${c.accent}, ${c.accent}99)`, boxShadow: `0 0 24px ${c.accent}aa` }}>
+                    {c.name[0]}
                   </span>
-                  <span className="font-display block text-[clamp(1.75rem,3vw,2.5rem)] leading-tight font-semibold tracking-[-0.02em] text-white">{c.name}</span>
-                  <span className="block text-[15px] text-white/75">{c.tagline}</span>
-                </span>
+                  <span>
+                    <span className="block font-mono text-[11.5px] font-semibold tracking-[0.14em] uppercase" style={{ color: c.accent }}>
+                      The product · {kindLabel[c.kind]}
+                    </span>
+                    <span className="font-display block text-[clamp(1.5rem,2.4vw,2.125rem)] leading-tight font-semibold tracking-[-0.02em] text-white">{c.name}</span>
+                  </span>
+                </div>
               </div>
             </div>
           ))}
-          {/* progress: one dot per product */}
-          <div className="absolute right-6 bottom-6 hidden items-center gap-1.5 sm:flex">
+          <div className="absolute right-5 bottom-5 hidden items-center gap-1.5 lg:flex">
             {productConcepts.map((c, i) => (
-              <span key={c.slug} className="nm-reel-dot block h-2 w-2 rounded-full bg-white/30" style={{ "--delay": `${-i * step + 48}s` } as Vars} />
+              <span key={c.slug} className="nm-reel-dot block h-2 w-2 rounded-full bg-white/30" style={{ "--reel": `${loop}s`, "--delay": delay(i) } as Vars} />
             ))}
           </div>
         </div>
       </div>
-      <ConceptBadge>Products we design and engineer</ConceptBadge>
+      <ConceptBadge>From a real problem to a real product</ConceptBadge>
     </figure>
   );
 }

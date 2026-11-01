@@ -4,7 +4,7 @@ import { engineeringApproach, takingShape, workHero } from "@/content/pages/work
 import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/layout/page-hero";
 import { FeatureTile } from "@/components/ui/tile-3d";
-import { BadgeCheck, Compass, FileClock, GitBranch, Images, Lightbulb, PenTool, Target, Wrench } from "lucide-react";
+import { BadgeCheck, Code2, Compass, FileClock, GitBranch, Images, LayoutDashboard, Lightbulb, PenTool, Rocket, Sparkles, Target, Wrench, type LucideIcon } from "lucide-react";
 import type { ConceptKind } from "@/content/types";
 import { WorkHeroArt } from "@/components/illustrations/page-hero-art";
 import { Section } from "@/components/layout/section";
@@ -30,6 +30,14 @@ const coverIcons = [Target, Lightbulb, Wrench, Images, BadgeCheck];
 const approachIcons = [Compass, PenTool, GitBranch, Wrench];
 
 const kinds: ConceptKind[] = ["saas", "mvp", "ai", "custom"];
+/** One section per kind, in the services' colours (`ink` is the readable shade on light grounds). */
+const groups: Record<ConceptKind, { label: string; heading: string; icon: LucideIcon; accent: string; ink: string; href: string; link: string }> = {
+  saas: { label: "SaaS Platforms", heading: "Products people subscribe to, built to scale.", icon: LayoutDashboard, accent: "#6de1d2", ink: "#0a7266", href: "/services/saas-development", link: "Explore SaaS development" },
+  mvp: { label: "MVPs", heading: "Focused first versions that do one job well.", icon: Rocket, accent: "#f6b26b", ink: "#b0661c", href: "/services/mvp-development", link: "Explore MVP development" },
+  ai: { label: "AI Products", heading: "AI that helps people, with them in control.", icon: Sparkles, accent: "#b794f6", ink: "#7b4fd0", href: "/services/ai-development", link: "Explore AI development" },
+  custom: { label: "Custom Software", heading: "Tools shaped around how a business works.", icon: Code2, accent: "#6ea8ff", ink: "#2f6fd6", href: "/services/custom-software", link: "Explore custom software" },
+};
+
 const byKind = (kind: ConceptKind) => productConcepts.filter((c) => c.kind === kind);
 
 
@@ -101,23 +109,43 @@ export default function WorkPage() {
             </div>
           </Section>
 
-          {productConcepts.length ? (
-            <Section theme="dark" aria-labelledby="concepts-h">
-              <Reveal className="mb-8 lg:mb-10">
-                <Eyebrow>Product concepts</Eyebrow>
-                <h2 id="concepts-h" className="text-h2 mt-4">
-                  The kind of product we design and engineer.
-                </h2>
-              </Reveal>
-              {/* Every product, in one grid; each card names its category. */}
-              <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-                {kinds.flatMap(byKind).map((c, i) => (
-                  <ConceptCard key={c.slug} concept={c} index={i % 4} />
-                ))}
-              </ul>
-              <p className="text-small mt-4 text-ink-muted">Examples of the kinds of product we design and engineer. Not client work; we are not affiliated with these companies.</p>
-            </Section>
-          ) : null}
+          {/* One section per kind of product, each in its service's colour. */}
+          {kinds.map((kind, k) => {
+            const g = groups[kind];
+            const Icon = g.icon;
+            const items = byKind(kind);
+            if (!items.length) return null;
+            return (
+              <Section key={kind} theme={k % 2 === 0 ? "dark" : "light"} tone={k % 2 === 0 ? "default" : "muted"} aria-labelledby={`kind-${kind}`}>
+                <Reveal className="mb-8 flex flex-wrap items-end justify-between gap-6 lg:mb-10">
+                  <div className="flex items-center gap-5">
+                    <span aria-hidden className="grid size-16 shrink-0 place-items-center rounded-[18px]" style={{ background: `linear-gradient(135deg, ${g.accent}, ${g.accent}99)`, boxShadow: `0 0 34px -4px ${g.accent}` }}>
+                      <Icon className="size-8 text-navy-900" strokeWidth={2} />
+                    </span>
+                    <div>
+                      <p className="font-mono text-[0.8125rem] font-semibold tracking-[0.14em] uppercase" style={{ color: k % 2 === 0 ? g.accent : g.ink }}>
+                        {g.label}
+                      </p>
+                      <h2 id={`kind-${kind}`} className="text-h2 mt-1">
+                        {g.heading}
+                      </h2>
+                    </div>
+                  </div>
+                  <Button href={g.href} variant="ghost">
+                    {g.link}
+                  </Button>
+                </Reveal>
+                <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                  {items.map((c, i) => (
+                    <ConceptCard key={c.slug} concept={c} index={i} />
+                  ))}
+                </ul>
+                {k === kinds.length - 1 ? (
+                  <p className="text-small mt-6 text-ink-muted">Examples of the kinds of product we design and engineer. Not client work; we are not affiliated with these companies.</p>
+                ) : null}
+              </Section>
+            );
+          })}
         </>
       )}
 
