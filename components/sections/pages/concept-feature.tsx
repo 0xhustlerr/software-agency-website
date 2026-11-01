@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ProductConcept } from "@/content/types";
 import { Tag } from "@/components/ui/tag";
+import { Badge3D } from "@/components/illustrations/scene";
 import { Reveal } from "@/components/motion/reveal";
 import { cn } from "@/lib/utils";
 
@@ -17,7 +18,8 @@ export function ConceptFeature({ concept, index }: { concept: ProductConcept; in
         <figure className={cn("m-0 lg:col-span-8", flip && "lg:order-2 lg:col-start-5")}>
           <div
             data-theme="dark"
-            className="relative overflow-hidden rounded-md bg-surface shadow-frame after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:shadow-[inset_0_0_0_1px_rgb(255_255_255/0.06)]"
+            className="relative overflow-hidden rounded-[16px] border-[1.5px] bg-surface"
+            style={{ borderColor: `${concept.accent}aa`, boxShadow: `0 0 70px -16px ${concept.accent}aa, 0 40px 70px -30px rgb(0 0 0 / 0.55)` }}
           >
             <Image
               src={concept.image.src}
@@ -33,8 +35,8 @@ export function ConceptFeature({ concept, index }: { concept: ProductConcept; in
           </figcaption>
         </figure>
         <div className={cn("flex flex-col lg:col-span-4 lg:self-center", flip && "lg:order-1")}>
-          <span className="self-start rounded-xs border border-dashed border-line-strong px-2 text-[11px] leading-5 font-semibold tracking-[0.08em] text-ink-muted uppercase">
-            {concept.tagline}
+          <span className="self-start">
+            <Badge3D accent={concept.accent}>{concept.tagline}</Badge3D>
           </span>
           <h3 className="text-h2 mt-5">{concept.name}</h3>
           <p className="text-mono mt-2 text-ink-muted">{concept.category}</p>

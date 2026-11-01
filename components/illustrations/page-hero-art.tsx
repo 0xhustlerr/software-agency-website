@@ -33,8 +33,6 @@ function Glass({ accent, className, children }: { accent: string; className?: st
 
 /* ---------- /work: the concepts as real products, in browser windows and a phone ---------- */
 
-const conceptAccents = ["#b794f6", "#6ea8ff", "#f6b26b"];
-
 /** A browser window around a screenshot: traffic lights, address bar, framed in the concept's colour. */
 function Browser({ src, url, accent }: { src: string; url: string; accent: string }) {
   return (
@@ -64,19 +62,19 @@ export function WorkHeroArt() {
         <Light x={300} y={160} size={220} color="#f6b26b" />
         {a ? (
           <Item x={0} y={10} w={330} h={220} z={-90} enter={200} float="-5px" floatDur="8s" floatDelay="-2s">
-            <Browser src={a.image.src} url={`${a.slug}.concept`} accent={conceptAccents[0]} />
+            <Browser src={a.image.src} url={`${a.slug}.concept`} accent={a.accent} />
           </Item>
         ) : null}
         {b ? (
           <Item x={130} y={92} w={360} h={240} z={0} enter={400} float="-7px" floatDur="7s">
-            <Browser src={b.image.src} url={`${b.slug}.concept`} accent={conceptAccents[1]} />
+            <Browser src={b.image.src} url={`${b.slug}.concept`} accent={b.accent} />
           </Item>
         ) : null}
         {c ? (
           <Item x={452} y={150} w={104} h={200} z={70} enter={650} float="-10px" floatDur="6s" floatDelay="-3s">
             <div
               className="h-full rounded-[22px] border-[1.5px] bg-[#0b1220] p-1.5"
-              style={{ borderColor: `${conceptAccents[2]}cc`, boxShadow: `0 0 40px -8px ${conceptAccents[2]}cc, 0 30px 50px -16px rgb(0 0 0 / 0.85)` }}
+              style={{ borderColor: `${c.accent}cc`, boxShadow: `0 0 40px -8px ${c.accent}cc, 0 30px 50px -16px rgb(0 0 0 / 0.85)` }}
             >
               <div className="relative h-full overflow-hidden rounded-[17px]">
                 <Image src={c.image.src} alt="" fill sizes="10vw" className="object-cover" style={{ objectPosition: "18% 30%" }} />

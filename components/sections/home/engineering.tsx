@@ -3,6 +3,19 @@ import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 import { EngineeringArt } from "@/components/illustrations/architecture";
+import { FeatureTile } from "@/components/ui/tile-3d";
+import { Bot, Cloud, Code2, FileCode2, Layers, Monitor, Plug, Server, ShieldCheck, Workflow, type LucideIcon } from "lucide-react";
+
+/** One icon per engineering theme, in the order of content/home.ts. */
+const themeIcons: LucideIcon[] = [FileCode2, ShieldCheck, Plug, Cloud, Layers, Workflow];
+/** One icon and colour per stack layer: frontend, backend, cloud, AI, integrations. */
+const layers: { icon: LucideIcon; accent: string }[] = [
+  { icon: Monitor, accent: "#6de1d2" },
+  { icon: Server, accent: "#6ea8ff" },
+  { icon: Cloud, accent: "#8fb3ff" },
+  { icon: Bot, accent: "#b794f6" },
+  { icon: Code2, accent: "#f6b26b" },
+];
 
 /** Section 7 — dark engineering capabilities, explained for founders. */
 export function Engineering() {
@@ -21,32 +34,41 @@ export function Engineering() {
         </Reveal>
       </div>
 
-      <ul className="mt-20 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:mt-28 lg:grid-cols-3">
+      <ul className="mt-20 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:mt-28 lg:grid-cols-3 lg:gap-6">
         {engineering.themes.map((t, i) => (
-          <Reveal as="li" key={t.title} delay={(i % 3) * 0.06} className="border-t border-line pt-6">
-            <h3 className="text-h4">{t.title}</h3>
-            <p className="text-body-sm mt-2 max-w-[38ch] text-ink-muted">{t.body}</p>
+          <Reveal as="li" key={t.title} delay={(i % 3) * 0.06}>
+            <FeatureTile mark={String(i + 1).padStart(2, "0")} icon={themeIcons[i % themeIcons.length]} title={t.title} body={t.body} lift />
           </Reveal>
         ))}
       </ul>
 
+      {/* The stack, as a cloud of chips grouped by layer. */}
       <div className="mt-20 lg:mt-24">
-        <h3 className="text-eyebrow mb-5 text-ink-muted">Capabilities</h3>
-        <dl className="border-b border-line">
-          {engineering.capabilities.map((c) => (
-            <div key={c.category} className="grid grid-cols-1 gap-2 border-t border-line py-4 sm:grid-cols-[10rem_1fr] sm:items-baseline sm:gap-6 lg:grid-cols-[14rem_1fr]">
-              <dt className="text-h4 text-[1.0625rem]">{c.category}</dt>
-              <dd className="flex flex-wrap gap-x-3 gap-y-1 font-mono text-[0.8125rem] text-ink-muted">
-                {c.items.map((it, i) => (
-                  <span key={it} className="inline-flex items-center gap-3">
-                    {i > 0 ? <span aria-hidden className="text-line-strong">/</span> : null}
-                    {it}
-                  </span>
-                ))}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <h3 className="text-eyebrow mb-6 text-ink-muted">Capabilities</h3>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {engineering.capabilities.map((c, i) => {
+            const { icon: Icon, accent } = layers[i % layers.length];
+            return (
+              <Reveal key={c.category} delay={i * 0.05}>
+                <div className="h-full rounded-[14px] border-[1.5px] bg-surface-muted p-4" style={{ borderColor: `${accent}66`, boxShadow: `0 0 30px -14px ${accent}` }}>
+                  <p className="flex items-center gap-2.5">
+                    <span className="grid size-8 place-items-center rounded-[9px]" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}99)` }}>
+                      <Icon aria-hidden className="size-4 text-[#0b1220]" strokeWidth={2.5} />
+                    </span>
+                    <span className="text-h4 text-[1.0625rem]">{c.category}</span>
+                  </p>
+                  <ul className="mt-4 flex flex-wrap gap-1.5">
+                    {c.items.map((it) => (
+                      <li key={it} className="rounded-full border px-2.5 py-1 font-mono text-[12px] text-ink" style={{ borderColor: `${accent}55`, background: `${accent}14` }}>
+                        {it}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
       </div>
     </Section>
   );

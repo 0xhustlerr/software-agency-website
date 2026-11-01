@@ -18,8 +18,22 @@ const delay = (ms: number) => ({ "--reveal-delay": `${ms}ms` }) as CSSProperties
  */
 export function FinalCta() {
   return (
-    <Section id="contact" theme="dark" spacing="none" aria-labelledby="contact-heading" className="pt-24 pb-24 lg:pt-40 lg:pb-36">
-      <Reveal className="grid grid-cols-1 lg:grid-cols-12 lg:gap-x-6">
+    <Section id="contact" theme="dark" spacing="none" aria-labelledby="contact-heading" className="relative overflow-hidden pt-24 pb-24 lg:pt-40 lg:pb-36">
+      {/* The hero's idea returns as the backdrop: the glowing brain, waiting for yours. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute top-[8%] right-[-6%] size-[640px] rounded-full bg-mint-400/[0.12] blur-[120px]" />
+        <div className="absolute bottom-[-20%] left-[10%] size-[520px] rounded-full bg-[#7c6cf0]/[0.10] blur-[120px]" />
+        <div
+          className="absolute top-[6%] right-[-4%] hidden size-[560px] opacity-35 lg:block"
+          style={{
+            background: "linear-gradient(135deg, #ffffff 10%, var(--accent) 60%)",
+            mask: "url(/hero/brain-glow.webp) center / contain no-repeat",
+            WebkitMask: "url(/hero/brain-glow.webp) center / contain no-repeat",
+            filter: "drop-shadow(0 0 18px var(--accent))",
+          }}
+        />
+      </div>
+      <Reveal className="relative grid grid-cols-1 lg:grid-cols-12 lg:gap-x-6">
         <h2
           id="contact-heading"
           className="text-display -ml-[0.04em] leading-[0.95] [font-size:clamp(2.75rem,11.5vw,5.5rem)] lg:col-span-9 lg:[font-size:clamp(5rem,8.4vw,8.5rem)]"

@@ -54,6 +54,8 @@ export interface ProductConcept {
   category: string;
   /** Short headline shown above the name. */
   tagline: string;
+  /** The concept's colour: frames, glow and badge. */
+  accent: string;
   /** The problem the concept explores. */
   problem: string;
   /** Product approach: how the concept answers the problem. */

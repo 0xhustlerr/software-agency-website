@@ -11,6 +11,7 @@ export const productConcepts: ProductConcept[] = [
     name: "Adaline",
     category: "LLMOps platform",
     tagline: "Never stop learning",
+    accent: "#b794f6",
     problem:
       "Teams building with LLMs scatter prompts across code, docs, and provider dashboards, so nobody knows which version is live or whether a change made it worse.",
     approach:
@@ -30,6 +31,7 @@ export const productConcepts: ProductConcept[] = [
     name: "Qovery",
     category: "Internal developer platform",
     tagline: "Build. Deploy. Scale. Without the complexity",
+    accent: "#6ea8ff",
     problem: "Developers wait on DevOps to ship, while small teams can’t afford to build and run their own Kubernetes platform.",
     approach:
       "A self-service layer that provisions infrastructure and deploys apps in the team’s own cloud account, with a Heroku-like experience.",
@@ -48,6 +50,7 @@ export const productConcepts: ProductConcept[] = [
     name: "Cofounder",
     category: "AI business operations",
     tagline: "Run your company with AI",
+    accent: "#f6b26b",
     problem:
       "Solo and early-stage founders drown in operations like sales, marketing, and finance, leaving little time for the product itself.",
     approach:
