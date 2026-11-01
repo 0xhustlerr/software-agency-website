@@ -8,7 +8,7 @@ import { ClipboardCheck, Cloud, Plug, ShieldCheck, TrendingUp, Wrench, type Luci
 /** One icon per engineering theme, in the order of content/home.ts. */
 const themeIcons: LucideIcon[] = [Wrench, ShieldCheck, Plug, Cloud, TrendingUp, ClipboardCheck];
 
-/** Section 7 — engineering, explained for everyone: a building on strong foundations beside six plain promises. */
+/** Section 7 — engineering, explained for everyone: software that just works, beside six plain promises. */
 export function Engineering() {
   return (
     <Section id="engineering" theme="dark" spacing="lg" aria-labelledby="engineering-heading">

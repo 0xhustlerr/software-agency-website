@@ -55,7 +55,7 @@ export const journey = {
 };
 
 export const engineering = {
-  eyebrow: "Built on strong foundations",
+  eyebrow: "Software you can rely on",
   heading: "Thoughtful architecture. Reliable execution.",
   supporting: "We choose technologies based on your product goals, not because they're fashionable.",
   themes: [
