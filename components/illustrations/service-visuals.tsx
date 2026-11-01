@@ -22,6 +22,8 @@ export interface ServiceLook {
   /** Focal point of the photo inside the frame. */
   position: string;
   accent: string;
+  /** A darker shade of the accent, readable as text on light grounds. */
+  ink: string;
   /** Colour grade blended over the photo. */
   grade: string;
   icon: LucideIcon;
@@ -37,6 +39,7 @@ export const serviceLooks: Partial<Record<ServiceSlug, ServiceLook>> = {
     src: "/img/services/mvp-v2.webp",
     position: "center 55%",
     accent: "#f6b26b",
+    ink: "#b0661c",
     grade: "from-[#f6b26b]/30 to-[#e8734a]/15",
     icon: Rocket,
     label: "MVPs",
@@ -47,6 +50,7 @@ export const serviceLooks: Partial<Record<ServiceSlug, ServiceLook>> = {
     src: "/img/services/saas.webp",
     position: "center 40%",
     accent: "#6de1d2",
+    ink: "#0a7266",
     grade: "from-[#6de1d2]/25 to-[#3fa7c9]/15",
     icon: LayoutDashboard,
     label: "SaaS Platforms",
@@ -57,6 +61,7 @@ export const serviceLooks: Partial<Record<ServiceSlug, ServiceLook>> = {
     src: "/img/services/ai.webp",
     position: "center",
     accent: "#b794f6",
+    ink: "#7b4fd0",
     grade: "from-[#b794f6]/25 to-[#7c6cf0]/15",
     icon: Sparkles,
     label: "AI Products",
@@ -67,6 +72,7 @@ export const serviceLooks: Partial<Record<ServiceSlug, ServiceLook>> = {
     src: "/img/services/custom-v2.webp",
     position: "center 35%",
     accent: "#6ea8ff",
+    ink: "#2f6fd6",
     grade: "from-[#6ea8ff]/30 to-[#3d5afe]/15",
     icon: Code2,
     label: "Custom Software",

@@ -14,6 +14,8 @@ interface RevealProps {
    *          so Largest Contentful Paint isn't held back by the animation.
    */
   mode?: "view" | "enter" | "settle";
+  /** Extra inline styles, merged with the reveal delay. */
+  style?: CSSProperties;
 }
 
 /**
@@ -23,8 +25,8 @@ interface RevealProps {
  * - "enter" is a pure CSS animation, so it never depends on JavaScript.
  * Reduced motion and print show everything immediately. See globals.css → Reveal.
  */
-export function Reveal({ children, delay = 0, className, as: Tag = "div", mode = "view" }: RevealProps) {
-  const style = delay ? ({ "--reveal-delay": `${Math.round(delay * 1000)}ms` } as CSSProperties) : undefined;
+export function Reveal({ children, delay = 0, className, as: Tag = "div", mode = "view", style: extra }: RevealProps) {
+  const style = delay ? ({ ...extra, "--reveal-delay": `${Math.round(delay * 1000)}ms` } as CSSProperties) : extra;
   return (
     <Tag className={cn(mode === "enter" ? "nm-enter" : mode === "settle" ? "nm-settle" : undefined, className)} data-reveal={mode === "view" ? "" : undefined} style={style}>
       {children}
