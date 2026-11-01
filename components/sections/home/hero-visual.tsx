@@ -278,7 +278,7 @@ export function HeroVisual() {
           </Clock>
         </Scene>
         {/* the two labels on one flat line, same size: under the brain and under the products */}
-        <div className="pointer-events-none absolute inset-x-0 bottom-[3%] h-0">
+        <div className="pointer-events-none absolute inset-x-0 bottom-[9%] h-0">
           <div className="absolute left-[14%] -translate-x-1/2 -translate-y-1/2">
             <Pill icon={Lightbulb} accent="#f6b26b">
               ONLY <Glow color="#f6b26b">IDEA</Glow>

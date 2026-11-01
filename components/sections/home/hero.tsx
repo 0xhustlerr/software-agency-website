@@ -45,11 +45,11 @@ export function Hero() {
         <p className="nm-settle text-lead mt-4 max-w-[58ch] text-ink-muted" style={at(460)}>
           {hero.lead}
         </p>
-        <div className="mt-8 w-full lg:mt-5 lg:max-w-[max(40rem,calc((100svh-33rem)*2.49))]">
+        <div className="mt-8 w-full lg:mt-5 lg:max-w-[max(40rem,calc((100svh-35rem)*2.49))]">
           <HeroVisual />
         </div>
         <div
-          className="nm-enter mt-8 grid w-full grid-cols-1 gap-3 min-[420px]:flex min-[420px]:w-auto min-[420px]:flex-wrap min-[420px]:items-center min-[420px]:justify-center lg:mt-5"
+          className="nm-enter mt-8 grid w-full grid-cols-1 gap-3 min-[420px]:flex min-[420px]:w-auto min-[420px]:flex-wrap min-[420px]:items-center min-[420px]:justify-center lg:mt-9"
           style={at(900, { "--rise": "10px", "--enter-dur": "500ms" })}
         >
           <Button href={primaryCta.href} className="justify-center">
