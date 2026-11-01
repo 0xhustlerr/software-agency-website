@@ -351,72 +351,127 @@ export function ProblemSlideshow({ items }: { items: ProductConcept[] }) {
   );
 }
 
-/* ---------- Homepage: every product on a tilted band you can drag ---------- */
+/* ---------- Homepage: every product on an endless arch you can drag ---------- */
+
+const CARD = 300;
+const GAP = 28;
+const STEP = CARD + GAP;
+/** How far the ends of the arch drop below its top, in px. */
+const RISE = 130;
 
 /**
- * All products on an angled band. Press and drag (mouse) or swipe (touch) to
- * move it left or right; a short click still opens the product. Arrow keys
- * scroll it when focused.
+ * All products on an arch, like a bridge: highest in the middle, dropping and
+ * turning towards the edges. Press and drag (or swipe) to move them along it;
+ * the line loops, so the first product follows the last. A short click still
+ * opens the product; arrow keys move one product at a time.
  */
 export function ProductStrip({ items }: { items: ProductConcept[] }) {
-  const track = useRef<HTMLUListElement>(null);
-  const drag = useRef({ down: false, startX: 0, startLeft: 0, moved: false });
+  const reduce = usePrefersReducedMotion();
+  const box = useRef<HTMLUListElement>(null);
+  const [width, setWidth] = useState(1200);
+  const [offset, setOffset] = useState(0);
+  const drag = useRef({ down: false, startX: 0, startOffset: 0, moved: false, lastX: 0, lastT: 0, v: 0 });
+  const glide = useRef(0);
   const [grabbing, setGrabbing] = useState(false);
 
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const ro = new ResizeObserver(([e]) => setWidth(e.contentRect.width));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  useEffect(() => () => cancelAnimationFrame(glide.current), []);
+
+  const total = items.length * STEP;
+
   const onPointerDown = (e: React.PointerEvent<HTMLUListElement>) => {
-    if (e.pointerType !== "mouse" || e.button !== 0 || !track.current) return;
-    drag.current = { down: true, startX: e.clientX, startLeft: track.current.scrollLeft, moved: false };
+    if (e.button !== 0) return;
+    cancelAnimationFrame(glide.current);
+    drag.current = { down: true, startX: e.clientX, startOffset: offset, moved: false, lastX: e.clientX, lastT: e.timeStamp, v: 0 };
   };
   const onPointerMove = (e: React.PointerEvent<HTMLUListElement>) => {
     const d = drag.current;
-    if (!d.down || !track.current) return;
+    if (!d.down) return;
     const dx = e.clientX - d.startX;
     if (!d.moved && Math.abs(dx) > 5) {
       d.moved = true;
       setGrabbing(true);
-      track.current.setPointerCapture(e.pointerId);
+      box.current?.setPointerCapture(e.pointerId);
     }
-    if (d.moved) track.current.scrollLeft = d.startLeft - dx;
+    if (!d.moved) return;
+    const dt = Math.max(1, e.timeStamp - d.lastT);
+    d.v = (e.clientX - d.lastX) / dt;
+    d.lastX = e.clientX;
+    d.lastT = e.timeStamp;
+    setOffset(d.startOffset + dx);
   };
   const end = (e: React.PointerEvent<HTMLUListElement>) => {
-    drag.current.down = false;
+    const d = drag.current;
+    if (!d.down) return;
+    d.down = false;
     setGrabbing(false);
-    if (track.current?.hasPointerCapture(e.pointerId)) track.current.releasePointerCapture(e.pointerId);
+    if (box.current?.hasPointerCapture(e.pointerId)) box.current.releasePointerCapture(e.pointerId);
+    // let it glide a little after a flick
+    if (d.moved && !reduce) {
+      let v = d.v * 16;
+      const step = () => {
+        v *= 0.94;
+        if (Math.abs(v) < 0.3) return;
+        setOffset((o) => o + v);
+        glide.current = requestAnimationFrame(step);
+      };
+      glide.current = requestAnimationFrame(step);
+    }
   };
 
+  const half = width / 2;
   return (
-    <div className="relative -mx-[8vw] py-10">
-      <div className="-rotate-[4deg]">
-        <ul
-          ref={track}
-          tabIndex={0}
-          aria-label="Products — drag to move"
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={end}
-          onPointerCancel={end}
-          onClickCapture={(e) => {
-            // a drag is not a click: don't open the product
-            if (drag.current.moved) {
-              e.preventDefault();
-              e.stopPropagation();
-              drag.current.moved = false;
-            }
-          }}
-          onDragStart={(e) => e.preventDefault()}
-          className={cn(
-            "flex gap-5 overflow-x-auto px-[8vw] py-6 select-none [scrollbar-width:none] focus-visible:outline-2 focus-visible:outline-mint-400",
-            grabbing ? "cursor-grabbing" : "cursor-grab",
-          )}
-        >
-          {items.map((c) => (
-            <ConceptCard key={c.slug} concept={c} index={0} items={items} className="w-[300px] shrink-0" />
-          ))}
-        </ul>
-      </div>
-      {/* soft edges, so the band fades in and out */}
-      <div aria-hidden className="pointer-events-none absolute inset-y-0 left-0 w-[14vw] bg-linear-to-r from-surface to-transparent" />
-      <div aria-hidden className="pointer-events-none absolute inset-y-0 right-0 w-[14vw] bg-linear-to-l from-surface to-transparent" />
-    </div>
+    <ul
+      ref={box}
+      tabIndex={0}
+      aria-label="Products — drag to move along the line"
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={end}
+      onPointerCancel={end}
+      onClickCapture={(e) => {
+        // a drag is not a click: don't open the product
+        if (drag.current.moved) {
+          e.preventDefault();
+          e.stopPropagation();
+          drag.current.moved = false;
+        }
+      }}
+      onDragStart={(e) => e.preventDefault()}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowRight") setOffset((o) => o - STEP);
+        if (e.key === "ArrowLeft") setOffset((o) => o + STEP);
+      }}
+      className={cn("relative -mx-[6vw] h-[600px] touch-pan-y overflow-hidden select-none focus-visible:outline-2 focus-visible:outline-mint-400", grabbing ? "cursor-grabbing" : "cursor-grab")}
+    >
+      {items.map((c, i) => {
+        // place on the loop: from one card before the left edge, wrapping round
+        const x = ((((i * STEP + offset + STEP) % total) + total) % total) - STEP;
+        // the arch: d runs from -1 (left edge) to 1 (right edge)
+        const d = (x + CARD / 2 - half) / half;
+        const y = RISE * d * d;
+        const angle = (Math.atan((2 * RISE * d) / half) * 180) / Math.PI;
+        const far = Math.min(1, Math.abs(d));
+        return (
+          <ConceptCard
+            key={c.slug}
+            concept={c}
+            index={0}
+            items={items}
+            className="absolute top-6 left-0 w-[300px] transition-none! will-change-transform"
+            style={{ transform: `translate3d(${x}px, ${y}px, 0) rotate(${angle}deg) scale(${1 - 0.1 * far * far})`, opacity: x < -CARD || x > width ? 0 : 1, zIndex: Math.round(100 - far * 50) }}
+          />
+        );
+      })}
+      {/* soft ends, so the arch fades in and out */}
+      <li aria-hidden className="pointer-events-none absolute inset-y-0 left-0 z-[200] w-[10vw] bg-linear-to-r from-surface to-transparent" />
+      <li aria-hidden className="pointer-events-none absolute inset-y-0 right-0 z-[200] w-[10vw] bg-linear-to-l from-surface to-transparent" />
+    </ul>
   );
 }
