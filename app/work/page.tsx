@@ -3,6 +3,7 @@ import { productConcepts } from "@/content/concepts";
 import { engineeringApproach, takingShape, workHero } from "@/content/pages/work";
 import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/layout/page-hero";
+import { WorkHeroArt } from "@/components/illustrations/page-hero-art";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
@@ -26,7 +27,7 @@ export default function WorkPage() {
 
   return (
     <>
-      <PageHero size="display" eyebrow={workHero.eyebrow} title={workHero.title} lead={workHero.lead} leadAside />
+      <PageHero size="display" eyebrow={workHero.eyebrow} title={workHero.title} lead={workHero.lead} aside={<WorkHeroArt />} />
 
       {hasWork ? (
         <Section aria-labelledby="projects-h">

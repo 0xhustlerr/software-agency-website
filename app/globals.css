@@ -551,6 +551,42 @@ html.js .nm-scaled:not([data-scaled]) {
  * a burst rides the beam, the next card turns to the front of the carousel and
  * materialises (scan line, colour, frame flash, slow zoom). Reduced motion
  * shows the first product in front, still. */
+/* Orbit (about hero): items ride an ellipse, staying upright. Reduced motion
+ * leaves each at its starting point (--start). */
+@keyframes nm-orbit {
+  from {
+    offset-distance: var(--start, 0%);
+  }
+  to {
+    offset-distance: calc(var(--start, 0%) + 100%);
+  }
+}
+.nm-orbit {
+  offset-rotate: 0deg;
+  offset-distance: var(--start, 0%);
+}
+/* Lift (services hero bento): each tile rises and brightens for its quarter of
+ * the 16s clock. Reduced motion keeps the first tile lifted (--lz/--lb). */
+@keyframes nm-lift {
+  0%,
+  22% {
+    translate: 0 0 46px;
+    filter: brightness(1.12) saturate(1.15);
+  }
+  27%,
+  95% {
+    translate: 0 0 0;
+    filter: brightness(0.62) saturate(0.7);
+  }
+  100% {
+    translate: 0 0 46px;
+    filter: brightness(1.12) saturate(1.15);
+  }
+}
+.nm-lift {
+  translate: 0 0 var(--lz, 0);
+  filter: brightness(var(--lb, 1));
+}
 @property --nm-hue {
   syntax: "<color>";
   inherits: true;
@@ -771,6 +807,12 @@ html.js .nm-scaled:not([data-scaled]) {
   .nm-hue-cycle {
     animation: nm-hue 16s linear infinite;
   }
+  .nm-orbit {
+    animation: nm-orbit var(--dur, 18s) linear infinite;
+  }
+  .nm-lift {
+    animation: nm-lift 16s var(--ease-studio) var(--delay, 0s) infinite;
+  }
   .nm-flow {
     animation: nm-flow 16s var(--ease-studio) var(--delay, 0s) infinite;
   }
@@ -795,7 +837,7 @@ html.js .nm-scaled:not([data-scaled]) {
   .nm-think {
     animation: nm-think 4s ease-in-out infinite;
   }
-  html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar, .nm-hue-cycle, .nm-flow, .nm-unveil, .nm-scan, .nm-flash, .nm-kb, .nm-rail, .nm-burst, .nm-think) {
+  html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar, .nm-orbit, .nm-lift, .nm-hue-cycle, .nm-flow, .nm-unveil, .nm-scan, .nm-flash, .nm-kb, .nm-rail, .nm-burst, .nm-think) {
     animation-play-state: paused;
   }
   /* Scenes scrolled out of view stop looping (and save their entrance for when they arrive). */

@@ -14,8 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/motion/reveal";
-import { ServiceBadge, ServiceVisual } from "@/components/illustrations/service-visuals";
-import { BlueprintStage } from "@/components/sections/pages/blueprint-stage";
+import { ServiceHeroBackdrop } from "@/components/illustrations/service-visuals";
 import { RuledList, Split } from "@/components/sections/pages/split";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
 import { CtaBand } from "@/components/sections/cta-band";
@@ -70,16 +69,7 @@ async function ServiceDetailPageContent({ params }: { params: PageProps<"/servic
             </Button>
           </>
         }
-        aside={
-          <figure className="m-0">
-            <BlueprintStage tone="muted" className="aspect-[5/4]">
-              <div aria-hidden className="w-full">
-                <ServiceVisual slug={service.slug} />
-              </div>
-            </BlueprintStage>
-            <ServiceBadge slug={service.slug} />
-          </figure>
-        }
+        backdrop={<ServiceHeroBackdrop slug={service.slug} />}
       />
 
       <Section aria-labelledby="who-h">

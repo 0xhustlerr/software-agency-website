@@ -17,7 +17,7 @@ import type { ServiceSlug } from "@/content/types";
 import { cn } from "@/lib/utils";
 import { Badge3D, ConceptBadge, Item, Scene } from "./scene";
 
-interface Look {
+export interface ServiceLook {
   src: string;
   /** Focal point of the photo inside the frame. */
   position: string;
@@ -32,7 +32,7 @@ interface Look {
 }
 
 /** The same four skills, colours and promises as the homepage hero's product cards. */
-const looks: Partial<Record<ServiceSlug, Look>> = {
+export const serviceLooks: Partial<Record<ServiceSlug, ServiceLook>> = {
   "mvp-development": {
     src: "/img/services/mvp-v2.webp",
     position: "center 55%",
@@ -83,7 +83,7 @@ const phases: Partial<Record<ServiceSlug, string>> = {
   "ai-development": "-12s",
 };
 
-function ServicePicture({ look, phase }: { look: Look; phase: string }) {
+function ServicePicture({ look, phase }: { look: ServiceLook; phase: string }) {
   const { accent: a, icon: Icon } = look;
   return (
     <Scene width={440} height={330} phase={phase}>
@@ -122,7 +122,7 @@ function ServicePicture({ look, phase }: { look: Look; phase: string }) {
 }
 
 export function ServiceVisual({ slug, className }: { slug: ServiceSlug; className?: string }) {
-  const look = looks[slug];
+  const look = serviceLooks[slug];
   return look ? (
     <div data-theme="dark" className={cn("bg-transparent", className)}>
       <ServicePicture look={look} phase={phases[slug] ?? "0s"} />
@@ -132,7 +132,43 @@ export function ServiceVisual({ slug, className }: { slug: ServiceSlug; classNam
 
 /** The 3D badge beneath a service picture: what its photo shows, in the service's colour. */
 export function ServiceBadge({ slug, standalone }: { slug: ServiceSlug; standalone?: boolean }) {
-  const look = looks[slug];
+  const look = serviceLooks[slug];
   if (!look) return null;
   return standalone ? <Badge3D accent={look.accent}>{look.caption}</Badge3D> : <ConceptBadge accent={look.accent}>{look.caption}</ConceptBadge>;
+}
+
+/**
+ * Full-bleed hero backdrop for a service page: the service photo on the right,
+ * graded in the service colour and fading into the navy behind the copy, with
+ * the photo's 3D label floating at its corner.
+ */
+export function ServiceHeroBackdrop({ slug }: { slug: ServiceSlug }) {
+  const look = serviceLooks[slug];
+  if (!look) return null;
+  const a = look.accent;
+  const Icon = look.icon;
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0">
+      <div className="absolute inset-y-0 right-0 w-full lg:w-[62%]">
+        <Image src={look.src} alt="" fill priority sizes="(min-width: 1024px) 62vw, 100vw" className="object-cover" style={{ objectPosition: look.position }} />
+        <div className={cn("absolute inset-0 bg-linear-to-br mix-blend-color", look.grade)} />
+        {/* fade into the copy: full on phones, from the left on desktop */}
+        <div className="absolute inset-0 bg-surface/85 lg:bg-transparent lg:bg-linear-to-r lg:from-surface lg:via-surface/70 lg:to-surface/10" />
+        <div className="absolute inset-0 bg-linear-to-t from-surface via-transparent to-surface/40" />
+      </div>
+      <div className="absolute top-1/4 right-[8%] size-[420px] rounded-full blur-[110px]" style={{ background: `${a}33` }} />
+      {/* the service, floating at the photo's corner */}
+      <div className="absolute right-[5%] bottom-[14%] hidden items-center gap-3 rounded-[14px] border-[1.5px] bg-[#0b1220]/80 py-2.5 pr-5 pl-2.5 backdrop-blur-md lg:flex" style={{ borderColor: `${a}99`, boxShadow: `0 0 40px -8px ${a}aa, 0 30px 50px -18px rgb(0 0 0 / 0.85)` }}>
+        <span className="grid size-11 place-items-center rounded-[11px]" style={{ background: `linear-gradient(135deg, ${a}, ${a}99)`, boxShadow: `0 0 20px ${a}88` }}>
+          <Icon className="size-[22px] text-[#0b1220]" strokeWidth={2.25} />
+        </span>
+        <span>
+          <span className="font-display block text-[20px] leading-tight font-semibold text-white">{look.label}</span>
+          <span className="block text-[13.5px] font-medium" style={{ color: a }}>
+            {look.caption}
+          </span>
+        </span>
+      </div>
+    </div>
+  );
 }

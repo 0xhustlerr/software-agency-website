@@ -2,9 +2,9 @@ import Image from "next/image";
 import { aboutHero, collaborationWays, engineeringValues, mission, philosophy, team, whyWeExist } from "@/content/pages/about";
 import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/layout/page-hero";
+import { AboutHeroArt } from "@/components/illustrations/page-hero-art";
 import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/ui/eyebrow";
-import { NodeGrid } from "@/components/ui/node-grid";
 import { Reveal } from "@/components/motion/reveal";
 import { RuledList, Split } from "@/components/sections/pages/split";
 import { CtaBand } from "@/components/sections/cta-band";
@@ -25,11 +25,7 @@ export default function AboutPage() {
         eyebrow={aboutHero.eyebrow}
         title={aboutHero.title}
         lead={aboutHero.lead}
-        aside={
-          <div aria-hidden className="opacity-90">
-            <NodeGrid cols={6} rows={5} pitch={72} path={[[0, 1], [2, 1], [2, 3], [4, 3], [4, 4], [6, 4]]} animate />
-          </div>
-        }
+        aside={<AboutHeroArt />}
       />
 
       {/* 1 · Mission + why we exist */}

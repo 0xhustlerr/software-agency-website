@@ -4,6 +4,7 @@ import { href } from "@/content/routes";
 import { contactConfig } from "@/lib/contact/config";
 import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/layout/page-hero";
+import { ContactHeroArt } from "@/components/illustrations/page-hero-art";
 import { Section } from "@/components/layout/section";
 import { ContactForm } from "@/components/forms/contact-form";
 
@@ -24,7 +25,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <PageHero size="display" eyebrow={contactHero.eyebrow} title={contactHero.title} lead={contactHero.lead} className="pb-14 lg:pb-16" />
+      <PageHero size="display" eyebrow={contactHero.eyebrow} title={contactHero.title} lead={contactHero.lead} aside={<ContactHeroArt />} className="pb-14 lg:pb-16" />
       <Section tone="muted" aria-label="Contact form" className="lg:pt-16">
         <div className="grid grid-cols-1 items-start gap-14 lg:grid-cols-12 lg:gap-6">
           <div className="lg:col-span-7">
