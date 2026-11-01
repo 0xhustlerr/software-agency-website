@@ -196,19 +196,18 @@ function Floor({ cx, y, w }: { cx: number; y: number; w: number }) {
   );
 }
 
-/** A glass pill under each side; the product one glows and carries the four-product rail. */
-function Pill({ children, icon: Icon, accent, rail }: { children: ReactNode; icon: LucideIcon; accent: string; rail?: ReactNode }) {
+/** A glowing pill under each side: "Only idea" and "Complete product". */
+function Pill({ children, icon: Icon, accent }: { children: ReactNode; icon: LucideIcon; accent: string }) {
   return (
-    <p className="flex justify-center">
+    <p className="flex justify-center whitespace-nowrap">
       <span
-        className={cn("font-display flex items-center gap-3 rounded-full border-2 py-2 pl-2 text-[25px] font-semibold tracking-[-0.015em] whitespace-nowrap text-white", rail ? "pr-3" : "pr-6")}
+        className="font-display flex shrink-0 items-center gap-3 rounded-full border-2 py-2 pr-6 pl-2 text-[25px] font-semibold tracking-[-0.015em] whitespace-nowrap text-white"
         style={{ borderColor: accent, background: `${accent}1f`, boxShadow: `0 0 36px -4px ${accent}, inset 0 0 18px -6px ${accent}` }}
       >
         <span className="grid size-11 place-items-center rounded-full text-navy-900" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}aa)`, boxShadow: `0 0 20px ${accent}` }}>
           <Icon aria-hidden className="size-5" strokeWidth={2.5} />
         </span>
-        <span>{children}</span>
-        {rail}
+        <span className="whitespace-nowrap">{children}</span>
       </span>
     </p>
   );
@@ -223,26 +222,6 @@ function Glow({ children, color }: { children: string; color: string }) {
   );
 }
 
-/** The four products as icons; the one in front lights up and grows. */
-function Rail() {
-  return (
-    <span className="ml-1.5 flex items-center gap-1.5 border-l border-white/15 pl-3">
-      {products.map((p, i) => {
-        const Icon = p.icon;
-        const front = start[i].place === "front";
-        return (
-          <span
-            key={p.src}
-            className="nm-rail grid size-7 place-items-center rounded-full"
-            style={{ background: p.accent, boxShadow: `0 0 14px ${p.accent}aa`, "--delay": start[i].delay, "--ro": front ? "1" : "0.35", "--rs": front ? "1.15" : "0.9" } as Vars}
-          >
-            <Icon aria-hidden className="size-3.5 text-[#0b1220]" strokeWidth={2.5} />
-          </span>
-        );
-      })}
-    </span>
-  );
-}
 
 /** Twinkling dust, deterministic so server and client agree. */
 function Dust({ w, h, n }: { w: number; h: number; n: number }) {
@@ -298,11 +277,11 @@ export function HeroVisual() {
 
             <Item x={-20} y={394} w={380} z={60} enter={500} float="0px">
               <Pill icon={Lightbulb} accent="#f6b26b">
-                Only your <Glow color="#f6b26b">idea</Glow>
+                Only <Glow color="#f6b26b">idea</Glow>
               </Pill>
             </Item>
             <Item x={690} y={408} w={530} enter={800} float="0px">
-              <Pill icon={Rocket} accent="#6de1d2" rail={<Rail />}>
+              <Pill icon={Rocket} accent="#6de1d2">
                 <Glow color="#6de1d2">Complete</Glow> product
               </Pill>
             </Item>
@@ -325,11 +304,11 @@ export function HeroVisual() {
             <Carousel cx={330} cy={420} w={300} h={200} dx={170} dz={-140} />
             <Item x={-30} y={262} w={320} enter={500} float="0px">
               <Pill icon={Lightbulb} accent="#f6b26b">
-                Only your <Glow color="#f6b26b">idea</Glow>
+                Only <Glow color="#f6b26b">idea</Glow>
               </Pill>
             </Item>
             <Item x={60} y={596} w={540} enter={800} float="0px">
-              <Pill icon={Rocket} accent="#6de1d2" rail={<Rail />}>
+              <Pill icon={Rocket} accent="#6de1d2">
                 <Glow color="#6de1d2">Complete</Glow> product
               </Pill>
             </Item>

@@ -611,6 +611,21 @@ html.js .nm-scaled:not([data-scaled]) {
   translate: 0 0 var(--lz, 0);
   filter: brightness(var(--lb, 1));
 }
+/* Hologram scan (engineering picture): a line of light rises through the projection. */
+@keyframes nm-scan-up {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-330px);
+    opacity: 0;
+  }
+}
 @property --nm-hue {
   syntax: "<color>";
   inherits: true;
@@ -833,6 +848,9 @@ html.js .nm-scaled:not([data-scaled]) {
   }
   .nm-orbit {
     animation: nm-orbit var(--dur, 18s) linear infinite;
+  }
+  .nm-scan-up {
+    animation: nm-scan-up 4.5s ease-in-out infinite;
   }
   .nm-lift {
     animation: nm-lift 16s var(--ease-studio) var(--delay, 0s) infinite;

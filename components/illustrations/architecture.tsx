@@ -1,8 +1,9 @@
 /**
  * The engineering section's picture, for everyone (not only developers): a
- * hand-drawn 3D sketch of a laptop and phone running an app, with four
- * promises called out in plain words (safe, fast, always on, ready to grow).
- * Isometric line drawing that draws itself when the section comes into view.
+ * holographic 3D projection of a laptop and phone running an app, floating
+ * above a glowing glass board, with four promises called out in plain words
+ * (safe, fast, always on, ready to grow). It draws itself when the section
+ * comes into view; a scan line rises through it.
  */
 import type { CSSProperties } from "react";
 import { ShieldCheck, TrendingUp, Wifi, Zap, type LucideIcon } from "lucide-react";
@@ -62,7 +63,32 @@ const strokes: string[] = [
   poly([ph(0.18, 0.4), ph(0.38, 0.5), ph(0.56, 0.44), ph(0.82, 0.6)], false),
 ];
 
-/** Shading: hatch lines on the base's front face, as a pencil would. */
+
+/* The projection board: a glass plate under the devices, with a light grid. */
+const DROP = 46;
+const BX0 = -50;
+const BX1 = W + 110;
+const BY0 = -70;
+const BY1 = D + 60;
+const boardTop = poly([[BX0, BY0, -DROP], [BX1, BY0, -DROP], [BX1, BY1, -DROP], [BX0, BY1, -DROP]]);
+const boardFront = poly([[BX0, BY1, -DROP], [BX1, BY1, -DROP], [BX1, BY1, -DROP - 10], [BX0, BY1, -DROP - 10]]);
+const boardSide = poly([[BX1, BY0, -DROP], [BX1, BY1, -DROP], [BX1, BY1, -DROP - 10], [BX1, BY0, -DROP - 10]]);
+const boardGrid = [
+  ...Array.from({ length: 9 }, (_, i) => poly([[BX0 + ((BX1 - BX0) * (i + 1)) / 10, BY0, -DROP], [BX0 + ((BX1 - BX0) * (i + 1)) / 10, BY1, -DROP]], false)),
+  ...Array.from({ length: 7 }, (_, i) => poly([[BX0, BY0 + ((BY1 - BY0) * (i + 1)) / 8, -DROP], [BX1, BY0 + ((BY1 - BY0) * (i + 1)) / 8, -DROP]], false)),
+];
+/** Light rays from the board up to the devices' corners. */
+const rays: [P3, P3][] = [
+  [[0, 0, -DROP], [0, 0, 0]],
+  [[W, 0, -DROP], [W, 0, 0]],
+  [[W, D, -DROP], [W, D, 0]],
+  [[0, D, -DROP], [0, D, 0]],
+  [[PX, PY, -DROP], [PX, PY, 0]],
+  [[PX + PW, PY, -DROP], [PX + PW, PY, 0]],
+];
+const HOLO = "#7ff3ff";
+
+/** Fine lines on the laptop base's front face. */
 const hatch = Array.from({ length: 18 }, (_, i) => poly([[12 + i * 17, D, 1], [i * 17 + 4, D, BASE - 1]], false));
 
 const promises: { icon: LucideIcon; label: string; line: string; accent: string; box: [number, number]; to: string }[] = [
@@ -76,7 +102,7 @@ const d = (ms: number) => ({ "--reveal-delay": `${ms}ms` }) as CSSProperties;
 
 export function EngineeringArt() {
   return (
-    <figure className="m-0" aria-label="A hand-drawn 3D sketch of a laptop and phone running an app, with four promises: safe and secure, fast, always on, and ready to grow.">
+    <figure className="m-0" aria-label="A holographic 3D projection of a laptop and phone running an app above a glowing board, with four promises: safe and secure, fast, always on, and ready to grow.">
       <div className="nm-float" style={{ "--float": "-6px", "--float-dur": "8s" } as CSSProperties}>
         <svg aria-hidden viewBox="-30 -20 690 600" className="block h-auto w-full overflow-visible" fill="none" strokeLinecap="round" strokeLinejoin="round">
           <defs>
@@ -86,28 +112,52 @@ export function EngineeringArt() {
             </radialGradient>
           </defs>
           <ellipse cx="300" cy="280" rx="330" ry="260" fill="url(#eng-glow)" />
-          {/* soft shadow under the devices */}
-          <path d={poly([[-10, -10, 0], [W + 10, -10, 0], [W + 10, D + 14, 0], [-10, D + 14, 0]])} fill="#000" fillOpacity="0.25" style={{ filter: "blur(10px)" }} />
+          <defs>
+            <linearGradient id="eng-ray" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0" stopColor={HOLO} stopOpacity="0.9" />
+              <stop offset="1" stopColor={HOLO} stopOpacity="0" />
+            </linearGradient>
+            <linearGradient id="eng-scan" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stopColor={HOLO} stopOpacity="0" />
+              <stop offset="0.5" stopColor={HOLO} stopOpacity="0.9" />
+              <stop offset="1" stopColor={HOLO} stopOpacity="0" />
+            </linearGradient>
+          </defs>
+          {/* the glass board the product is projected from */}
+          <path d={boardTop} fill={HOLO} fillOpacity="0.07" stroke={HOLO} strokeOpacity="0.8" strokeWidth="1.6" style={{ filter: `drop-shadow(0 0 8px ${HOLO})` }} />
+          <path d={boardFront} fill={HOLO} fillOpacity="0.18" stroke={HOLO} strokeOpacity="0.6" strokeWidth="1" />
+          <path d={boardSide} fill={HOLO} fillOpacity="0.12" stroke={HOLO} strokeOpacity="0.6" strokeWidth="1" />
+          {boardGrid.map((g, i) => (
+            <path key={i} d={g} stroke={HOLO} strokeOpacity="0.18" strokeWidth="1" />
+          ))}
+          {/* light pooling on the board under the projection */}
+          <path d={poly([[-10, -10, -DROP], [W + 70, -10, -DROP], [W + 70, D + 20, -DROP], [-10, D + 20, -DROP]])} fill={HOLO} fillOpacity="0.16" style={{ filter: "blur(16px)" }} />
+          {/* rays of light up to the projection */}
+          {rays.map(([a, b], i) => (
+            <path key={i} d={`M ${pt(a)} L ${pt(b)}`} stroke="url(#eng-ray)" strokeWidth="2" className="nm-enter-fade" style={d(600 + i * 60)} />
+          ))}
           {/* the screens glow: they're on */}
-          <path d={rectOnScreen(0.04, 0.06, 0.96, 0.94)} fill="#6de1d2" fillOpacity="0.07" />
-          <path d={rectOnPhone(0.1, 0.06, 0.9, 0.94)} fill="#6de1d2" fillOpacity="0.07" />
+          <path d={rectOnScreen(0.04, 0.06, 0.96, 0.94)} fill={HOLO} fillOpacity="0.1" />
+          <path d={rectOnPhone(0.1, 0.06, 0.9, 0.94)} fill={HOLO} fillOpacity="0.1" />
           {/* a filled button on the screen and on the phone */}
           <path d={rectOnScreen(0.38, 0.14, 0.62, 0.24)} fill="#6de1d2" fillOpacity="0.6" className="nm-enter-fade" style={d(1800)} />
           <path d={rectOnPhone(0.3, 0.12, 0.7, 0.2)} fill="#6de1d2" fillOpacity="0.6" className="nm-enter-fade" style={d(1900)} />
-          {/* pencil hatching */}
+          {/* fine glowing lines on the laptop's front */}
           {hatch.map((h, i) => (
-            <path key={i} d={h} pathLength={1} stroke="#cbd5e1" strokeOpacity="0.35" strokeWidth="1" className="nm-draw" style={d(1200 + i * 25)} />
+            <path key={i} d={h} pathLength={1} stroke={HOLO} strokeOpacity="0.4" strokeWidth="1" className="nm-draw" style={d(1200 + i * 25)} />
           ))}
-          {/* the sketch, drawn twice a hair apart for a hand-drawn line */}
+          {/* the hologram: a soft glow line under a crisp one */}
           {strokes.map((s, i) => {
             const app = i >= 8 && i <= 11;
             return (
               <g key={i}>
-                <path d={s} pathLength={1} stroke="#e6edf7" strokeOpacity="0.4" strokeWidth="1" transform="translate(1.4 1)" className="nm-draw" style={d(i * 90)} />
-                <path d={s} pathLength={1} stroke={app ? "#6de1d2" : "#e6edf7"} strokeWidth={app ? 2.2 : 1.8} className="nm-draw" style={d(i * 90)} />
+                <path d={s} pathLength={1} stroke={HOLO} strokeOpacity="0.35" strokeWidth="5" className="nm-draw" style={{ ...d(i * 90), filter: "blur(3px)" }} />
+                <path d={s} pathLength={1} stroke={app ? "#ffffff" : HOLO} strokeWidth={app ? 2.2 : 1.8} className="nm-draw" style={d(i * 90)} />
               </g>
             );
           })}
+          {/* a scan line rising through the projection */}
+          <rect x="40" y="430" width="520" height="3" fill="url(#eng-scan)" className="nm-scan-up" style={{ filter: `drop-shadow(0 0 6px ${HOLO})` }} />
           {/* call-outs: dashed arrows from each promise to the product */}
           {promises.map((p, i) => (
             <path key={p.label} d={p.to} pathLength={1} stroke={p.accent} strokeWidth="1.8" strokeDasharray="0.04 0.03" className="nm-enter-fade" style={d(2000 + i * 150)} />
