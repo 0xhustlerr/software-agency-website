@@ -4,7 +4,7 @@ import { engineeringApproach, takingShape, workHero } from "@/content/pages/work
 import { pageMetadata } from "@/lib/metadata";
 import { PageHero } from "@/components/layout/page-hero";
 import { FeatureTile } from "@/components/ui/tile-3d";
-import { BadgeCheck, Code2, Compass, FileClock, GitBranch, Images, LayoutDashboard, Lightbulb, PenTool, Rocket, Sparkles, Target, Wrench, type LucideIcon } from "lucide-react";
+import { BadgeCheck, Compass, FileClock, GitBranch, Images, Lightbulb, PenTool, Target, Wrench } from "lucide-react";
 import type { ConceptKind } from "@/content/types";
 import { WorkHeroArt } from "@/components/illustrations/page-hero-art";
 import { Section } from "@/components/layout/section";
@@ -13,7 +13,6 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
 import { ConceptCard } from "@/components/sections/pages/concept-feature";
-import { ColorTabs } from "@/components/ui/color-tabs";
 import { WorkFilters } from "@/components/sections/pages/work-filters";
 import { CtaBand } from "@/components/sections/cta-band";
 
@@ -33,13 +32,6 @@ const approachIcons = [Compass, PenTool, GitBranch, Wrench];
 const kinds: ConceptKind[] = ["saas", "mvp", "ai", "custom"];
 const byKind = (kind: ConceptKind) => productConcepts.filter((c) => c.kind === kind);
 
-/** One heading per kind of product, in the services' colours. */
-const groups: Record<ConceptKind, { label: string; line: string; icon: LucideIcon; accent: string }> = {
-  saas: { label: "SaaS Platforms", line: "Products people subscribe to, built to scale.", icon: LayoutDashboard, accent: "#6de1d2" },
-  mvp: { label: "MVPs", line: "Focused first versions, in front of real users fast.", icon: Rocket, accent: "#f6b26b" },
-  ai: { label: "AI Products", line: "AI that helps people, with a person in control.", icon: Sparkles, accent: "#b794f6" },
-  custom: { label: "Custom Software", line: "Tools shaped around how a business really works.", icon: Code2, accent: "#6ea8ff" },
-};
 
 
 export default function WorkPage() {
@@ -48,7 +40,7 @@ export default function WorkPage() {
 
   return (
     <>
-      <PageHero eyebrow={workHero.eyebrow} title={workHero.title} lead={workHero.lead} leadAside className="lg:pb-16">
+      <PageHero full eyebrow={workHero.eyebrow} title={workHero.title} lead={workHero.lead} leadAside>
         <div className="mt-10 lg:mt-12">
           <WorkHeroArt />
         </div>
@@ -117,24 +109,13 @@ export default function WorkPage() {
                   The kind of product we design and engineer.
                 </h2>
               </Reveal>
-              <ColorTabs
-                label="Product categories"
-                tabs={kinds.map((kind) => {
-                  const g = groups[kind];
-                  const Icon = g.icon;
-                  return { id: kind, label: `${g.label} · ${byKind(kind).length}`, accent: g.accent, icon: <Icon className="size-4" strokeWidth={2.5} /> };
-                })}
-                panels={kinds.map((kind) => (
-                  <div key={kind}>
-                    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-                      {byKind(kind).map((c, i) => (
-                        <ConceptCard key={c.slug} concept={c} index={i} />
-                      ))}
-                    </ul>
-                  </div>
+              {/* Every product, in one grid; each card names its category. */}
+              <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+                {kinds.flatMap(byKind).map((c, i) => (
+                  <ConceptCard key={c.slug} concept={c} index={i % 4} />
                 ))}
-              />
-              <p className="text-small mt-4 text-ink-muted">All concepts use sample data. Stride, Tablr, Fixly, Tutorly, Recap, Assist, StockFlow, ClinicDesk and GarageBay are original products invented for illustration; photos are illustrative.</p>
+              </ul>
+              <p className="text-small mt-4 text-ink-muted">Examples of the kinds of product we design and engineer. Not client work; we are not affiliated with these companies.</p>
             </Section>
           ) : null}
         </>

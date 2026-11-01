@@ -1,6 +1,6 @@
 import { work } from "@/content/home";
 import { approvedProjects } from "@/content/projects";
-import { featuredConcepts, productConcepts } from "@/content/concepts";
+import { featuredConcepts } from "@/content/concepts";
 import { talkHref } from "@/content/site";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
 import { Section } from "@/components/layout/section";
@@ -23,7 +23,7 @@ export function Work() {
         </div>
         {!hasWork ? (
           <Button href="/work" variant="ghost">
-            See all {productConcepts.length} products
+            See all products
           </Button>
         ) : null}
       </Reveal>

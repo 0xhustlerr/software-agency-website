@@ -37,6 +37,7 @@ export default function ServicesPage() {
   return (
     <>
       <PageHero
+        full
         eyebrow={servicesHero.eyebrow}
         title={servicesHero.title}
         lead={servicesHero.lead}

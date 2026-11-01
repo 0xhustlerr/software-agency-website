@@ -34,6 +34,7 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
+        full
         size="display"
         eyebrow={aboutHero.eyebrow}
         title={aboutHero.title}

@@ -29,7 +29,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <PageHero size="display" eyebrow={contactHero.eyebrow} title={contactHero.title} lead={contactHero.lead} aside={<ContactHeroArt />} className="pb-14 lg:pb-16" />
+      <PageHero full size="display" eyebrow={contactHero.eyebrow} title={contactHero.title} lead={contactHero.lead} aside={<ContactHeroArt />} className="pb-14 lg:pb-16" />
       <Section tone="muted" aria-label="Contact form" className="lg:pt-16">
         <div className="grid grid-cols-1 items-start gap-14 lg:grid-cols-12 lg:gap-6">
           <div className="lg:col-span-7">

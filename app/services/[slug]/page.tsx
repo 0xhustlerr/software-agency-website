@@ -59,6 +59,7 @@ async function ServiceDetailPageContent({ params }: { params: PageProps<"/servic
   return (
     <>
       <PageHero
+        full
         crumbs={[{ label: "Home", href: "/" }, { label: "Services", href: "/services" }, { label: d.name }]}
         eyebrow={d.name}
         title={d.headline}

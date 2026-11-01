@@ -46,17 +46,17 @@ export function WorkHeroArt() {
   const n = productConcepts.length;
   const step = 48 / n;
   return (
-    <figure className="m-0" aria-label={`A slideshow of ${n} products: ${productConcepts.map((c) => c.name).join(", ")}.`}>
+    <figure className="m-0" aria-label={`A slideshow of products: ${productConcepts.map((c) => c.name).join(", ")}.`}>
       <div className="relative">
         <div aria-hidden className="absolute -inset-8 rounded-[40px] bg-[radial-gradient(closest-side,rgb(109_225_210/0.2),transparent)] blur-[30px]" />
         <div
           aria-hidden
-          className="relative h-[clamp(220px,calc(100svh-34rem),540px)] overflow-hidden rounded-[22px] border-[1.5px] border-mint-400/60 bg-[#0b1220] shadow-[0_0_80px_-20px_rgb(109_225_210/0.7),0_50px_90px_-40px_rgb(0_0_0/0.9)]"
+          className="relative h-[clamp(220px,calc(100svh-35rem),620px)] overflow-hidden rounded-[22px] border-[1.5px] border-mint-400/60 bg-[#0b1220] shadow-[0_0_80px_-20px_rgb(109_225_210/0.7),0_50px_90px_-40px_rgb(0_0_0/0.9)]"
         >
           {productConcepts.map((c, i) => (
             <div key={c.slug} className="nm-reel absolute inset-0" style={{ "--delay": `${-i * step + 48}s`, "--ro": i === 0 ? "1" : "0" } as Vars}>
-              <Image src={c.image.src} alt="" fill priority={i < 2} sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover" style={{ objectPosition: c.kind === "saas" ? "50% 20%" : "50% 35%" }} />
-              <div className="absolute inset-0 bg-linear-to-t from-[#0b1220]/90 via-[#0b1220]/10 to-transparent" />
+              <Image src={c.image.src} alt="" fill priority={i < 2} sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover" style={{ objectPosition: "50% 0%" }} />
+              <div className="absolute inset-0 bg-linear-to-t from-[#0b1220] via-[#0b1220]/45 to-transparent" />
               <div className="absolute bottom-6 left-6 flex items-center gap-4 sm:bottom-8 sm:left-8">
                 <span className="grid size-14 shrink-0 place-items-center rounded-[15px] font-display text-[24px] font-bold text-[#0b1220]" style={{ background: `linear-gradient(135deg, ${c.accent}, ${c.accent}99)`, boxShadow: `0 0 26px ${c.accent}aa` }}>
                   {c.name[0]}
@@ -79,7 +79,7 @@ export function WorkHeroArt() {
           </div>
         </div>
       </div>
-      <ConceptBadge>{`${n} products we design and engineer`}</ConceptBadge>
+      <ConceptBadge>Products we design and engineer</ConceptBadge>
     </figure>
   );
 }
