@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/motion/reveal";
+import { IconCard, tints } from "@/components/ui/icon-card";
 import { ServiceBadge, ServiceVisual, serviceLooks } from "@/components/illustrations/service-visuals";
 import { Check, Gauge, Palette, ServerCog, type LucideIcon } from "lucide-react";
 import { BlueprintStage } from "@/components/sections/pages/blueprint-stage";
@@ -20,9 +21,9 @@ import { CtaBand } from "@/components/sections/cta-band";
 
 /** One icon and colour per additional capability: design, infrastructure, scaling. `ink` is the readable shade on white. */
 const extras: { icon: LucideIcon; accent: string; ink: string }[] = [
-  { icon: Palette, accent: "#b794f6", ink: "#7b4fd0" },
-  { icon: ServerCog, accent: "#6ea8ff", ink: "#2f6fd6" },
-  { icon: Gauge, accent: "#6de1d2", ink: "#0a7266" },
+  { icon: Palette, ...tints.violet },
+  { icon: ServerCog, ...tints.blue },
+  { icon: Gauge, ...tints.mint },
 ];
 
 export const metadata = pageMetadata({
@@ -114,33 +115,8 @@ export default function ServicesPage() {
         {/* Light glass cards, so they don't repeat the dark stage tiles further down. */}
         <ul className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:gap-6">
           {additionalCapabilities.map((c, i) => {
-            const { icon: Icon, accent, ink } = extras[i % extras.length];
-            return (
-              <Reveal
-                as="li"
-                key={c.title}
-                delay={i * 0.06}
-                className="relative flex flex-col overflow-hidden rounded-[18px] border border-line bg-surface p-6 shadow-[0_24px_50px_-30px_rgb(16_24_39/0.35)] transition-[transform,box-shadow] duration-300 hover:-translate-y-1"
-              >
-                <span aria-hidden className="absolute inset-x-0 top-0 h-1" style={{ background: `linear-gradient(90deg, ${accent}, ${accent}55)` }} />
-                <span aria-hidden className="absolute -top-16 -right-16 size-48 rounded-full blur-[40px]" style={{ background: `${accent}33` }} />
-                <span aria-hidden className="relative grid size-14 place-items-center rounded-[16px]" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}99)`, boxShadow: `0 12px 28px -10px ${accent}` }}>
-                  <Icon className="size-7 text-navy-900" strokeWidth={2} />
-                </span>
-                <p className="relative mt-5 font-mono text-[0.75rem] font-semibold tracking-[0.12em]" style={{ color: ink }}>
-                  {String.fromCharCode(65 + i)}
-                </p>
-                <h3 className="text-h3 relative mt-1">{c.title}</h3>
-                <p className="text-body-sm relative mt-2.5 text-ink-muted">{c.body}</p>
-                <ul className="relative mt-auto flex flex-wrap gap-1.5 pt-5" aria-label="Includes">
-                  {c.tags.map((t) => (
-                    <li key={t} className="rounded-full border px-2.5 py-1 font-mono text-[12px] text-ink" style={{ borderColor: `${accent}66`, background: `${accent}1a` }}>
-                      {t}
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-            );
+            const { icon, accent, ink } = extras[i % extras.length];
+            return <IconCard key={c.title} icon={icon} accent={accent} ink={ink} mark={String.fromCharCode(65 + i)} title={c.title} body={c.body} tags={c.tags} delay={i * 0.06} />;
           })}
         </ul>
       </Section>

@@ -1,4 +1,4 @@
-import { CircleAlert, Code2, PackageCheck, UserRound } from "lucide-react";
+import { CircleAlert, Code2, PackageCheck, UserRound, type LucideIcon } from "lucide-react";
 import { Reveal } from "@/components/motion/reveal";
 
 /**
@@ -106,7 +106,7 @@ export function ProcessRail({ items, accent, ink }: { items: Item[] } & Tint) {
 }
 
 /** Technical considerations (dark section): glass spec cards. */
-export function SpecCards({ items, accent }: { items: Item[]; accent: string }) {
+export function SpecCards({ items, accent, icon: Icon = Code2 }: { items: Item[]; accent: string; icon?: LucideIcon }) {
   return (
     <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {items.map((it, i) => (
@@ -119,7 +119,7 @@ export function SpecCards({ items, accent }: { items: Item[]; accent: string }) 
         >
           <p className="flex items-center gap-2.5">
             <span aria-hidden className="grid size-8 place-items-center rounded-[8px] font-mono" style={{ background: `${accent}22`, color: accent, boxShadow: `inset 0 0 0 1px ${accent}77` }}>
-              <Code2 className="size-4" strokeWidth={2.5} />
+              <Icon className="size-4" strokeWidth={2.5} />
             </span>
             <span className="font-display text-[1.0625rem] leading-[1.3] font-semibold">{it.title}</span>
           </p>
