@@ -201,10 +201,10 @@ function Pill({ children, icon: Icon, accent }: { children: ReactNode; icon: Luc
   return (
     <p className="flex justify-center whitespace-nowrap">
       <span
-        className="font-display flex shrink-0 items-center gap-3 rounded-full border-2 py-2 pr-6 pl-2 text-[25px] font-semibold tracking-[-0.015em] whitespace-nowrap text-white"
+        className="font-display flex shrink-0 items-center gap-3 rounded-full border-2 py-2 pr-6 pl-2 text-[clamp(16px,1.6vw,23px)] font-semibold tracking-[0.02em] whitespace-nowrap text-white"
         style={{ borderColor: accent, background: `${accent}1f`, boxShadow: `0 0 36px -4px ${accent}, inset 0 0 18px -6px ${accent}` }}
       >
-        <span className="grid size-11 place-items-center rounded-full text-navy-900" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}aa)`, boxShadow: `0 0 20px ${accent}` }}>
+        <span className="grid size-[clamp(30px,2.8vw,40px)] place-items-center rounded-full text-navy-900" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}aa)`, boxShadow: `0 0 20px ${accent}` }}>
           <Icon aria-hidden className="size-5" strokeWidth={2.5} />
         </span>
         <span className="whitespace-nowrap">{children}</span>
@@ -216,7 +216,7 @@ function Pill({ children, icon: Icon, accent }: { children: ReactNode; icon: Luc
 /** A word lit in its colour, for the two key ideas. */
 function Glow({ children, color }: { children: string; color: string }) {
   return (
-    <span className="font-bold uppercase" style={{ color, textShadow: `0 0 18px ${color}` }}>
+    <span className="font-bold" style={{ color, textShadow: `0 0 18px ${color}` }}>
       {children}
     </span>
   );
@@ -257,7 +257,7 @@ const compactBeam = "M240 130 C 290 130, 330 120, 410 120 S 350 280, 330 322";
 export function HeroVisual() {
   return (
     <figure className="relative m-0" aria-label="From idea to product: a glowing brain sends a beam of light through the studio, and in turn an MVP, a SaaS platform, an AI product and custom software step forward, built.">
-      <div className="hidden lg:block">
+      <div className="relative hidden lg:block">
         <Scene width={1200} height={470}>
           <Clock>
             <div className="absolute top-[40px] left-[380px] size-[460px] rounded-full bg-mint-400/[0.08] blur-[90px]" style={{ transform: "translateZ(-160px)" }} />
@@ -275,18 +275,21 @@ export function HeroVisual() {
 
             <Carousel cx={955} cy={200} w={330} h={220} dx={225} dz={-160} />
 
-            <Item x={-20} y={394} w={380} z={60} enter={500} float="0px">
-              <Pill icon={Lightbulb} accent="#f6b26b">
-                Only <Glow color="#f6b26b">idea</Glow>
-              </Pill>
-            </Item>
-            <Item x={690} y={408} w={530} enter={800} float="0px">
-              <Pill icon={Rocket} accent="#6de1d2">
-                <Glow color="#6de1d2">Complete</Glow> product
-              </Pill>
-            </Item>
           </Clock>
         </Scene>
+        {/* the two labels on one flat line, same size: under the brain and under the products */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-[3%] h-0">
+          <div className="absolute left-[14%] -translate-x-1/2 -translate-y-1/2">
+            <Pill icon={Lightbulb} accent="#f6b26b">
+              ONLY <Glow color="#f6b26b">IDEA</Glow>
+            </Pill>
+          </div>
+          <div className="absolute left-[79%] -translate-x-1/2 -translate-y-1/2">
+            <Pill icon={Rocket} accent="#6de1d2">
+              <Glow color="#6de1d2">COMPLETE</Glow> PRODUCT
+            </Pill>
+          </div>
+        </div>
       </div>
 
       <div className="lg:hidden">
@@ -304,12 +307,12 @@ export function HeroVisual() {
             <Carousel cx={330} cy={420} w={300} h={200} dx={170} dz={-140} />
             <Item x={-30} y={262} w={320} enter={500} float="0px">
               <Pill icon={Lightbulb} accent="#f6b26b">
-                Only <Glow color="#f6b26b">idea</Glow>
+                ONLY <Glow color="#f6b26b">IDEA</Glow>
               </Pill>
             </Item>
             <Item x={60} y={596} w={540} enter={800} float="0px">
               <Pill icon={Rocket} accent="#6de1d2">
-                <Glow color="#6de1d2">Complete</Glow> product
+                <Glow color="#6de1d2">COMPLETE</Glow> PRODUCT
               </Pill>
             </Item>
           </Clock>

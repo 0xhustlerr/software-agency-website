@@ -611,7 +611,7 @@ html.js .nm-scaled:not([data-scaled]) {
   translate: 0 0 var(--lz, 0);
   filter: brightness(var(--lb, 1));
 }
-/* Hologram scan (engineering picture): a line of light rises through the projection. */
+/* Hologram scan (architecture picture): a line of light rises through the stack. */
 @keyframes nm-scan-up {
   0% {
     transform: translateY(0);
@@ -624,6 +624,12 @@ html.js .nm-scaled:not([data-scaled]) {
   100% {
     transform: translateY(-330px);
     opacity: 0;
+  }
+}
+/* Flow (architecture picture): dashes travel along a line, like data moving. */
+@keyframes nm-dash {
+  to {
+    stroke-dashoffset: -38;
   }
 }
 @property --nm-hue {
@@ -848,6 +854,9 @@ html.js .nm-scaled:not([data-scaled]) {
   }
   .nm-orbit {
     animation: nm-orbit var(--dur, 18s) linear infinite;
+  }
+  .nm-dash {
+    animation: nm-dash 1.6s linear infinite;
   }
   .nm-scan-up {
     animation: nm-scan-up 4.5s ease-in-out infinite;
