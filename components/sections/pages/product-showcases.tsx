@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, Pause, Play } from "lucide-react";
 import type { ProductConcept } from "@/content/types";
+import { ProductDialog } from "./product-dialog";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { cn } from "@/lib/utils";
 
@@ -81,6 +82,11 @@ export function FullSlideshow({ items, accent }: { items: ProductConcept[]; acce
           <div className="mt-4">
             <Chips tags={c.tags} accent={c.accent} dark />
           </div>
+          <ProductDialog items={items} index={i}>
+            <button type="button" className="mt-5 inline-flex h-11 items-center gap-2 rounded-full px-5 text-[15px] font-semibold text-navy-900 transition-transform duration-200 hover:scale-[1.03]" style={{ background: accent, boxShadow: `0 10px 30px -10px ${accent}` }}>
+              See the project <ArrowRight className="size-4" strokeWidth={2.5} />
+            </button>
+          </ProductDialog>
         </div>
         <div className="flex items-center gap-3">
           <RoundButton label="Previous product" onClick={() => go(-1)} accent={accent}>
@@ -126,9 +132,14 @@ export function CardCarousel({ items, accent }: { items: ProductConcept[]; accen
   return (
     <div>
       <ul ref={track} className="-mx-1 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth px-1 pb-4 [scrollbar-width:none]">
-        {items.map((c) => (
+        {items.map((c, k) => (
           <li key={c.slug} className="w-[min(82vw,360px)] shrink-0 snap-start">
-            <article className="flex h-full flex-col overflow-hidden rounded-[18px] border-[1.5px] bg-surface shadow-[0_24px_50px_-30px_rgb(16_24_39/0.4)]" style={{ borderColor: `${c.accent}66` }}>
+            <article className="group relative flex h-full flex-col overflow-hidden rounded-[18px] border-[1.5px] bg-surface shadow-[0_24px_50px_-30px_rgb(16_24_39/0.4)] transition-transform duration-300 hover:-translate-y-1" style={{ borderColor: `${c.accent}66` }}>
+              <ProductDialog items={items} index={k}>
+            <button type="button" className="absolute inset-0 z-10 cursor-pointer rounded-[inherit] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mint-400">
+              <span className="sr-only">See the project: {c.name}</span>
+            </button>
+          </ProductDialog>
               <div className="relative aspect-[16/10]">
                 <Image src={c.image.src} alt={c.image.alt} fill sizes="360px" className="object-cover object-top" />
               </div>
@@ -163,6 +174,11 @@ export function BentoGrid({ items }: { items: ProductConcept[] }) {
     <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 lg:gap-5">
       {items.map((c, k) => (
         <li key={c.slug} className={cn("group relative overflow-hidden rounded-[20px] border-[1.5px] bg-[#0b1220]", k === 0 ? "min-h-[300px] sm:col-span-2 lg:row-span-2" : "min-h-[200px]")} style={{ borderColor: `${c.accent}77`, boxShadow: `0 0 50px -22px ${c.accent}` }}>
+          <ProductDialog items={items} index={k}>
+            <button type="button" className="absolute inset-0 z-10 cursor-pointer rounded-[inherit] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mint-400">
+              <span className="sr-only">See the project: {c.name}</span>
+            </button>
+          </ProductDialog>
           <Image src={c.image.src} alt={c.image.alt} fill sizes={k === 0 ? "50vw" : "25vw"} className="object-cover object-top transition-transform duration-700 ease-studio group-hover:scale-[1.04]" />
           <div className="absolute inset-0 bg-linear-to-t from-[#0b1220] via-[#0b1220]/40 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 p-5">
@@ -213,14 +229,121 @@ export function ListPreview({ items, accent }: { items: ProductConcept[]; accent
         })}
       </ol>
       <div aria-live="polite" className="lg:col-span-7">
-        <div className="relative aspect-[16/9] max-h-[calc(100svh-24rem)] w-full overflow-hidden rounded-[20px] border-[1.5px]" style={{ borderColor: `${accent}88`, boxShadow: `0 0 70px -20px ${accent}` }}>
+        <div className="group relative aspect-[16/9] max-h-[calc(100svh-24rem)] w-full overflow-hidden rounded-[20px] border-[1.5px]" style={{ borderColor: `${accent}88`, boxShadow: `0 0 70px -20px ${accent}` }}>
+          <ProductDialog items={items} index={i}>
+            <button type="button" className="absolute inset-0 z-10 cursor-pointer rounded-[inherit] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mint-400">
+              <span className="sr-only">See the project: {c.name}</span>
+            </button>
+          </ProductDialog>
           {items.map((p, k) => (
             <Image key={p.slug} src={p.image.src} alt={k === i ? p.image.alt : ""} fill sizes="(min-width: 1024px) 55vw, 100vw" className={cn("object-cover object-top transition-opacity duration-500", k === i ? "opacity-100" : "opacity-0")} />
           ))}
         </div>
         <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
           <p className="text-body max-w-[52ch] text-white/80">{c.problem}</p>
-          <Chips tags={c.tags} accent={c.accent} dark />
+          <ProductDialog items={items} index={i}>
+            <button type="button" className="inline-flex h-11 items-center gap-2 rounded-full px-5 text-[15px] font-semibold text-navy-900 transition-transform duration-200 hover:scale-[1.03]" style={{ background: accent }}>
+              See {c.name} <ArrowRight className="size-4" strokeWidth={2.5} />
+            </button>
+          </ProductDialog>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- /work hero: every product, with the problem it solves ---------- */
+
+const heroKind: Record<ProductConcept["kind"], string> = { saas: "SaaS Platform", mvp: "MVP", ai: "AI Product", custom: "Custom Software" };
+
+/**
+ * The /work hero: one product per slide — the problem in plain words on the
+ * left, the product's screen on the right — every 6s, with previous / next,
+ * pause and dots. The screen opens the product's full view.
+ */
+export function ProblemSlideshow({ items }: { items: ProductConcept[] }) {
+  const reduce = usePrefersReducedMotion();
+  const [i, setI] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const go = useCallback((d: number) => setI((v) => (v + d + items.length) % items.length), [items.length]);
+
+  useEffect(() => {
+    if (reduce || paused) return;
+    const t = setTimeout(() => go(1), 6000);
+    return () => clearTimeout(t);
+  }, [i, reduce, paused, go]);
+
+  const c = items[i];
+  return (
+    <div
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="Products and the problems they solve"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      className="relative grid h-[clamp(280px,calc(100svh-33rem),620px)] grid-cols-1 overflow-hidden rounded-[22px] border-[1.5px] bg-[#0b1220] sm:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+      style={{ borderColor: `${c.accent}99`, boxShadow: `0 0 80px -20px ${c.accent}, 0 50px 90px -40px rgb(0 0 0 / 0.9)`, transition: "border-color 600ms, box-shadow 600ms" }}
+    >
+      {/* the problem */}
+      <div aria-live="polite" className="relative hidden flex-col justify-between bg-linear-to-br from-[#2a1d24] to-[#141a28] p-7 sm:flex lg:p-9">
+        <div>
+          <p className="flex items-center gap-2 font-mono text-[12px] font-semibold tracking-[0.14em] text-[#f08a6b] uppercase">
+            <span className="size-2 rounded-full bg-[#f08a6b]" /> The problem
+          </p>
+          <p key={c.slug} className="nm-enter font-display mt-4 text-[clamp(1.25rem,2vw,1.75rem)] leading-snug font-medium tracking-[-0.01em] text-white">
+            “{c.problem}”
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <RoundButton label="Previous product" onClick={() => go(-1)} accent={c.accent}>
+            <ArrowLeft className="size-5" strokeWidth={2.25} />
+          </RoundButton>
+          {!reduce ? (
+            <RoundButton label={paused ? "Play slideshow" : "Pause slideshow"} onClick={() => setPaused((p) => !p)} accent={c.accent}>
+              {paused ? <Play className="size-5" strokeWidth={2.25} /> : <Pause className="size-5" strokeWidth={2.25} />}
+            </RoundButton>
+          ) : null}
+          <RoundButton label="Next product" onClick={() => go(1)} accent={c.accent}>
+            <ArrowRight className="size-5" strokeWidth={2.25} />
+          </RoundButton>
+        </div>
+      </div>
+      {/* the product */}
+      <div className="group relative">
+        {items.map((p, k) => (
+          <div key={p.slug} aria-hidden={k !== i} className={cn("absolute inset-0 transition-opacity duration-700", k === i ? "opacity-100" : "opacity-0")}>
+            <Image src={p.image.src} alt={k === i ? p.image.alt : ""} fill priority={k < 2} sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover object-top" />
+          </div>
+        ))}
+        <div aria-hidden className="absolute inset-0 bg-linear-to-t from-[#0b1220] via-[#0b1220]/25 to-transparent" />
+        <ProductDialog items={items} index={i}>
+          <button type="button" className="absolute inset-0 z-10 cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-mint-400">
+            <span className="sr-only">See the project: {c.name}</span>
+          </button>
+        </ProductDialog>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 sm:p-7">
+          <div>
+            <p className="font-mono text-[11.5px] font-semibold tracking-[0.14em] uppercase" style={{ color: c.accent }}>
+              The product · {heroKind[c.kind]}
+            </p>
+            <p className="font-display text-[clamp(1.5rem,2.6vw,2.25rem)] leading-tight font-semibold tracking-[-0.02em] text-white">{c.name}</p>
+          </div>
+          <span className="rounded-full border border-white/25 bg-[#0b1220]/70 px-3.5 py-1.5 text-[13px] font-semibold text-white backdrop-blur-md transition-colors group-hover:bg-white group-hover:text-navy-900">
+            See the project
+          </span>
+        </div>
+        <div className="absolute top-4 right-4 z-20 hidden max-w-[60%] flex-wrap justify-end gap-1 lg:flex">
+          {items.map((p, k) => (
+            <button
+              key={p.slug}
+              type="button"
+              aria-label={`Show ${p.name}`}
+              aria-current={k === i}
+              onClick={() => setI(k)}
+              className="h-1.5 rounded-full transition-[width,background-color] duration-300"
+              style={{ width: k === i ? 22 : 6, background: k === i ? c.accent : "rgb(255 255 255 / 0.4)" }}
+            />
+          ))}
         </div>
       </div>
     </div>

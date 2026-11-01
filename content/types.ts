@@ -62,6 +62,8 @@ export interface ProductConcept {
   tagline: string;
   /** The concept's colour: frames, glow and badge. */
   accent: string;
+  /** The idea behind the product, as a founder might first put it: one plain “What if…?” question. */
+  idea: string;
   /** The problem the concept explores. */
   problem: string;
   /** Product approach: how the concept answers the problem. */

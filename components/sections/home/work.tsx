@@ -36,7 +36,7 @@ export function Work() {
       ) : (
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
           {featuredConcepts.map((c, i) => (
-            <ConceptCard key={c.slug} concept={c} index={i} />
+            <ConceptCard key={c.slug} concept={c} index={i} items={featuredConcepts} />
           ))}
         </ul>
       )}
