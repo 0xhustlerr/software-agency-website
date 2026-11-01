@@ -4,8 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Service } from "@/content/types";
-import { ServiceVisual } from "@/components/illustrations/service-visuals";
-import { Badge3D } from "@/components/illustrations/scene";
+import { ServiceBadge, ServiceVisual } from "@/components/illustrations/service-visuals";
 import { cn } from "@/lib/utils";
 
 interface ServicesShowcaseProps {
@@ -95,11 +94,11 @@ export function ServicesShowcase({ services }: ServicesShowcaseProps) {
                 )}
               >
                 <ServiceVisual slug={s.slug} className="w-full" />
+                <span className="absolute bottom-3 left-4">
+                  <ServiceBadge slug={s.slug} standalone />
+                </span>
               </div>
             ))}
-            <span className="absolute bottom-3 left-4">
-              <Badge3D>Interface concept</Badge3D>
-            </span>
           </div>
         </div>
       </div>

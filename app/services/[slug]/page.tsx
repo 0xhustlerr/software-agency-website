@@ -14,8 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/motion/reveal";
-import { ServiceVisual } from "@/components/illustrations/service-visuals";
-import { ConceptBadge } from "@/components/illustrations/scene";
+import { ServiceBadge, ServiceVisual } from "@/components/illustrations/service-visuals";
 import { BlueprintStage } from "@/components/sections/pages/blueprint-stage";
 import { RuledList, Split } from "@/components/sections/pages/split";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
@@ -78,7 +77,7 @@ async function ServiceDetailPageContent({ params }: { params: PageProps<"/servic
                 <ServiceVisual slug={service.slug} />
               </div>
             </BlueprintStage>
-            <ConceptBadge>Interface concept</ConceptBadge>
+            <ServiceBadge slug={service.slug} />
           </figure>
         }
       />

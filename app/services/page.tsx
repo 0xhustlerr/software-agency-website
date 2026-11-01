@@ -11,7 +11,7 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Tag } from "@/components/ui/tag";
 import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/motion/reveal";
-import { ServiceVisual } from "@/components/illustrations/service-visuals";
+import { ServiceBadge, ServiceVisual } from "@/components/illustrations/service-visuals";
 import { BlueprintStage } from "@/components/sections/pages/blueprint-stage";
 import { StageCard } from "@/components/sections/pages/stage-card";
 import { Split } from "@/components/sections/pages/split";
@@ -58,11 +58,14 @@ export default function ServicesPage() {
             return (
               <article key={f.slug} aria-labelledby={`svc-${f.slug}`} className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-6">
                 <Reveal className={cn("lg:col-span-7", flip && "lg:order-2 lg:col-start-6")}>
-                  <BlueprintStage className="aspect-[4/3]">
-                    <div aria-hidden className="w-full">
-                      <ServiceVisual slug={f.slug} />
-                    </div>
-                  </BlueprintStage>
+                  <figure className="m-0">
+                    <BlueprintStage className="aspect-[4/3]">
+                      <div aria-hidden className="w-full">
+                        <ServiceVisual slug={f.slug} />
+                      </div>
+                    </BlueprintStage>
+                    <ServiceBadge slug={f.slug} />
+                  </figure>
                 </Reveal>
                 <Reveal delay={0.08} className={cn("lg:col-span-4", flip ? "lg:order-1 lg:col-start-1" : "lg:col-start-9")}>
                   <p className="text-mono text-accent-ink">{s.index}</p>
@@ -85,7 +88,7 @@ export default function ServicesPage() {
             );
           })}
         </div>
-        <p className="text-small mt-12 text-ink-muted">Interface vignettes are illustrative concepts with sample data.</p>
+        <p className="text-small mt-12 text-ink-muted">Service photos are illustrative.</p>
       </Section>
 
       {/* C · additional capabilities */}

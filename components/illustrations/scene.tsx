@@ -115,20 +115,30 @@ export function Particle({ d, dur, delay }: { d: string; dur: string; delay: str
 }
 
 /** The 3D label under a scene: a raised mint tile that flips once every few seconds. */
-export function ConceptBadge({ children }: { children: ReactNode }) {
+export function ConceptBadge({ children, accent }: { children: ReactNode; accent?: string }) {
   return (
     <figcaption className="mt-4 flex justify-end">
-      <Badge3D>{children}</Badge3D>
+      <Badge3D accent={accent}>{children}</Badge3D>
     </figcaption>
   );
 }
 
-/** The flipping 3D label on its own. Always dark, so it reads on light sections too. */
-export function Badge3D({ children }: { children: ReactNode }) {
+/** The flipping 3D label on its own. Always dark, so it reads on light sections too. `accent` recolours it (mint by default). */
+export function Badge3D({ children, accent }: { children: ReactNode; accent?: string }) {
   return (
     <span className="inline-block shrink-0 [perspective:600px]">
       <span
         data-theme="dark"
+        style={
+          accent
+            ? {
+                color: accent,
+                borderColor: `${accent}66`,
+                textShadow: `0 1px 0 color-mix(in srgb, ${accent} 45%, black), 0 2px 0 color-mix(in srgb, ${accent} 30%, black), 0 3px 6px rgb(0 0 0 / 0.6)`,
+                boxShadow: `inset 0 1px 0 rgb(255 255 255 / 0.1), 0 3px 0 #0d1626, 0 5px 0 #0a111e, 0 14px 24px -8px rgb(0 0 0 / 0.8), 0 0 18px -4px ${accent}77`,
+              }
+            : undefined
+        }
         className="nm-badge-3d block rounded-[8px] border border-mint-400/40 bg-linear-to-b from-surface-raised to-surface-muted px-3 py-1 text-[12.5px] leading-6 font-semibold tracking-[0.1em] text-mint-400 uppercase shadow-[inset_0_1px_0_rgb(255_255_255/0.1),0_3px_0_#0d1626,0_5px_0_#0a111e,0_14px_24px_-8px_rgb(0_0_0/0.8),0_0_18px_-4px_rgb(109_225_210/0.45)] sm:px-4.5 sm:py-1.5 sm:text-[16.5px] sm:leading-7 sm:tracking-[0.12em]"
       >
         {children}
