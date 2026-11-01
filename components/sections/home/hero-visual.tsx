@@ -197,23 +197,29 @@ function Floor({ cx, y, w }: { cx: number; y: number; w: number }) {
 }
 
 /** A glass pill under each side; the product one glows and carries the four-product rail. */
-function Pill({ children, icon: Icon, on, rail }: { children: string; icon: LucideIcon; on?: boolean; rail?: ReactNode }) {
+function Pill({ children, icon: Icon, accent, rail }: { children: ReactNode; icon: LucideIcon; accent: string; rail?: ReactNode }) {
   return (
     <p className="flex justify-center">
       <span
-        className={cn(
-          "font-display flex items-center gap-2.5 rounded-full border py-2 pl-2 text-[20px] font-semibold tracking-[-0.01em]",
-          rail ? "pr-2.5" : "pr-5",
-          on ? "border-mint-400/60 bg-mint-400/10 text-white shadow-[0_0_30px_-6px_rgb(109_225_210/0.7)]" : "border-white/15 bg-white/[0.05] text-ink-muted",
-        )}
+        className={cn("font-display flex items-center gap-3 rounded-full border-2 py-2 pl-2 text-[25px] font-semibold tracking-[-0.015em] whitespace-nowrap text-white", rail ? "pr-3" : "pr-6")}
+        style={{ borderColor: accent, background: `${accent}1f`, boxShadow: `0 0 36px -4px ${accent}, inset 0 0 18px -6px ${accent}` }}
       >
-        <span className={cn("grid size-8 place-items-center rounded-full", on ? "bg-linear-to-br from-mint-400 to-[#3fa7c9] text-navy-900 shadow-[0_0_16px_rgb(109_225_210/0.8)]" : "bg-white/10 text-ink")}>
-          <Icon aria-hidden className="size-4" strokeWidth={2.5} />
+        <span className="grid size-11 place-items-center rounded-full text-navy-900" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}aa)`, boxShadow: `0 0 20px ${accent}` }}>
+          <Icon aria-hidden className="size-5" strokeWidth={2.5} />
         </span>
-        {children}
+        <span>{children}</span>
         {rail}
       </span>
     </p>
+  );
+}
+
+/** A word lit in its colour, for the two key ideas. */
+function Glow({ children, color }: { children: string; color: string }) {
+  return (
+    <span className="font-bold uppercase" style={{ color, textShadow: `0 0 18px ${color}` }}>
+      {children}
+    </span>
   );
 }
 
@@ -290,12 +296,14 @@ export function HeroVisual() {
 
             <Carousel cx={955} cy={200} w={330} h={220} dx={225} dz={-160} />
 
-            <Item x={10} y={398} w={320} z={60} enter={500} float="0px">
-              <Pill icon={Lightbulb}>Your idea</Pill>
+            <Item x={-20} y={394} w={380} z={60} enter={500} float="0px">
+              <Pill icon={Lightbulb} accent="#f6b26b">
+                Only your <Glow color="#f6b26b">idea</Glow>
+              </Pill>
             </Item>
-            <Item x={735} y={412} w={440} enter={800} float="0px">
-              <Pill icon={Rocket} on rail={<Rail />}>
-                Your product
+            <Item x={690} y={408} w={530} enter={800} float="0px">
+              <Pill icon={Rocket} accent="#6de1d2" rail={<Rail />}>
+                <Glow color="#6de1d2">Complete</Glow> product
               </Pill>
             </Item>
           </Clock>
@@ -315,12 +323,14 @@ export function HeroVisual() {
             </Item>
             <Beam d={compactBeam} w={640} h={660} />
             <Carousel cx={330} cy={420} w={300} h={200} dx={170} dz={-140} />
-            <Item x={-10} y={262} w={260} enter={500} float="0px">
-              <Pill icon={Lightbulb}>Your idea</Pill>
+            <Item x={-30} y={262} w={320} enter={500} float="0px">
+              <Pill icon={Lightbulb} accent="#f6b26b">
+                Only your <Glow color="#f6b26b">idea</Glow>
+              </Pill>
             </Item>
-            <Item x={110} y={600} w={440} enter={800} float="0px">
-              <Pill icon={Rocket} on rail={<Rail />}>
-                Your product
+            <Item x={60} y={596} w={540} enter={800} float="0px">
+              <Pill icon={Rocket} accent="#6de1d2" rail={<Rail />}>
+                <Glow color="#6de1d2">Complete</Glow> product
               </Pill>
             </Item>
           </Clock>
