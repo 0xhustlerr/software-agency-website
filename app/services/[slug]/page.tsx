@@ -81,7 +81,7 @@ async function ServiceDetailPageContent({ params }: { params: PageProps<"/servic
       </Section>
 
       <Section tone="muted" aria-labelledby="prob-h">
-        <Reveal className="mb-12 lg:mb-18">
+        <Reveal className="mb-8 lg:mb-10">
           <Eyebrow>Problems it solves</Eyebrow>
           <h2 id="prob-h" className="text-h2 mt-4 max-w-[22ch]">
             {d.problemsTitle}
@@ -91,7 +91,7 @@ async function ServiceDetailPageContent({ params }: { params: PageProps<"/servic
       </Section>
 
       <Section id="deliverables" aria-labelledby="dlv-h">
-        <Reveal className="mb-12 lg:mb-18">
+        <Reveal className="mb-8 lg:mb-10">
           <Eyebrow>Typical deliverables</Eyebrow>
           <h2 id="dlv-h" className="text-h2 mt-4">
             What you can expect to receive.
@@ -102,7 +102,7 @@ async function ServiceDetailPageContent({ params }: { params: PageProps<"/servic
       </Section>
 
       <Section tone="muted" aria-labelledby="proc-h">
-        <Reveal className="mb-12 lg:mb-18">
+        <Reveal className="mb-8 lg:mb-10">
           <Eyebrow>How we deliver it</Eyebrow>
           <h2 id="proc-h" className="text-h2 mt-4 max-w-[20ch]">
             A collaborative process, in stages you can see.

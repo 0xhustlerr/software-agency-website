@@ -3,7 +3,6 @@ import { serviceDetails } from "@/content/service-details";
 import { additionalCapabilities, coreServiceFeatures, engagementStages, servicesFaqs, servicesHero } from "@/content/pages/services";
 import { talkHref } from "@/content/site";
 import { pageMetadata } from "@/lib/metadata";
-import { cn } from "@/lib/utils";
 import { PageHero } from "@/components/layout/page-hero";
 import { Section } from "@/components/layout/section";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import { ServiceBadge, ServiceVisual, serviceLooks } from "@/components/illustra
 import { Check, Gauge, Palette, ServerCog, type LucideIcon } from "lucide-react";
 import { BlueprintStage } from "@/components/sections/pages/blueprint-stage";
 import { StageCard } from "@/components/sections/pages/stage-card";
+import { ColorTabs } from "@/components/ui/color-tabs";
 import { Split } from "@/components/sections/pages/split";
 import { ServicesHeroArt } from "@/components/illustrations/services-hero-art";
 import { CtaBand } from "@/components/sections/cta-band";
@@ -53,60 +53,64 @@ export default function ServicesPage() {
 
       {/* B · core services */}
       <Section aria-labelledby="core-h">
-        <Reveal className="mb-12 lg:mb-18">
+        <Reveal className="mb-8 lg:mb-10">
           <Eyebrow>Core services</Eyebrow>
           <h2 id="core-h" className="text-h2 mt-4 max-w-[20ch]">
             Four ways we take products from idea to production.
           </h2>
         </Reveal>
-        <div className="grid gap-24 lg:gap-36">
-          {coreServiceFeatures.map((f, i) => {
+        {/* One service at a time, so the section fits one screen. */}
+        <ColorTabs
+          label="Core services"
+          tabs={coreServiceFeatures.map((f) => {
+            const look = serviceLooks[f.slug];
+            const Icon = look?.icon;
+            return { id: f.slug, label: look?.label ?? f.slug, accent: look?.accent ?? "#6de1d2", icon: Icon ? <Icon className="size-4" strokeWidth={2.5} /> : null };
+          })}
+          panels={coreServiceFeatures.map((f) => {
             const s = services.find((x) => x.slug === f.slug)!;
-            const flip = i % 2 === 1;
+            const look = serviceLooks[f.slug];
             return (
               <article key={f.slug} aria-labelledby={`svc-${f.slug}`} className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-6">
-                <Reveal className={cn("lg:col-span-7", flip && "lg:order-2 lg:col-start-6")}>
-                  <figure className="m-0">
-                    <BlueprintStage className="aspect-[4/3]">
-                      <div aria-hidden className="w-full">
-                        <ServiceVisual slug={f.slug} />
-                      </div>
-                    </BlueprintStage>
-                    <ServiceBadge slug={f.slug} />
-                  </figure>
-                </Reveal>
-                <Reveal delay={0.08} className={cn("lg:col-span-4", flip ? "lg:order-1 lg:col-start-1" : "lg:col-start-9")}>
-                  <p className="font-mono text-[0.8125rem] font-semibold tracking-[0.1em]" style={{ color: serviceLooks[f.slug]?.ink }}>
+                <figure className="m-0 lg:col-span-7">
+                  <BlueprintStage className="sm:p-4">
+                    <div aria-hidden className="w-full max-w-[420px]">
+                      <ServiceVisual slug={f.slug} />
+                    </div>
+                  </BlueprintStage>
+                  <ServiceBadge slug={f.slug} />
+                </figure>
+                <div className="lg:col-span-4 lg:col-start-9">
+                  <p className="font-mono text-[0.8125rem] font-semibold tracking-[0.1em]" style={{ color: look?.ink }}>
                     {s.index}
                   </p>
-                  <h3 id={`svc-${f.slug}`} className="text-h2 mt-3">
+                  <h3 id={`svc-${f.slug}`} className="text-h2 mt-2">
                     {serviceDetails[f.slug]?.name ?? s.title}
                   </h3>
-                  <p className="text-lead mt-4 text-ink-muted">{f.outcome}</p>
-                  <ul className="mt-7 grid gap-2.5">
+                  <p className="text-body mt-3 text-ink-muted">{f.outcome}</p>
+                  <ul className="mt-5 grid gap-2">
                     {f.capabilities.map((c) => (
                       <li key={c} className="text-body-sm flex items-start gap-3">
-                        <span aria-hidden className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full" style={{ background: serviceLooks[f.slug]?.accent }}>
+                        <span aria-hidden className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full" style={{ background: look?.accent }}>
                           <Check className="size-3 text-navy-900" strokeWidth={3.5} />
                         </span>
                         {c}
                       </li>
                     ))}
                   </ul>
-                  <Button href={`/services/${f.slug}`} variant="ghost" className="mt-7">
+                  <Button href={`/services/${f.slug}`} variant="ghost" className="mt-6">
                     {f.linkLabel}
                   </Button>
-                </Reveal>
+                </div>
               </article>
             );
           })}
-        </div>
-        <p className="text-small mt-12 text-ink-muted">Service photos are illustrative.</p>
+        />
       </Section>
 
       {/* C · additional capabilities */}
       <Section tone="muted" aria-labelledby="add-h">
-        <Reveal className="mb-12 lg:mb-18">
+        <Reveal className="mb-8 lg:mb-10">
           <Eyebrow>Additional capabilities</Eyebrow>
           <h2 id="add-h" className="text-h2 mt-4 max-w-[22ch]">
             Support for every part of the product, before and after launch.

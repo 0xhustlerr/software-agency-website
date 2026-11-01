@@ -15,7 +15,7 @@ export function Tile3D({ children, className, lift }: { children: ReactNode; cla
         data-theme="dark"
         className={cn(
           slab,
-          "flex h-full flex-col p-6 transition-transform duration-500 ease-studio motion-safe:group-hover:[transform:rotateX(4deg)_rotateY(-5deg)_translateY(-6px)]",
+          "flex h-full flex-col p-5 transition-transform duration-500 ease-studio motion-safe:group-hover:[transform:rotateX(4deg)_rotateY(-5deg)_translateY(-6px)]",
           lift && "from-[#2d3e5a] to-[#1e2b40]",
           className,
         )}
@@ -30,7 +30,7 @@ export function Tile3D({ children, className, lift }: { children: ReactNode; cla
 export function TileHead({ mark, icon: Icon }: { mark: string; icon: ComponentType<{ className?: string; strokeWidth?: number; "aria-hidden"?: boolean }> }) {
   return (
     <div className="flex items-start justify-between">
-      <span className="font-display bg-linear-to-br from-mint-400 to-[#3fa7c9] bg-clip-text text-[2.75rem] leading-none font-semibold tracking-[-0.04em] text-transparent">
+      <span className="font-display bg-linear-to-br from-mint-400 to-[#3fa7c9] bg-clip-text text-[2.25rem] leading-none font-semibold tracking-[-0.04em] text-transparent">
         {mark}
       </span>
       <span className={cn(iconTile, "size-9 rounded-[9px]")}>

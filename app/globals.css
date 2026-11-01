@@ -228,22 +228,23 @@
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
 }
+/* Desktop padding follows the window height, so a section and its content fit one screen. */
 @utility section-y {
-  padding-block: 4.5rem;
+  padding-block: 4rem;
   @media (width >= 40rem) {
-    padding-block: 5.5rem;
+    padding-block: 4.5rem;
   }
   @media (width >= 64rem) {
-    padding-block: 8rem;
+    padding-block: clamp(3.5rem, 9svh, 5.5rem);
   }
 }
 @utility section-y-lg {
-  padding-block: 5rem;
+  padding-block: 4.5rem;
   @media (width >= 40rem) {
-    padding-block: 6rem;
+    padding-block: 5rem;
   }
   @media (width >= 64rem) {
-    padding-block: 9rem;
+    padding-block: clamp(4rem, 10svh, 6.5rem);
   }
 }
 @utility focus-ring {
@@ -606,42 +607,6 @@ html.js .nm-scaled:not([data-scaled]) {
   translate: 0 0 var(--lz, 0);
   filter: brightness(var(--lb, 1));
 }
-/* Wipe (work hero): a line of light sweeps across a sketch, turning it into the
- * product behind it, then back. Reduced motion stops at the halfway split. */
-@keyframes nm-wipe {
-  0%,
-  8% {
-    clip-path: inset(0 100% 0 0);
-  }
-  46%,
-  58% {
-    clip-path: inset(0 0 0 0);
-  }
-  96%,
-  100% {
-    clip-path: inset(0 100% 0 0);
-  }
-}
-@keyframes nm-wipe-line {
-  0%,
-  8% {
-    left: 0%;
-  }
-  46%,
-  58% {
-    left: 100%;
-  }
-  96%,
-  100% {
-    left: 0%;
-  }
-}
-.nm-wipe {
-  clip-path: inset(0 50% 0 0);
-}
-.nm-wipe-line {
-  left: 50%;
-}
 @property --nm-hue {
   syntax: "<color>";
   inherits: true;
@@ -871,11 +836,11 @@ html.js .nm-scaled:not([data-scaled]) {
   .nm-pin {
     animation: nm-pin 16s var(--ease-studio) var(--delay, 0s) infinite;
   }
-  .nm-wipe {
-    animation: nm-wipe 9s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  .nm-reel {
+    animation: nm-reel 48s linear var(--delay, 0s) infinite;
   }
-  .nm-wipe-line {
-    animation: nm-wipe-line 9s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  .nm-reel-dot {
+    animation: nm-reel-dot 48s linear var(--delay, 0s) infinite;
   }
   .nm-flow {
     animation: nm-flow 16s var(--ease-studio) var(--delay, 0s) infinite;

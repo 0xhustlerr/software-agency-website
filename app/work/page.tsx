@@ -12,7 +12,8 @@ import { Button } from "@/components/ui/button";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
 import { ProjectFeature } from "@/components/sections/pages/project-feature";
-import { ConceptCard, ConceptFeature } from "@/components/sections/pages/concept-feature";
+import { ConceptCard } from "@/components/sections/pages/concept-feature";
+import { ColorTabs } from "@/components/ui/color-tabs";
 import { WorkFilters } from "@/components/sections/pages/work-filters";
 import { CtaBand } from "@/components/sections/cta-band";
 
@@ -29,6 +30,7 @@ const coverIcons = [Target, Lightbulb, Wrench, Images, BadgeCheck];
 /** The approach: the problem, design first, build in the open, maintainable. */
 const approachIcons = [Compass, PenTool, GitBranch, Wrench];
 
+const kinds: ConceptKind[] = ["saas", "mvp", "ai", "custom"];
 const byKind = (kind: ConceptKind) => productConcepts.filter((c) => c.kind === kind);
 
 /** One heading per kind of product, in the services' colours. */
@@ -39,21 +41,6 @@ const groups: Record<ConceptKind, { label: string; line: string; icon: LucideIco
   custom: { label: "Custom Software", line: "Tools shaped around how a business really works.", icon: Code2, accent: "#6ea8ff" },
 };
 
-function ConceptGroupHeading({ kind }: { kind: ConceptKind }) {
-  const g = groups[kind];
-  const Icon = g.icon;
-  return (
-    <Reveal className="mb-8 flex items-center gap-4 border-b border-line pb-5 lg:mb-10">
-      <span aria-hidden className="grid size-12 shrink-0 place-items-center rounded-[13px]" style={{ background: `linear-gradient(135deg, ${g.accent}, ${g.accent}99)`, boxShadow: `0 0 24px ${g.accent}88` }}>
-        <Icon className="size-6 text-navy-900" strokeWidth={2.25} />
-      </span>
-      <div>
-        <h3 className="font-display text-[1.75rem] leading-tight font-semibold tracking-[-0.02em]">{g.label}</h3>
-        <p className="text-body-sm text-ink-muted">{g.line}</p>
-      </div>
-    </Reveal>
-  );
-}
 
 export default function WorkPage() {
   const hasWork = approvedProjects.length > 0;
@@ -61,8 +48,8 @@ export default function WorkPage() {
 
   return (
     <>
-      <PageHero size="display" eyebrow={workHero.eyebrow} title={workHero.title} lead={workHero.lead} leadAside>
-        <div className="mt-12 lg:mt-16">
+      <PageHero eyebrow={workHero.eyebrow} title={workHero.title} lead={workHero.lead} leadAside className="lg:pb-16">
+        <div className="mt-10 lg:mt-12">
           <WorkHeroArt />
         </div>
       </PageHero>
@@ -124,29 +111,30 @@ export default function WorkPage() {
 
           {productConcepts.length ? (
             <Section theme="dark" aria-labelledby="concepts-h">
-              <Reveal className="mb-14 lg:mb-20">
+              <Reveal className="mb-8 lg:mb-10">
                 <Eyebrow>Product concepts</Eyebrow>
-                <h2 id="concepts-h" className="text-h1 mt-5 max-w-[18ch]">
+                <h2 id="concepts-h" className="text-h2 mt-4">
                   The kind of product we design and engineer.
                 </h2>
               </Reveal>
-              <ConceptGroupHeading kind="saas" />
-              <ul className="grid gap-20 lg:gap-28">
-                {byKind("saas").map((c, i) => (
-                  <ConceptFeature key={c.slug} concept={c} index={i} />
+              <ColorTabs
+                label="Product categories"
+                tabs={kinds.map((kind) => {
+                  const g = groups[kind];
+                  const Icon = g.icon;
+                  return { id: kind, label: `${g.label} · ${byKind(kind).length}`, accent: g.accent, icon: <Icon className="size-4" strokeWidth={2.5} /> };
+                })}
+                panels={kinds.map((kind) => (
+                  <div key={kind}>
+                    <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                      {byKind(kind).map((c, i) => (
+                        <ConceptCard key={c.slug} concept={c} index={i} />
+                      ))}
+                    </ul>
+                  </div>
                 ))}
-              </ul>
-              {(["mvp", "ai", "custom"] as const).map((kind) => (
-                <div key={kind} className="mt-24 lg:mt-32">
-                  <ConceptGroupHeading kind={kind} />
-                  <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-                    {byKind(kind).map((c, i) => (
-                      <ConceptCard key={c.slug} concept={c} index={i} />
-                    ))}
-                  </ul>
-                </div>
-              ))}
-              <p className="text-small mt-12 text-ink-muted">All concepts use sample data. Stride, Tablr, Fixly, Tutorly, Recap, Assist, StockFlow, ClinicDesk and GarageBay are original products invented for illustration; photos are illustrative.</p>
+              />
+              <p className="text-small mt-4 text-ink-muted">All concepts use sample data. Stride, Tablr, Fixly, Tutorly, Recap, Assist, StockFlow, ClinicDesk and GarageBay are original products invented for illustration; photos are illustrative.</p>
             </Section>
           ) : null}
         </>

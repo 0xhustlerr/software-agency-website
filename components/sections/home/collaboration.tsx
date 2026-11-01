@@ -17,7 +17,7 @@ const principleIcons: LucideIcon[] = [MessagesSquare, Eye, ListOrdered, Calendar
 export function Collaboration() {
   return (
     <Section id="collaboration" aria-labelledby="collaboration-heading">
-      <Reveal className="mb-12 grid grid-cols-1 gap-6 sm:gap-8 lg:mb-18 lg:grid-cols-12 lg:items-end lg:gap-6">
+      <Reveal className="mb-8 grid grid-cols-1 gap-6 sm:gap-8 lg:mb-10 lg:grid-cols-12 lg:items-end lg:gap-6">
         <div className="lg:col-span-7">
           <Eyebrow className="mb-4">{collaboration.eyebrow}</Eyebrow>
           <h2 id="collaboration-heading" className="text-h2 max-w-[15ch]">
@@ -27,7 +27,7 @@ export function Collaboration() {
         <p className="text-lead text-ink-muted lg:col-span-5 lg:col-start-8">{collaboration.lead}</p>
       </Reveal>
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-6">
-        <Reveal className="lg:col-span-7">
+        <Reveal className="lg:col-span-6">
           <figure className="m-0">
             <div
               aria-hidden
@@ -53,17 +53,17 @@ export function Collaboration() {
             </figcaption>
           </figure>
         </Reveal>
-        <ol className="grid gap-3 sm:grid-cols-2 sm:gap-x-6 lg:col-span-5 lg:col-start-8 lg:grid-cols-1 lg:gap-3">
+        <ol className="grid content-start gap-3 sm:grid-cols-2 lg:col-span-6">
           {collaboration.principles.map((p, i) => {
             const Icon = principleIcons[i % principleIcons.length];
             return (
-              <Reveal as="li" key={p.title} delay={i * 0.06} className="flex items-start gap-4 rounded-[14px] border border-line bg-surface-muted p-4 transition-[border-color,box-shadow] duration-300 hover:border-accent-ink/40 hover:shadow-[0_0_28px_-12px_var(--accent)]">
+              <Reveal as="li" key={p.title} delay={i * 0.06} className="flex items-start gap-3 rounded-[14px] border border-line bg-surface-muted p-3.5 transition-[border-color,box-shadow] duration-300 hover:border-accent-ink/40 hover:shadow-[0_0_28px_-12px_var(--accent)]">
                 <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-[10px] bg-linear-to-br from-mint-400 to-[#3fa7c9] text-navy-900 shadow-[0_0_16px_-4px_rgb(109_225_210/0.8)]">
                   <Icon className="size-5" strokeWidth={2.25} />
                 </span>
                 <div>
                   <h3 className="text-h4 text-[1.0625rem]">{p.title}</h3>
-                  <p className="text-body-sm mt-1 text-ink-muted">{p.body}</p>
+                  <p className="text-small mt-0.5 text-ink-muted">{p.body}</p>
                 </div>
               </Reveal>
             );

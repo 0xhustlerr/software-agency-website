@@ -204,5 +204,5 @@ export const productConcepts: ProductConcept[] = [
   },
 ];
 
-/** The three featured on the homepage: the SaaS concepts. */
-export const featuredConcepts = productConcepts.filter((c) => c.kind === "saas");
+/** Featured on the homepage: the first concept of each kind, so all four services show. */
+export const featuredConcepts = (["saas", "mvp", "ai", "custom"] as const).flatMap((k) => productConcepts.find((c) => c.kind === k) ?? []);

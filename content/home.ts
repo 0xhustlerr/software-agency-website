@@ -59,21 +59,13 @@ export const engineering = {
   heading: "Thoughtful architecture. Reliable execution.",
   supporting: "We choose technologies based on your product goals, not because they're fashionable.",
   themes: [
-    { title: "Maintainable code", body: "Readable, reviewed, and documented, so any good engineer — including your future team — can pick it up." },
-    { title: "Secure application design", body: "Authentication, permissions, and data protection designed in from the start, not added after launch." },
-    { title: "API\u2011first integration", body: "Clear interfaces that let your product connect to payments, CRMs, and the tools your customers already use." },
-    { title: "Cloud\u2011ready infrastructure", body: "Environments you can reproduce, deploy with confidence, and scale when usage grows." },
-    { title: "Scalable system architecture", body: "Simple where it can be, flexible where it needs to be — sized for the next stage, not a hypothetical one." },
-    { title: "Quality assurance and automated delivery", body: "Automated tests and deployment pipelines that catch problems before your users do." },
+    { title: "Easy to change later", body: "Readable, reviewed, and documented, so any good engineer — including your future team — can pick it up." },
+    { title: "Safe by design", body: "Authentication, permissions, and data protection designed in from the start, not added after launch." },
+    { title: "Connects to your tools", body: "Clear interfaces that let your product connect to payments, CRMs, and the tools your customers already use." },
+    { title: "Runs reliably online", body: "Environments you can reproduce, deploy with confidence, and scale when usage grows." },
+    { title: "Grows with your users", body: "Simple where it can be, flexible where it needs to be — sized for the next stage, not a hypothetical one." },
+    { title: "Checked before every release", body: "Automated tests and deployment pipelines that catch problems before your users do." },
   ] satisfies Pillar[],
-  /** TODO(content): confirm the studio's default stack. */
-  capabilities: [
-    { category: "Frontend", items: ["React", "Next.js", "TypeScript"] },
-    { category: "Backend", items: ["Node.js", "Python", "PostgreSQL"] },
-    { category: "Cloud", items: ["AWS", "Containers", "CI/CD"] },
-    { category: "AI", items: ["LLM integration", "Retrieval", "Evaluation"] },
-    { category: "Integrations", items: ["REST & webhooks", "Payments", "Auth"] },
-  ],
 };
 
 export const collaboration = {

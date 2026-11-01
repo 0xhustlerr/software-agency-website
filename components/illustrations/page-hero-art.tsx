@@ -1,14 +1,16 @@
 /**
  * Hero pictures for the inner pages. Each tells its page's main idea in its own
  * medium, so no two heroes look alike:
- * /work: a sketch wiping into the product · /about: jargon becoming plain
+ * /work: a showreel of every product · /about: jargon becoming plain
  * words · /contact: a photo with glass interface cards. Decorative (aria-hidden inside).
  *
  * Contact photo (free licence, no attribution required): Unsplash UK78i6vK3sc.
  */
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { MessageSquareText, PencilLine, Rocket, Send, ShieldCheck, Smile, Sparkles, User, Zap, type LucideIcon } from "lucide-react";
+import { MessageSquareText, Send, ShieldCheck, Smile, User, Zap, type LucideIcon } from "lucide-react";
+import { productConcepts } from "@/content/concepts";
+import type { ProductConcept } from "@/content/types";
 import { cn } from "@/lib/utils";
 import { ConceptBadge, Item, Scene, type Vars } from "./scene";
 
@@ -30,50 +32,54 @@ function Glass({ accent, className, children }: { accent: string; className?: st
   );
 }
 
-/* ---------- /work: one simple sketch becomes a real product ---------- */
+/* ---------- /work: a showreel of every product we've designed ---------- */
+
+const kindLabel: Record<ProductConcept["kind"], string> = { saas: "SaaS Platform", mvp: "MVP", ai: "AI Product", custom: "Custom Software" };
 
 /**
- * A pencil sketch of a product and the finished product, the same layout; a
- * line of light sweeps across and turns one into the other. Anyone reads it in
- * a glance: idea on paper → working product. Full width, under the hero copy.
- * The sketch is generated from the product screenshot (scripts aside: a
- * greyscale edge trace on paper), so the two match line for line.
+ * All product concepts, one after another (4s each): photo or screen with a
+ * slow zoom, its name, kind and tagline, and a progress dot per product.
+ * Anyone reads it as "look at everything they build". Full width, sized so
+ * the hero copy and the reel fit one screen.
  */
 export function WorkHeroArt() {
+  const n = productConcepts.length;
+  const step = 48 / n;
   return (
-    <figure className="m-0" aria-label="A pencil sketch of a product turns into the finished, working product as a line of light sweeps across it.">
+    <figure className="m-0" aria-label={`A slideshow of ${n} products: ${productConcepts.map((c) => c.name).join(", ")}.`}>
       <div className="relative">
-        <div className="absolute -inset-8 rounded-[40px] bg-[radial-gradient(closest-side,rgb(109_225_210/0.22),transparent)] blur-[30px]" aria-hidden />
+        <div aria-hidden className="absolute -inset-8 rounded-[40px] bg-[radial-gradient(closest-side,rgb(109_225_210/0.2),transparent)] blur-[30px]" />
         <div
           aria-hidden
-          className="relative aspect-[1600/900] overflow-hidden rounded-[22px] border-[1.5px] border-mint-400/60 bg-[#f3efe6] shadow-[0_0_80px_-20px_rgb(109_225_210/0.7),0_50px_90px_-40px_rgb(0_0_0/0.9)]"
+          className="relative h-[clamp(220px,calc(100svh-34rem),540px)] overflow-hidden rounded-[22px] border-[1.5px] border-mint-400/60 bg-[#0b1220] shadow-[0_0_80px_-20px_rgb(109_225_210/0.7),0_50px_90px_-40px_rgb(0_0_0/0.9)]"
         >
-          <Image src="/img/work/sketch-v2.webp" alt="" fill priority sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover" />
-          <div className="nm-wipe absolute inset-0">
-            <Image src="/img/work/product.webp" alt="" fill priority sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover" />
+          {productConcepts.map((c, i) => (
+            <div key={c.slug} className="nm-reel absolute inset-0" style={{ "--delay": `${-i * step + 48}s`, "--ro": i === 0 ? "1" : "0" } as Vars}>
+              <Image src={c.image.src} alt="" fill priority={i < 2} sizes="(min-width: 1280px) 1200px, 100vw" className="object-cover" style={{ objectPosition: c.kind === "saas" ? "50% 20%" : "50% 35%" }} />
+              <div className="absolute inset-0 bg-linear-to-t from-[#0b1220]/90 via-[#0b1220]/10 to-transparent" />
+              <div className="absolute bottom-6 left-6 flex items-center gap-4 sm:bottom-8 sm:left-8">
+                <span className="grid size-14 shrink-0 place-items-center rounded-[15px] font-display text-[24px] font-bold text-[#0b1220]" style={{ background: `linear-gradient(135deg, ${c.accent}, ${c.accent}99)`, boxShadow: `0 0 26px ${c.accent}aa` }}>
+                  {c.name[0]}
+                </span>
+                <span>
+                  <span className="block font-mono text-[12px] font-semibold tracking-[0.14em] uppercase" style={{ color: c.accent }}>
+                    {kindLabel[c.kind]} · {c.category}
+                  </span>
+                  <span className="font-display block text-[clamp(1.75rem,3vw,2.5rem)] leading-tight font-semibold tracking-[-0.02em] text-white">{c.name}</span>
+                  <span className="block text-[15px] text-white/75">{c.tagline}</span>
+                </span>
+              </div>
+            </div>
+          ))}
+          {/* progress: one dot per product */}
+          <div className="absolute right-6 bottom-6 hidden items-center gap-1.5 sm:flex">
+            {productConcepts.map((c, i) => (
+              <span key={c.slug} className="nm-reel-dot block h-2 w-2 rounded-full bg-white/30" style={{ "--delay": `${-i * step + 48}s` } as Vars} />
+            ))}
           </div>
-          {/* the line of light */}
-          <div className="nm-wipe-line absolute inset-y-0 w-0">
-            <span className="absolute inset-y-0 -left-[2px] w-1 bg-white shadow-[0_0_24px_6px_rgb(109_225_210/0.9),0_0_60px_14px_rgb(109_225_210/0.5)]" />
-            <span className="absolute top-1/2 -left-6 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-mint-400 text-navy-900 shadow-[0_0_30px_rgb(109_225_210/0.9)]">
-              <Sparkles className="size-6" strokeWidth={2.25} />
-            </span>
-          </div>
-          <span className="absolute top-4 left-4 flex items-center gap-2 rounded-full border border-mint-400/60 bg-[#0b1220]/80 py-1.5 pr-4 pl-1.5 text-[15px] font-semibold text-white backdrop-blur-md">
-            <span className="grid size-7 place-items-center rounded-full bg-mint-400 text-navy-900">
-              <Rocket className="size-4" strokeWidth={2.5} />
-            </span>
-            Real product
-          </span>
-          <span className="absolute top-4 right-4 flex items-center gap-2 rounded-full border border-[#3f4856]/40 bg-white/85 py-1.5 pr-4 pl-1.5 text-[15px] font-semibold text-[#2b3442]">
-            <span className="grid size-7 place-items-center rounded-full bg-[#2b3442] text-white">
-              <PencilLine className="size-4" strokeWidth={2.5} />
-            </span>
-            Simple idea
-          </span>
         </div>
       </div>
-      <ConceptBadge>From one sketch to a real product</ConceptBadge>
+      <ConceptBadge>{`${n} products we design and engineer`}</ConceptBadge>
     </figure>
   );
 }

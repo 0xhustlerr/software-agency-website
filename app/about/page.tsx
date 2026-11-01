@@ -69,9 +69,14 @@ export default function AboutPage() {
             </figure>
           </Reveal>
         </div>
-        <div className="mt-24 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-6">
+      </Section>
+
+      {/* 1b · Why we exist */}
+      <Section tone="muted" aria-labelledby="why-h">
+        <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-6">
           <div className="lg:col-span-4">
-            <Eyebrow as="h3">Why we exist</Eyebrow>
+            <Eyebrow>Why we exist</Eyebrow>
+            <h2 id="why-h" className="text-h2 mt-4 max-w-[14ch]">Founders deserve a better partner.</h2>
           </div>
           <Reveal className="lg:col-span-7 lg:col-start-6">
             {/* A quote card: the founder's dilemma, then our answer. */}
@@ -88,7 +93,7 @@ export default function AboutPage() {
 
       {/* 2 · Philosophy */}
       <Section aria-labelledby="phil-h">
-        <Reveal className="mb-12 lg:mb-18">
+        <Reveal className="mb-8 lg:mb-10">
           <Eyebrow>Product development philosophy</Eyebrow>
           <h2 id="phil-h" className="text-h2 mt-4">
             Build the right thing, then build it right.
@@ -134,7 +139,7 @@ export default function AboutPage() {
       {/* 5 · Team — only with real profiles and genuine photography */}
       {members.length ? (
         <Section aria-labelledby="team-h">
-          <Reveal className="mb-12 lg:mb-18">
+          <Reveal className="mb-8 lg:mb-10">
             <Eyebrow>The team</Eyebrow>
             <h2 id="team-h" className="text-h2 mt-4">
               The people you’ll work with.

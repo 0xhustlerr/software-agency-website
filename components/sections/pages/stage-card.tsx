@@ -25,26 +25,26 @@ export function StageCard({ stage, index }: { stage: Stage; index: number }) {
   return (
     <Tile3D>
       <TileHead mark={String(index + 1).padStart(2, "0")} icon={Icon} />
-      <h3 className="font-display mt-6 text-[1.375rem] leading-[1.15] font-semibold tracking-[-0.02em] text-balance text-ink">
+      <h3 className="font-display mt-4 text-[1.375rem] leading-[1.15] font-semibold tracking-[-0.02em] text-balance text-ink">
         {main}
         {sub ? <span className="text-ink-muted"> / {sub}</span> : null}
       </h3>
-      <dl className="mt-5 mb-5 grid gap-3.5">
+      <dl className="mt-3.5 mb-4 grid gap-2.5">
         <div>
           <dt className="text-[0.75rem] font-semibold tracking-[0.08em] text-ink-muted uppercase">Where you are</dt>
-          <dd className="text-body-sm mt-1 text-pretty text-ink-muted">{stage.where}</dd>
+          <dd className="mt-0.5 text-[0.875rem] leading-[1.35rem] text-pretty text-ink-muted">{stage.where}</dd>
         </div>
         <div>
           <dt className="text-[0.75rem] font-semibold tracking-[0.08em] text-ink-muted uppercase">What we focus on</dt>
-          <dd className="text-body-sm mt-1 text-pretty text-ink-muted">{stage.focus}</dd>
+          <dd className="mt-0.5 text-[0.875rem] leading-[1.35rem] text-pretty text-ink-muted">{stage.focus}</dd>
         </div>
         <div className="rounded-[10px] border border-mint-400/30 bg-mint-400/[0.07] p-3">
           <dt className="text-[0.75rem] font-semibold tracking-[0.08em] text-mint-400 uppercase">You leave with</dt>
-          <dd className="text-body-sm mt-1 font-medium text-pretty text-ink">{stage.leaveWith}</dd>
+          <dd className="mt-0.5 text-[0.875rem] leading-[1.35rem] font-medium text-pretty text-ink">{stage.leaveWith}</dd>
         </div>
       </dl>
       {/* Room for two rows of chips, so every card's divider lines up. */}
-      <p className="mt-auto flex min-h-[4.5rem] flex-wrap content-start items-center gap-1.5 border-t border-white/10 pt-4">
+      <p className="mt-auto flex min-h-[3.75rem] flex-wrap content-start items-center gap-1.5 border-t border-white/10 pt-3">
         <span className="sr-only">Services that fit: </span>
         {fit.map((part, i) =>
           i % 2 === 1 ? (
