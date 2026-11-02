@@ -465,7 +465,8 @@ export function ProductStrip({ items }: { items: ProductConcept[] }) {
             index={0}
             items={items}
             className="absolute top-6 left-0 w-[300px] transition-none! will-change-transform"
-            style={{ transform: `translate3d(${x}px, ${y}px, 0) rotate(${angle}deg) scale(${1 - 0.1 * far * far})`, opacity: x < -CARD || x > width ? 0 : 1, zIndex: Math.round(100 - far * 50) }}
+            // rounded: server and browser can differ in a float's last digit, which breaks hydration
+            style={{ transform: `translate3d(${x.toFixed(2)}px, ${y.toFixed(2)}px, 0) rotate(${angle.toFixed(3)}deg) scale(${(1 - 0.1 * far * far).toFixed(4)})`, opacity: x < -CARD || x > width ? 0 : 1, zIndex: Math.round(100 - far * 50) }}
           />
         );
       })}

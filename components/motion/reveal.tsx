@@ -24,11 +24,13 @@ interface RevealProps {
  *   reveals it on scroll. If the controller never starts, a CSS failsafe shows it.
  * - "enter" is a pure CSS animation, so it never depends on JavaScript.
  * Reduced motion and print show everything immediately. See globals.css → Reveal.
+ * suppressHydrationWarning: RevealController may set data-revealed before a
+ * streamed section hydrates, which is expected and must stay.
  */
 export function Reveal({ children, delay = 0, className, as: Tag = "div", mode = "view", style: extra }: RevealProps) {
   const style = delay ? ({ ...extra, "--reveal-delay": `${Math.round(delay * 1000)}ms` } as CSSProperties) : extra;
   return (
-    <Tag className={cn(mode === "enter" ? "nm-enter" : mode === "settle" ? "nm-settle" : undefined, className)} data-reveal={mode === "view" ? "" : undefined} style={style}>
+    <Tag className={cn(mode === "enter" ? "nm-enter" : mode === "settle" ? "nm-settle" : undefined, className)} data-reveal={mode === "view" ? "" : undefined} style={style} suppressHydrationWarning>
       {children}
     </Tag>
   );
