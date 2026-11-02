@@ -552,10 +552,9 @@ html.js .nm-scaled:not([data-scaled]) {
   }
 }
 /* Showcase (homepage hero): one 16s clock, four 4s beats, one per product.
- * The accent colour (--nm-hue) follows the product in front; the brain pulses,
- * a burst rides the beam, the next card turns to the front of the carousel and
- * materialises (scan line, colour, frame flash, slow zoom). Reduced motion
- * shows the first product in front, still. */
+ * The accent colour (--nm-hue) follows the product in view; the brain pulses,
+ * a burst rides the beam, and the next card appears (scan line, frame flash,
+ * slow zoom). Reduced motion shows the first product, still. */
 /* Orbit (about hero): items ride an ellipse, staying upright. Reduced motion
  * leaves each at its starting point (--start). */
 @keyframes nm-orbit {
@@ -658,50 +657,6 @@ html.js .nm-scaled:not([data-scaled]) {
     --nm-hue: #f6b26b;
   }
 }
-@keyframes nm-flow {
-  0%,
-  21% {
-    translate: 0 0 0;
-    rotate: y 0deg;
-    opacity: 1;
-  }
-  25%,
-  46% {
-    translate: calc(var(--dx) * -1) var(--dy) var(--dz);
-    rotate: y 38deg;
-    opacity: 0.6;
-  }
-  50%,
-  71% {
-    translate: 0 calc(var(--dy) * -2) calc(var(--dz) * 2);
-    rotate: y 0deg;
-    opacity: 0.3;
-  }
-  75%,
-  96% {
-    translate: var(--dx) var(--dy) var(--dz);
-    rotate: y -38deg;
-    opacity: 0.6;
-  }
-  100% {
-    translate: 0 0 0;
-    rotate: y 0deg;
-    opacity: 1;
-  }
-}
-@keyframes nm-unveil {
-  0% {
-    clip-path: inset(0 0 0 0);
-  }
-  6%,
-  22% {
-    clip-path: inset(100% 0 0 0);
-  }
-  25%,
-  100% {
-    clip-path: inset(0 0 0 0);
-  }
-}
 @keyframes nm-scan {
   0% {
     top: -2%;
@@ -745,18 +700,6 @@ html.js .nm-scaled:not([data-scaled]) {
     scale: 1;
   }
 }
-@keyframes nm-rail {
-  0%,
-  22% {
-    opacity: 1;
-    scale: 1.15;
-  }
-  25%,
-  100% {
-    opacity: 0.35;
-    scale: 0.9;
-  }
-}
 @keyframes nm-burst {
   0%,
   76% {
@@ -787,22 +730,43 @@ html.js .nm-scaled:not([data-scaled]) {
     filter: brightness(1.45);
   }
 }
-.nm-flow {
-  translate: var(--sx, 0) var(--sy, 0) var(--sz, 0);
-  rotate: y var(--sr, 0deg);
-  opacity: var(--so, 1);
+/* The steps light up in order on each 4s beat. Each product holds its 4s; the fades
+ * overlap by 3% of the cycle, so there is always one in view. */
+@keyframes nm-step {
+  0%,
+  100% {
+    opacity: 0.55;
+    scale: 1;
+  }
+  6%,
+  22% {
+    opacity: 1;
+    scale: 1.08;
+  }
 }
-.nm-unveil {
-  clip-path: var(--uv, inset(0 0 0 0));
+@keyframes nm-solo {
+  0% {
+    opacity: 0;
+    translate: 24px 0;
+  }
+  3%,
+  25% {
+    opacity: 1;
+    translate: 0 0;
+  }
+  28%,
+  100% {
+    opacity: 0;
+    translate: -24px 0;
+  }
+}
+.nm-solo {
+  opacity: var(--so, 0);
 }
 .nm-scan,
 .nm-flash,
 .nm-burst {
   opacity: 0;
-}
-.nm-rail {
-  opacity: var(--ro, 0.35);
-  scale: var(--rs, 0.9);
 }
 .nm-stage {
   transform-style: preserve-3d;
@@ -867,11 +831,11 @@ html.js .nm-scaled:not([data-scaled]) {
   .nm-pin {
     animation: nm-pin 16s var(--ease-studio) var(--delay, 0s) infinite;
   }
-  .nm-flow {
-    animation: nm-flow 16s var(--ease-studio) var(--delay, 0s) infinite;
+  .nm-step {
+    animation: nm-step 4s ease-in-out var(--delay, 0s) infinite;
   }
-  .nm-unveil {
-    animation: nm-unveil 16s linear var(--delay, 0s) infinite;
+  .nm-solo {
+    animation: nm-solo 16s var(--ease-studio) var(--delay, 0s) infinite;
   }
   .nm-scan {
     animation: nm-scan 16s linear var(--delay, 0s) infinite;
@@ -882,16 +846,13 @@ html.js .nm-scaled:not([data-scaled]) {
   .nm-kb {
     animation: nm-kb 16s ease-out var(--delay, 0s) infinite;
   }
-  .nm-rail {
-    animation: nm-rail 16s var(--ease-studio) var(--delay, 0s) infinite;
-  }
   .nm-burst {
     animation: nm-burst 4s linear infinite;
   }
   .nm-think {
     animation: nm-think 4s ease-in-out infinite;
   }
-  html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar, .nm-orbit, .nm-lift, .nm-pin, .nm-hue-cycle, .nm-flow, .nm-unveil, .nm-scan, .nm-flash, .nm-kb, .nm-rail, .nm-burst, .nm-think) {
+  html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar, .nm-orbit, .nm-lift, .nm-pin, .nm-hue-cycle, .nm-step, .nm-solo, .nm-scan, .nm-flash, .nm-kb, .nm-burst, .nm-think) {
     animation-play-state: paused;
   }
   /* Scenes scrolled out of view stop looping (and save their entrance for when they arrive). */

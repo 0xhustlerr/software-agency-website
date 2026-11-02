@@ -15,9 +15,9 @@ The reaction to earn: *"This company understands startups, has strong technical 
 One line, used everywhere:
 
 - Eyebrow: *From first idea to first users*
-- Headline: *Your idea deserves great engineering.*
+- Headline: *You bring the idea. We deliver the product.*
 - Lead: *We partner with ambitious founders to design, build, and launch software products that are ready for the real world.*
-- CTAs: **Discuss Your Product** (primary) · **Explore Our Expertise** (secondary)
+- CTAs: **Share Your Idea** (primary) · **See Our Work** (secondary)
 
 Voice: professional but approachable, concrete, "we" and "you". Every claim is followed by how. Banned: *innovative, cutting-edge, revolutionary, synergy, world-class, seamless*, exclamation marks, emoji.
 

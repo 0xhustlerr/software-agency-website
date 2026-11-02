@@ -13,7 +13,7 @@ const at = (ms: number, extra?: Record<string, string>) => ({ "--reveal-delay": 
 /**
  * Section 2 — dark hero that fits one screen on desktop: centred copy, the
  * "idea → product" scene, then the actions beneath it. On desktop the scene's
- * width follows the window height (aspect ≈ 2.49), so everything stays in view.
+ * width follows the window height (aspect ≈ 3.37), so everything stays in view.
  * Choreography: eyebrow (0) → headline lines (120 / 200) → lead (460) →
  * scene (200–1000) → actions (900) → capabilities (1000).
  */
@@ -32,7 +32,7 @@ export function Hero() {
           </Eyebrow>
         </div>
         {/* Two art-directed lines at every width; the type scales so neither breaks. */}
-        <h1 id="hero-heading" className="text-display text-ink [font-size:clamp(2.3rem,7.4vw,4.25rem)]">
+        <h1 id="hero-heading" className="text-display text-ink [font-size:clamp(1.75rem,6.2vw,4rem)]">
           {hero.headlineLines.map((line, i) => (
             <span key={line} className="nm-line" style={at(120 + i * 80)}>
               <span>
@@ -42,14 +42,14 @@ export function Hero() {
           ))}
         </h1>
         {/* The lead is usually the Largest Contentful Paint on phones: visible at first paint, it only settles. */}
-        <p className="nm-settle text-lead mt-4 max-w-[58ch] text-ink-muted" style={at(460)}>
+        <p className="nm-settle text-lead mt-4 max-w-[74ch] text-ink-muted" style={at(460)}>
           {hero.lead}
         </p>
-        <div className="mt-8 w-full lg:mt-5 lg:max-w-[max(40rem,calc((100svh-35rem)*2.49))]">
+        <div className="mt-8 w-full lg:mt-5 lg:max-w-[max(44rem,calc((100svh-37rem)*3.37))]">
           <HeroVisual />
         </div>
         <div
-          className="nm-enter mt-8 grid w-full grid-cols-1 gap-3 min-[420px]:flex min-[420px]:w-auto min-[420px]:flex-wrap min-[420px]:items-center min-[420px]:justify-center lg:mt-9"
+          className="nm-enter mt-8 grid w-full grid-cols-1 gap-3 min-[420px]:flex min-[420px]:w-auto min-[420px]:flex-wrap min-[420px]:items-center min-[420px]:justify-center lg:mt-4"
           style={at(900, { "--rise": "10px", "--enter-dur": "500ms" })}
         >
           <Button href={primaryCta.href} className="justify-center">
@@ -59,11 +59,10 @@ export function Hero() {
             {secondaryCta.label}
           </Button>
         </div>
-        <p className="nm-enter-fade mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 font-mono text-[0.8125rem] text-ink-muted lg:mt-4" style={at(1000)}>
-          <span className="sr-only">We build: </span>
-          {hero.capabilities.map((c, i) => (
+        <p className="nm-enter-fade mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[0.9375rem] text-ink-muted lg:mt-4" style={at(1000)}>
+          {hero.trust.map((c, i) => (
             <span key={c} className="inline-flex items-center gap-3">
-              {i > 0 ? <span aria-hidden className="text-line-strong">/</span> : null}
+              {i > 0 ? <span aria-hidden className="text-line-strong">·</span> : null}
               {c}
             </span>
           ))}
