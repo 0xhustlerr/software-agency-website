@@ -73,7 +73,7 @@ export function HeaderBar({ items, talkHref }: HeaderBarProps) {
       )}
     >
       <Container className="flex h-full items-center justify-between gap-6">
-        <Wordmark />
+        <Wordmark icon />
         <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {items.map((item) => {

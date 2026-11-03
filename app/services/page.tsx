@@ -12,9 +12,8 @@ import { Eyebrow } from "@/components/ui/eyebrow";
 import { Accordion } from "@/components/ui/accordion";
 import { Reveal } from "@/components/motion/reveal";
 import { IconCard, tints } from "@/components/ui/icon-card";
-import { ServiceBadge, ServiceVisual, serviceLooks } from "@/components/illustrations/service-visuals";
+import { ServiceBadge, ServicePhoto, serviceLooks } from "@/components/illustrations/service-visuals";
 import { Check, Gauge, Palette, ServerCog, type LucideIcon } from "lucide-react";
-import { BlueprintStage } from "@/components/sections/pages/blueprint-stage";
 import { StageCard } from "@/components/sections/pages/stage-card";
 import { Split } from "@/components/sections/pages/split";
 import { ServicesHeroArt } from "@/components/illustrations/services-hero-art";
@@ -87,6 +86,8 @@ export default function ServicesPage() {
         const s = services.find((x) => x.slug === f.slug)!;
         const look = serviceLooks[f.slug];
         const flip = i % 2 === 1;
+        /** Pictures alternate sides, starting on the right; each is angled toward its text. */
+        const picRight = i % 2 === 0;
         return (
           <section
             key={f.slug}
@@ -96,18 +97,14 @@ export default function ServicesPage() {
             className={cn("relative flex scroll-mt-(--header-h) items-center overflow-clip py-16 lg:min-h-[calc(100svh-var(--header-h))] lg:py-10", flip ? "bg-surface" : i === 0 ? "bg-surface-muted" : "bg-surface")}
           >
             {/* the service's own light */}
-            <div aria-hidden className="pointer-events-none absolute top-1/2 size-[680px] -translate-y-1/2 rounded-full blur-[120px]" style={{ background: `${look?.accent}${flip ? "26" : "33"}`, [flip ? "right" : "left"]: "-10%" }} />
+            <div aria-hidden className="pointer-events-none absolute top-1/2 size-[680px] -translate-y-1/2 rounded-full blur-[120px]" style={{ background: `${look?.accent}${flip ? "26" : "33"}`, [picRight ? "right" : "left"]: "-10%" }} />
             <Container className="relative w-full">
               <article className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
-                <figure className={cn("m-0 lg:col-span-7", flip && "lg:order-2 lg:col-start-6")}>
-                  <BlueprintStage className="sm:p-6">
-                    <div aria-hidden className="w-full max-w-[600px]">
-                      <ServiceVisual slug={f.slug} />
-                    </div>
-                  </BlueprintStage>
+                <figure className={cn("m-0 lg:col-span-7", picRight && "lg:order-2 lg:col-start-6")}>
+                  <ServicePhoto slug={f.slug} side={picRight ? "right" : "left"} />
                   <ServiceBadge slug={f.slug} />
                 </figure>
-                <Reveal className={cn("lg:col-span-5", flip ? "lg:order-1" : "lg:col-start-8")}>
+                <Reveal className={cn("lg:col-span-5", picRight ? "lg:order-1" : "lg:col-start-8")}>
                   <p className="font-display text-[clamp(3.5rem,6vw,5.5rem)] leading-none font-semibold tracking-[-0.04em]" style={{ color: look?.accent }}>
                     {s.index}
                   </p>

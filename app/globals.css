@@ -499,6 +499,16 @@ html.js .nm-scaled:not([data-scaled]) {
     translate: 120% 0;
   }
 }
+/* Services pictures: a band of light sliding across the photo. */
+@keyframes nm-flow-light {
+  0% {
+    background-position: 100% 0;
+  }
+  55%,
+  100% {
+    background-position: 0% 0;
+  }
+}
 @keyframes nm-bar {
   0%,
   100% {
@@ -785,6 +795,9 @@ html.js .nm-scaled:not([data-scaled]) {
   translate: -120% 0;
 }
 @media (prefers-reduced-motion: no-preference) {
+  .nm-flow-light {
+    animation: nm-flow-light 6s ease-in-out var(--flow-delay, 0s) infinite;
+  }
   .nm-stage {
     animation: nm-sway 14s ease-in-out infinite alternate;
   }

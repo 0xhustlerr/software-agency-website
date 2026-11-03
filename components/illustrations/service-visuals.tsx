@@ -136,6 +136,79 @@ export function ServiceVisual({ slug, className }: { slug: ServiceSlug; classNam
   ) : null;
 }
 
+/** Light passes over neighbouring pictures at different moments. */
+const flowDelays: Partial<Record<ServiceSlug, string>> = {
+  "mvp-development": "0s",
+  "custom-software": "-1.5s",
+  "saas-development": "-3s",
+  "ai-development": "-4.5s",
+};
+
+/**
+ * The service photo filling its whole frame (no stage around it), standing in
+ * 3D on large screens: turned toward its text, with a few slices behind it
+ * for thickness, the label card floating in front, and a pool of the
+ * service's colour beneath. Phones get it flat.
+ */
+export function ServicePhoto({ slug, side = "left", className }: { slug: ServiceSlug; side?: "left" | "right"; className?: string }) {
+  const look = serviceLooks[slug];
+  if (!look) return null;
+  const { accent: a, icon: Icon } = look;
+  return (
+    <div data-theme="dark" className={cn("w-full bg-transparent lg:[perspective:1400px]", className)}>
+      <div
+        className={cn(
+          "relative aspect-[4/3] w-full lg:[transform-style:preserve-3d]",
+          side === "right" ? "lg:[transform:rotateY(-16deg)_rotateX(5deg)]" : "lg:[transform:rotateY(16deg)_rotateX(5deg)]",
+        )}
+      >
+        {/* thickness: slices of the service's deep shade behind the photo */}
+        {[22, 16, 10, 5].map((z) => (
+          <div key={z} aria-hidden className="absolute inset-0 hidden rounded-[18px] lg:block" style={{ background: look.ink, transform: `translateZ(-${z}px)` }} />
+        ))}
+        {/* the service's colour pooled on the floor */}
+        <div aria-hidden className="absolute inset-x-[8%] -bottom-12 h-16 rounded-[50%] opacity-30 blur-[28px]" style={{ background: a }} />
+        <div
+          className="absolute inset-0 overflow-hidden rounded-[18px] border-[1.5px] bg-[#0b1220]"
+          style={{ borderColor: `${a}99`, boxShadow: `0 0 70px -14px ${a}99, 0 50px 80px -30px rgb(0 0 0 / 0.55)` }}
+        >
+          <Image src={look.src} alt="" fill sizes="(min-width: 1024px) 58vw, 100vw" className="object-cover" style={{ objectPosition: look.position }} />
+          <div className={cn("absolute inset-0 bg-linear-to-br mix-blend-color", look.grade)} />
+          <div className="absolute inset-0 bg-linear-to-t from-[#0b1220]/80 via-transparent via-45% to-transparent" />
+          {/* light catching the top corner */}
+          <div aria-hidden className="absolute inset-0 bg-[linear-gradient(115deg,rgb(255_255_255/0.18),transparent_35%)]" />
+          {/* flowing light: a band in the service's colour sliding across every 6s */}
+          <div
+            aria-hidden
+            className="nm-flow-light absolute inset-0 bg-no-repeat"
+            style={{
+              backgroundImage: `linear-gradient(110deg, transparent 38%, ${a}4d 45%, rgb(255 255 255 / 0.55) 50%, ${a}4d 55%, transparent 62%)`,
+              backgroundSize: "300% 100%",
+              backgroundPosition: "100% 0",
+              "--flow-delay": flowDelays[slug] ?? "0s",
+            } as React.CSSProperties}
+          />
+        </div>
+        {/* the skill, floating in front of the photo */}
+        <div
+          className="absolute bottom-4 left-4 flex max-w-[calc(100%-2rem)] items-center gap-3.5 rounded-[14px] border-[1.5px] bg-[#141d2e]/90 py-2.5 pr-5 pl-2.5 sm:bottom-7 sm:left-7 lg:[transform:translateZ(60px)]"
+          style={{ borderColor: `${a}99`, boxShadow: `0 0 36px -8px ${a}aa, 0 26px 40px -14px rgb(0 0 0 / 0.7)` }}
+        >
+          <span className="grid size-11 shrink-0 place-items-center rounded-[12px] sm:size-12" style={{ background: `linear-gradient(135deg, ${a}, ${a}99)`, boxShadow: `0 0 22px ${a}88` }}>
+            <Icon aria-hidden className="size-6 text-[#0b1220]" strokeWidth={2.25} />
+          </span>
+          <span className="min-w-0">
+            <span className="font-display block text-[19px] leading-tight font-semibold tracking-[-0.02em] text-white sm:text-[23px]">{look.label}</span>
+            <span className="mt-0.5 block truncate text-[13px] font-medium sm:text-[14px]" style={{ color: a }}>
+              {look.promise}
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /** The 3D badge beneath a service picture: what its photo shows, in the service's colour. */
 export function ServiceBadge({ slug, standalone }: { slug: ServiceSlug; standalone?: boolean }) {
   const look = serviceLooks[slug];
