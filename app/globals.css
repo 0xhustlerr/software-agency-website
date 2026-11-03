@@ -228,22 +228,23 @@
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
 }
+/* Desktop padding follows the window height, so a section and its content fit one screen. */
 @utility section-y {
-  padding-block: 4.5rem;
+  padding-block: 4rem;
   @media (width >= 40rem) {
-    padding-block: 5.5rem;
+    padding-block: 4.5rem;
   }
   @media (width >= 64rem) {
-    padding-block: 8rem;
+    padding-block: clamp(3.5rem, 9svh, 5.5rem);
   }
 }
 @utility section-y-lg {
-  padding-block: 5rem;
+  padding-block: 4.5rem;
   @media (width >= 40rem) {
-    padding-block: 6rem;
+    padding-block: 5rem;
   }
   @media (width >= 64rem) {
-    padding-block: 9rem;
+    padding-block: clamp(4rem, 10svh, 6.5rem);
   }
 }
 @utility focus-ring {
@@ -379,6 +380,10 @@
   .nm-mark-draw {
     transform-origin: left;
     animation: nm-mark 450ms var(--ease-studio) var(--reveal-delay, 60ms) both;
+  }
+  /* Drawings inside a scroll reveal wait until it comes into view, then draw. */
+  html.js [data-reveal]:not([data-revealed]) :is(.nm-draw, .nm-enter-fade) {
+    animation-play-state: paused;
   }
   /* A scaled illustration waits until it has been measured, then assembles. */
   html.js .nm-scaled:not([data-scaled]) :is(.nm-enter, .nm-enter-x, .nm-enter-fade, .nm-draw) {
@@ -520,6 +525,249 @@ html.js .nm-scaled:not([data-scaled]) {
     0 2px 0 #085a51,
     0 3px 6px rgb(0 0 0 / 0.6);
 }
+/* Homepage hero: spinning portal rings, a pulsing core and twinkling dust. */
+@keyframes nm-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes nm-twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+@keyframes nm-core {
+  0%,
+  100% {
+    opacity: 0.7;
+    scale: 0.92;
+  }
+  50% {
+    opacity: 1;
+    scale: 1.06;
+  }
+}
+/* Showcase (homepage hero): one 16s clock, four 4s beats, one per product.
+ * The accent colour (--nm-hue) follows the product in view; the brain pulses,
+ * a burst rides the beam, and the next card appears (scan line, frame flash,
+ * slow zoom). Reduced motion shows the first product, still. */
+/* Orbit (about hero): items ride an ellipse, staying upright. Reduced motion
+ * leaves each at its starting point (--start). */
+@keyframes nm-orbit {
+  from {
+    offset-distance: var(--start, 0%);
+  }
+  to {
+    offset-distance: calc(var(--start, 0%) + 100%);
+  }
+}
+.nm-orbit {
+  offset-rotate: 0deg;
+  offset-distance: var(--start, 0%);
+}
+/* Lift (services hero bento): each tile rises and brightens for its quarter of
+ * the 16s clock. Reduced motion keeps the first tile lifted (--lz/--lb). */
+@keyframes nm-lift {
+  0%,
+  22% {
+    translate: 0 0 46px;
+    filter: brightness(1.12) saturate(1.15);
+  }
+  27%,
+  95% {
+    translate: 0 0 0;
+    filter: brightness(0.62) saturate(0.7);
+  }
+  100% {
+    translate: 0 0 46px;
+    filter: brightness(1.12) saturate(1.15);
+  }
+}
+@keyframes nm-pin {
+  0%,
+  22% {
+    opacity: 1;
+    translate: 0 0 46px;
+  }
+  26%,
+  96% {
+    opacity: 0;
+    translate: 0 10px 0;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0 46px;
+  }
+}
+.nm-pin {
+  opacity: var(--po, 0);
+}
+.nm-lift {
+  translate: 0 0 var(--lz, 0);
+  filter: brightness(var(--lb, 1));
+}
+/* Hologram scan (architecture picture): a line of light rises through the stack. */
+@keyframes nm-scan-up {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-330px);
+    opacity: 0;
+  }
+}
+/* Flow (architecture picture): dashes travel along a line, like data moving. */
+@keyframes nm-dash {
+  to {
+    stroke-dashoffset: -38;
+  }
+}
+@property --nm-hue {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f6b26b;
+}
+@keyframes nm-hue {
+  0%,
+  22% {
+    --nm-hue: #f6b26b;
+  }
+  25%,
+  47% {
+    --nm-hue: #6de1d2;
+  }
+  50%,
+  72% {
+    --nm-hue: #b794f6;
+  }
+  75%,
+  97% {
+    --nm-hue: #6ea8ff;
+  }
+  100% {
+    --nm-hue: #f6b26b;
+  }
+}
+@keyframes nm-scan {
+  0% {
+    top: -2%;
+    opacity: 0;
+  }
+  0.6% {
+    opacity: 1;
+  }
+  6% {
+    top: 100%;
+    opacity: 1;
+  }
+  7%,
+  100% {
+    top: 100%;
+    opacity: 0;
+  }
+}
+@keyframes nm-flash {
+  0% {
+    opacity: 0;
+  }
+  5% {
+    opacity: 1;
+  }
+  16%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes nm-kb {
+  0% {
+    scale: 1;
+  }
+  22%,
+  24% {
+    scale: 1.08;
+  }
+  25%,
+  100% {
+    scale: 1;
+  }
+}
+@keyframes nm-burst {
+  0%,
+  76% {
+    stroke-dashoffset: 0.2;
+    opacity: 0;
+  }
+  78% {
+    opacity: 1;
+  }
+  96% {
+    stroke-dashoffset: -1;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: -1;
+    opacity: 0;
+  }
+}
+@keyframes nm-think {
+  0%,
+  62%,
+  100% {
+    scale: 1;
+    filter: brightness(1);
+  }
+  78% {
+    scale: 1.06;
+    filter: brightness(1.45);
+  }
+}
+/* The steps light up in order on each 4s beat. Each product holds its 4s; the fades
+ * overlap by 3% of the cycle, so there is always one in view. */
+@keyframes nm-step {
+  0%,
+  100% {
+    opacity: 0.55;
+    scale: 1;
+  }
+  6%,
+  22% {
+    opacity: 1;
+    scale: 1.08;
+  }
+}
+@keyframes nm-solo {
+  0% {
+    opacity: 0;
+    translate: 24px 0;
+  }
+  3%,
+  25% {
+    opacity: 1;
+    translate: 0 0;
+  }
+  28%,
+  100% {
+    opacity: 0;
+    translate: -24px 0;
+  }
+}
+.nm-solo {
+  opacity: var(--so, 0);
+}
+.nm-scan,
+.nm-flash,
+.nm-burst {
+  opacity: 0;
+}
 .nm-stage {
   transform-style: preserve-3d;
   transform: rotateX(7deg) rotateY(-10deg) rotateZ(1deg);
@@ -556,7 +804,55 @@ html.js .nm-scaled:not([data-scaled]) {
     transform-origin: bottom;
     animation: nm-bar var(--dur, 3s) ease-in-out var(--delay, 0s) infinite;
   }
-  html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar) {
+  .nm-spin {
+    animation: nm-spin var(--dur, 12s) linear infinite var(--dir, normal);
+  }
+  .nm-twinkle {
+    animation: nm-twinkle var(--dur, 3s) ease-in-out var(--delay, 0s) infinite;
+  }
+  .nm-core {
+    animation: nm-core 3.2s ease-in-out infinite;
+  }
+  .nm-hue-cycle {
+    animation: nm-hue 16s linear infinite;
+  }
+  .nm-orbit {
+    animation: nm-orbit var(--dur, 18s) linear infinite;
+  }
+  .nm-dash {
+    animation: nm-dash 1.6s linear infinite;
+  }
+  .nm-scan-up {
+    animation: nm-scan-up 4.5s ease-in-out infinite;
+  }
+  .nm-lift {
+    animation: nm-lift 16s var(--ease-studio) var(--delay, 0s) infinite;
+  }
+  .nm-pin {
+    animation: nm-pin 16s var(--ease-studio) var(--delay, 0s) infinite;
+  }
+  .nm-step {
+    animation: nm-step 4s ease-in-out var(--delay, 0s) infinite;
+  }
+  .nm-solo {
+    animation: nm-solo 16s var(--ease-studio) var(--delay, 0s) infinite;
+  }
+  .nm-scan {
+    animation: nm-scan 16s linear var(--delay, 0s) infinite;
+  }
+  .nm-flash {
+    animation: nm-flash 16s ease-out var(--delay, 0s) infinite;
+  }
+  .nm-kb {
+    animation: nm-kb 16s ease-out var(--delay, 0s) infinite;
+  }
+  .nm-burst {
+    animation: nm-burst 4s linear infinite;
+  }
+  .nm-think {
+    animation: nm-think 4s ease-in-out infinite;
+  }
+  html.js .nm-scaled:not([data-scaled]) :is(.nm-stage, .nm-float, .nm-particle, .nm-bar, .nm-orbit, .nm-lift, .nm-pin, .nm-hue-cycle, .nm-step, .nm-solo, .nm-scan, .nm-flash, .nm-kb, .nm-burst, .nm-think) {
     animation-play-state: paused;
   }
   /* Scenes scrolled out of view stop looping (and save their entrance for when they arrive). */

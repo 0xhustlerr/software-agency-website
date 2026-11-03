@@ -48,12 +48,22 @@ export interface Pillar {
  * A product concept used to show capability. Never client work: always
  * rendered with a visible concept label and no case-study link.
  */
+/** The four kinds of product the studio builds, matching the core services. */
+export type ConceptKind = "saas" | "mvp" | "ai" | "custom";
+
 export interface ProductConcept {
   slug: string;
+  kind: ConceptKind;
+  /** True for products we invented for illustration; false for concepts of real companies' products. */
+  original: boolean;
   name: string;
   category: string;
   /** Short headline shown above the name. */
   tagline: string;
+  /** The concept's colour: frames, glow and badge. */
+  accent: string;
+  /** The idea behind the product, as a founder might first put it: one plain “What if…?” question. */
+  idea: string;
   /** The problem the concept explores. */
   problem: string;
   /** Product approach: how the concept answers the problem. */

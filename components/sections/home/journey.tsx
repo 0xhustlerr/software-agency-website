@@ -9,7 +9,7 @@ import { JourneyTimeline } from "./journey-timeline";
 export function Journey() {
   return (
     <Section id="process" tone="muted" aria-labelledby="process-heading">
-      <Reveal className="mb-14 lg:mb-20">
+      <Reveal className="mb-8 lg:mb-10">
         <Eyebrow className="mb-4">{journey.eyebrow}</Eyebrow>
         <h2 id="process-heading" className="text-h2 max-w-[18ch]">
           {journey.heading}

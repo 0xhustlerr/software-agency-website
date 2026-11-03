@@ -4,9 +4,18 @@ import { useMotionValueEvent, useScroll, useSpring } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import type { ProcessStep } from "@/content/types";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
+import { Code2, Compass, PenTool, Rocket, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type StageState = "done" | "on" | "todo";
+
+/** One colour and icon per stage, from first idea to live product. `ink` is the readable text shade on light grounds. */
+const stageLook: { icon: LucideIcon; accent: string; ink: string }[] = [
+  { icon: Compass, accent: "#f6b26b", ink: "#b0661c" },
+  { icon: PenTool, accent: "#b794f6", ink: "#7b4fd0" },
+  { icon: Code2, accent: "#6ea8ff", ink: "#2f6fd6" },
+  { icon: Rocket, accent: "#6de1d2", ink: "#0a7266" },
+];
 
 /**
  * Four-stage process. As the section moves through the viewport the rail
@@ -70,16 +79,31 @@ export function JourneyTimeline({ steps }: { steps: ProcessStep[] }) {
           {steps.map((s, i) => {
             const st = state(i);
             return (
-              <li key={s.title} className="relative pl-12 lg:pt-12 lg:pr-8 lg:pl-0">
+              <li key={s.title} className="relative pl-16 lg:pt-16 lg:pr-8 lg:pl-0">
+                {/* the stage's node: an icon tile that lights up in the stage's colour */}
                 <span
                   aria-hidden
                   className={cn(
-                    "absolute top-0 left-0 size-[15px] rounded-full border transition-[background-color,border-color,box-shadow] duration-400 ease-studio",
-                    st === "on" && "border-accent bg-accent shadow-[0_0_0_6px_color-mix(in_srgb,var(--accent)_22%,transparent)]",
-                    st === "done" && "border-ink bg-ink",
-                    st === "todo" && "border-line-strong bg-surface-muted",
+                    "absolute top-[-14px] left-[-14px] grid size-11 place-items-center rounded-[12px] border-[1.5px] transition-[background-color,border-color,box-shadow,color,transform] duration-400 ease-studio lg:top-[-15px]",
+                    st === "todo" && "border-line-strong bg-surface text-ink-muted",
                   )}
-                />
+                  style={
+                    st === "todo"
+                      ? undefined
+                      : {
+                          background: `linear-gradient(135deg, ${stageLook[i].accent}, ${stageLook[i].accent}99)`,
+                          borderColor: stageLook[i].accent,
+                          color: "#0b1220",
+                          boxShadow: st === "on" ? `0 0 0 6px ${stageLook[i].accent}33, 0 0 28px ${stageLook[i].accent}aa` : `0 0 16px ${stageLook[i].accent}55`,
+                          transform: st === "on" ? "scale(1.1)" : undefined,
+                        }
+                  }
+                >
+                  {(() => {
+                    const Icon = stageLook[i].icon;
+                    return <Icon className="size-5" strokeWidth={2.25} />;
+                  })()}
+                </span>
                 <p className="text-mono flex items-baseline justify-between text-ink-muted">
                   <span>{String(i + 1).padStart(2, "0")}</span>
                   <span aria-hidden className={cn("transition-opacity duration-300", st === "on" ? "text-accent-ink opacity-100" : "opacity-0")}>
@@ -93,12 +117,12 @@ export function JourneyTimeline({ steps }: { steps: ProcessStep[] }) {
                 <p className="text-body-sm mt-3 max-w-[32ch] text-ink-muted">{s.body}</p>
                 {s.outcome ? (
                   <p
-                    className={cn(
-                      "text-body-sm mt-6 max-w-[32ch] border-t pt-3.5 text-ink transition-colors duration-400",
-                      st === "on" ? "border-accent-ink" : "border-line",
-                    )}
+                    className="text-body-sm mt-6 max-w-[32ch] rounded-[12px] border-[1.5px] bg-surface px-3.5 py-3 font-medium text-ink transition-[border-color,box-shadow] duration-400"
+                    style={{ borderColor: st === "todo" ? "var(--line)" : `${stageLook[i].accent}aa`, boxShadow: st === "on" ? `0 0 30px -10px ${stageLook[i].accent}` : undefined }}
                   >
-                    <span className="mb-1 block font-mono text-[0.6875rem] tracking-[0.04em] text-ink-muted">You leave with</span>
+                    <span className="mb-1 block text-[0.6875rem] font-semibold tracking-[0.08em] uppercase" style={{ color: st === "todo" ? "var(--ink-muted)" : stageLook[i].ink }}>
+                      You leave with
+                    </span>
                     {s.outcome}
                   </p>
                 ) : null}

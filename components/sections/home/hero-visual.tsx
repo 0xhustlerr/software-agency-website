@@ -1,234 +1,276 @@
-import { Sparkles, Workflow } from "lucide-react";
+import Image from "next/image";
+import { Fragment, type CSSProperties, type ReactNode } from "react";
+import { ArrowDown, Code2, Compass, LayoutDashboard, Lightbulb, PenTool, Rocket, Sparkles, type LucideIcon } from "lucide-react";
+import { Item, type Vars } from "@/components/illustrations/scene";
 import { cn } from "@/lib/utils";
-import { ConceptBadge, Glow, Item, Particle, Scene, Wires, iconTile, slab, type Vars } from "@/components/illustrations/scene";
+import { ScaledCanvas } from "@/components/motion/scaled-canvas";
 
 /**
- * "Relay" — an original operations-SaaS product concept used to show what the
- * studio designs and builds. Not a client product; all data is sample data.
+ * "You bring the idea, we deliver the product", as a picture on a flat stage
+ * so everything stays readable: the idea on the left, the four steps we take
+ * it through in the middle, and the product, live, on the right, one kind at
+ * a time. One 16s clock: every 4s the steps light up in order, a burst rides
+ * the beam, and the next product appears. Colours follow the product.
+ *
+ * Photos (free licences, no attribution required, stored in public/hero/):
+ * brain: Unsplash h6R3zA7vZI4 · MVP sketches: Unsplash weRQAu9TA-A ·
+ * SaaS dashboard: Unsplash JKUTrJ4vK00 · AI assistant: Unsplash BlWbfrQrI5k ·
+ * custom software: Unsplash LJ9KY8pIH3E.
  */
-const navItems = ["Overview", "Requests", "Automations", "Customers", "Reports"];
 
-const kpis = [
-  { label: "Open requests", value: "128", delta: "−12" },
-  { label: "First reply", value: "2h 14m", delta: "−18m" },
-  { label: "Auto-routed", value: "63%", delta: "+9 pts" },
+const products: { src: string; label: string; promise: string; icon: LucideIcon; position: string; accent: string }[] = [
+  { src: "/hero/product-mvp.webp", label: "MVPs", promise: "From sketch to first users", icon: Rocket, position: "center 45%", accent: "#f6b26b" },
+  { src: "/hero/product-saas.webp", label: "SaaS Platforms", promise: "Built to scale and grow", icon: LayoutDashboard, position: "center", accent: "#6de1d2" },
+  { src: "/hero/product-ai.webp", label: "AI Products", promise: "Intelligence users can trust", icon: Sparkles, position: "center 45%", accent: "#b794f6" },
+  { src: "/hero/product-custom.webp", label: "Custom Software", promise: "Shaped around how you work", icon: Code2, position: "center 40%", accent: "#6ea8ff" },
 ];
 
-const rows = [
-  { id: "RQ-2041", title: "Billing address change", owner: "AK", status: "Routed", on: true },
-  { id: "RQ-2040", title: "SSO setup for new team", owner: "MJ", status: "In review" },
-];
+/** Each card's place on the 16s clock: one in view at a time, 4s each. */
+const delays = ["0s", "-12s", "-8s", "-4s"];
 
-/** Requests resolved, sample series (0–100), drawn in chart coordinates (272 × 60). */
-const series = [38, 44, 41, 52, 49, 58, 55, 63, 60, 71, 68, 76];
-const chartW = 272;
-const chartH = 60;
-const chartLine = series
-  .map((v, i) => `${i ? "L" : "M"}${((i * chartW) / (series.length - 1)).toFixed(1)} ${(chartH - ((v - 30) / 50) * chartH).toFixed(1)}`)
-  .join(" ");
-
-/** The Relay operations dashboard (420 × 344). `id` keeps its gradient unique: phone and desktop copies share the page. */
-function Dashboard({ id }: { id: string }) {
+/** The idea: the brain photo (black baked into transparency) masks a white-to-accent gradient; it pulses on each beat. */
+function IdeaBrain({ size }: { size: number }) {
+  const mask = "url(/hero/brain-glow.webp) center / contain no-repeat";
   return (
-    <div className={cn(slab, "nm-sheen h-full rounded-[14px] bg-linear-to-b from-[#1d2a40] to-[#121b2b]")}>
-      <div className="flex h-9 items-center gap-2 border-b border-white/[0.07] px-3.5">
-        <span className={cn(iconTile, "size-5 rounded-[5px]")}>
-          <span className="size-1.5 rounded-full bg-navy-900" />
-        </span>
-        <span className="font-display text-[13px] font-semibold text-ink">Relay</span>
-        <span className="ml-auto mr-auto rounded-[5px] bg-white/[0.06] px-6 py-0.5 font-mono text-[10px] text-ink-muted">app.relay.example</span>
-        <span className="w-[62px]" />
+    <div className="nm-think relative" style={{ width: size, height: size }}>
+      <div className="absolute inset-[12%] rounded-full blur-[26px]" style={{ background: "radial-gradient(circle, color-mix(in srgb, var(--nm-hue) 55%, transparent), transparent 70%)" }} />
+      <div className="absolute inset-0" style={{ filter: "drop-shadow(0 0 14px var(--nm-hue))" }}>
+        <div className="absolute inset-0" style={{ background: "linear-gradient(135deg, #ffffff 10%, var(--nm-hue) 60%)", mask, WebkitMask: mask }} />
       </div>
-      <div className="grid grid-cols-[100px_1fr]">
-        <ul className="grid content-start gap-0.5 border-r border-white/[0.07] px-2 py-3">
-          {navItems.map((n, i) => (
-            <li key={n} className={cn("flex items-center gap-2 rounded-[6px] px-2 py-1.5 text-[11px] font-medium", i === 0 ? "bg-mint-400/12 text-ink" : "text-ink-muted")}>
-              <span className={cn("size-1.5 rounded-[2px]", i === 0 ? "bg-mint-400" : "bg-white/20")} />
-              {n}
+    </div>
+  );
+}
+
+/** What we take the idea through: the proof of "complete". */
+const steps: { label: string; icon: LucideIcon }[] = [
+  { label: "Plan", icon: Compass },
+  { label: "Design", icon: PenTool },
+  { label: "Build", icon: Code2 },
+  { label: "Launch", icon: Rocket },
+];
+
+/** The four steps in a row, lighting up in order on each 4s beat. Sits on the beam. */
+function Steps({ x, y, tile, text }: { x: number; y: number; tile: number; text: number }) {
+  return (
+    <ol className="absolute flex items-center gap-2.5" style={{ left: x, top: y }}>
+      {steps.map((st, i) => {
+        const Icon = st.icon;
+        return (
+          <li
+            key={st.label}
+            className="nm-step grid place-items-center gap-2 rounded-[16px] border-[1.5px] bg-[#141d2e] py-4"
+            style={{ width: tile, borderColor: "var(--nm-hue)", boxShadow: "0 0 26px -8px var(--nm-hue)", "--delay": `${i}s` } as Vars}
+          >
+            <span className="grid size-14 place-items-center rounded-[14px] text-[#0b1220]" style={{ background: "var(--nm-hue)" }}>
+              <Icon aria-hidden className="size-7" strokeWidth={2.25} />
+            </span>
+            <span className="font-display font-semibold text-white" style={{ fontSize: text }}>
+              {st.label}
+            </span>
+          </li>
+        );
+      })}
+    </ol>
+  );
+}
+
+/** The same steps as a column, for narrow screens: top to bottom, with arrows between. */
+function StepsColumn() {
+  return (
+    <ol className="flex w-full max-w-[280px] flex-col items-center gap-2">
+      {steps.map((st, i) => {
+        const Icon = st.icon;
+        return (
+          <Fragment key={st.label}>
+            {i > 0 ? <ArrowDown aria-hidden className="size-5" style={{ color: "var(--nm-hue)" }} strokeWidth={2.5} /> : null}
+            <li
+              className="nm-step flex w-full items-center gap-4 rounded-[14px] border-[1.5px] bg-[#141d2e] px-3.5 py-2.5"
+              style={{ borderColor: "var(--nm-hue)", boxShadow: "0 0 22px -8px var(--nm-hue)", "--delay": `${i}s` } as Vars}
+            >
+              <span className="grid size-10 shrink-0 place-items-center rounded-[10px] text-[#0b1220]" style={{ background: "var(--nm-hue)" }}>
+                <Icon aria-hidden className="size-5" strokeWidth={2.25} />
+              </span>
+              <span className="font-display text-[1.25rem] font-semibold text-white">{st.label}</span>
             </li>
-          ))}
-        </ul>
-        <div className="min-w-0 p-3.5">
-          <p className="font-display text-[14px] font-semibold tracking-[-0.01em] text-ink">Operations this week</p>
-          <div className="mt-2.5 grid grid-cols-3 gap-1.5">
-            {kpis.map((k) => (
-              <div key={k.label} className="rounded-[8px] border border-white/[0.07] bg-white/[0.03] px-2 py-1.5">
-                <p className="truncate text-[9.5px] text-ink-muted">{k.label}</p>
-                <p className="font-display mt-0.5 text-[18px] leading-tight font-semibold tracking-[-0.02em] whitespace-nowrap text-ink">{k.value}</p>
-                <p className="font-mono text-[9px] text-mint-400">{k.delta}</p>
+          </Fragment>
+        );
+      })}
+    </ol>
+  );
+}
+
+/** A short glowing line joining the pieces of the column. */
+function Link() {
+  return <span aria-hidden className="h-7 w-[3px] rounded-full" style={{ background: "var(--nm-hue)", boxShadow: "0 0 10px var(--nm-hue)" }} />;
+}
+
+/** The beam: a solid light from the brain, through the portal, into the front card, with a burst on every beat. */
+function Beam({ d, w, h }: { d: string; w: number; h: number }) {
+  return (
+    <svg className="absolute inset-0 overflow-visible" width={w} height={h} viewBox={`0 0 ${w} ${h}`} fill="none" aria-hidden style={{ filter: "drop-shadow(0 0 6px var(--nm-hue))" }}>
+      <path d={d} stroke="var(--nm-hue)" strokeOpacity="0.55" strokeWidth="3" strokeLinecap="round" />
+      <path d={d} stroke="#ffffff" strokeOpacity="0.5" strokeWidth="1" strokeLinecap="round" />
+      <path d={d} pathLength={1} stroke="#ffffff" strokeWidth="6" strokeLinecap="round" strokeDasharray="0.16 1.2" className="nm-burst" />
+    </svg>
+  );
+}
+
+/** The product, live: one card at a time, flat and fully readable. */
+function ProductCards({ box, small }: { box: CSSProperties; small?: boolean }) {
+  return (
+    <>
+      {products.map((p, i) => {
+        const Icon = p.icon;
+        return (
+          <div key={p.src} className="nm-solo absolute" style={{ ...box, "--delay": delays[i], "--so": i === 0 ? "1" : "0" } as Vars}>
+            <div
+              className="relative h-full overflow-hidden rounded-[18px] border-[1.5px] bg-[#0b1220]"
+              style={{ borderColor: `${p.accent}cc`, boxShadow: `inset 0 1px 0 rgb(255 255 255 / 0.1), 0 0 70px -12px ${p.accent}aa, 0 40px 70px -24px rgb(0 0 0 / 0.85)` }}
+            >
+              <div className="nm-kb absolute inset-0" style={{ "--delay": delays[i] } as Vars}>
+                <Image src={p.src} alt="" fill sizes="(min-width: 1024px) 36vw, 80vw" className="object-cover" style={{ objectPosition: p.position }} />
               </div>
-            ))}
-          </div>
-          <div className="mt-2 rounded-[8px] border border-white/[0.07] bg-white/[0.03] px-2.5 py-2">
-            <p className="text-[10px] font-medium text-ink">Requests resolved</p>
-            <div className="relative mt-1.5" style={{ width: chartW, height: chartH }}>
-              <svg className="absolute inset-0 overflow-visible" width={chartW} height={chartH} viewBox={`0 0 ${chartW} ${chartH}`} fill="none">
-                <defs>
-                  <linearGradient id={`${id}-area`} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="var(--accent)" stopOpacity="0.45" />
-                    <stop offset="1" stopColor="var(--accent)" stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                {[15, 30, 45].map((y) => (
-                  <line key={y} x1="0" x2={chartW} y1={y} y2={y} stroke="rgb(255 255 255 / 0.06)" />
-                ))}
-                <path d={`${chartLine} L ${chartW} ${chartH} L 0 ${chartH} Z`} fill={`url(#${id}-area)`} />
-                <path d={chartLine} pathLength={1} stroke="var(--accent)" strokeWidth="2" strokeLinejoin="round" className="nm-draw" style={{ "--reveal-delay": "1100ms" } as Vars} />
-              </svg>
-              <Particle d={chartLine} dur="5s" delay="2s" />
-            </div>
-          </div>
-          <div className="mt-2 overflow-hidden rounded-[8px] border border-white/[0.07]">
-            {rows.map((r, i) => (
-              <div key={r.id} className={cn("flex items-center gap-2 px-2.5 py-1.5 text-[10px]", i > 0 && "border-t border-white/[0.07]")}>
-                <span className="shrink-0 font-mono text-ink-muted">{r.id}</span>
-                <span className="min-w-0 flex-1 truncate font-medium text-ink">{r.title}</span>
-                <span className="grid size-[18px] shrink-0 place-items-center rounded-full bg-white/10 text-[8px] font-semibold text-ink">{r.owner}</span>
-                <span className={cn("w-[58px] shrink-0 rounded-[5px] py-0.5 text-center text-[9px] font-medium", r.on ? "bg-mint-400/15 text-mint-400" : "bg-white/[0.06] text-ink-muted")}>
-                  {r.status}
+              <div className="absolute inset-0 bg-linear-to-t from-[#0b1220] via-transparent to-transparent" />
+              <div className="nm-scan absolute inset-x-0 h-[3px]" style={{ background: p.accent, boxShadow: `0 0 18px 4px ${p.accent}`, "--delay": delays[i] } as Vars} />
+              <div className="absolute inset-x-3.5 bottom-3.5 flex items-center gap-3.5 overflow-hidden rounded-[14px] border border-white/10 bg-[#0b1220]/90 px-3.5 py-3 text-left">
+                <span aria-hidden className="absolute inset-x-0 top-0 h-px" style={{ background: `linear-gradient(90deg, transparent, ${p.accent}, transparent)` }} />
+                <span className={cn("grid shrink-0 place-items-center rounded-[14px]", small ? "size-11" : "size-16")} style={{ background: `linear-gradient(135deg, ${p.accent}, ${p.accent}99)`, boxShadow: `0 0 22px ${p.accent}88` }}>
+                  <Icon aria-hidden className={cn("text-[#0b1220]", small ? "size-6" : "size-8")} strokeWidth={2.25} />
+                </span>
+                <span className="min-w-0">
+                  <span className={cn("font-display block leading-tight font-semibold tracking-[-0.02em] text-white", small ? "text-[20px]" : "text-[32px]")}>{p.label}</span>
+                  <span className={cn("mt-0.5 block font-medium", small ? "text-[14px]" : "text-[20px]")} style={{ color: p.accent }}>
+                    {p.promise}
+                  </span>
                 </span>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const flow = [
-  { label: "Request received", meta: "Email · form · chat" },
-  { label: "Classify intent", meta: "AI assist", ai: true },
-  { label: "Route to owner", meta: "Rules · workload" },
-  { label: "Notify customer", meta: "Template" },
-];
-
-/** The intake automation, with a request travelling down its steps (170 × 196). */
-function WorkflowCard() {
-  return (
-    <div className={cn(slab, "h-full px-3.5 py-3")}>
-      <div className="flex items-center gap-2">
-        <span className={iconTile}>
-          <Workflow className="size-3.5" strokeWidth={2.25} />
-        </span>
-        <span className="text-[12px] font-semibold text-ink">Automation</span>
-      </div>
-      <ol className="relative mt-3 grid gap-2.5">
-        <span aria-hidden className="absolute top-2 bottom-2 left-[5px] w-px bg-white/15" />
-        <Particle d="M5.5 6 V 120" dur="3s" delay="1.8s" />
-        {flow.map((s, i) => (
-          <li key={s.label} className="relative flex items-start gap-2.5">
-            <span className={cn("relative mt-0.5 size-[11px] shrink-0 rounded-full border", i === flow.length - 1 ? "border-mint-400 bg-mint-400" : "border-mint-400/70 bg-surface-raised")} />
-            <div className="min-w-0">
-              <p className="text-[11px] leading-tight font-medium whitespace-nowrap text-ink">
-                {s.label}
-                {s.ai ? <span className="ml-1.5 rounded-[4px] bg-mint-400/15 px-1 font-mono text-[8.5px] text-mint-400">AI</span> : null}
-              </p>
-              <p className="text-[9.5px] text-ink-muted">{s.meta}</p>
             </div>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}
-
-/** The companion mobile view (150 × 244). */
-function Phone() {
-  return (
-    <div className={cn(slab, "h-full rounded-[24px] px-3 pt-2.5")}>
-      <div className="flex items-center justify-between font-mono text-[8.5px] text-ink-muted">
-        <span>9:41</span>
-        <span className="h-1.5 w-10 rounded-full bg-white/15" />
-        <span>●●</span>
-      </div>
-      <p className="mt-2 text-[9.5px] text-ink-muted">Good morning</p>
-      <p className="font-display text-[14px] leading-tight font-semibold text-ink">Your queue</p>
-      <div className="mt-2 grid gap-1.5">
-        {[
-          { t: "Billing address", s: "Due today", on: true },
-          { t: "SSO setup", s: "Waiting on IT" },
-          { t: "Renewal question", s: "New" },
-        ].map((r) => (
-          <div key={r.t} className={cn("rounded-[8px] px-2 py-1.5", r.on ? "bg-mint-400/12 ring-1 ring-mint-400/40" : "bg-white/[0.05]")}>
-            <p className="truncate text-[10px] font-medium text-ink">{r.t}</p>
-            <p className="mt-0.5 flex items-center gap-1 text-[8.5px] text-ink-muted">
-              <i className={cn("size-1 rounded-full", r.on ? "bg-mint-400" : "bg-white/30")} />
-              {r.s}
-            </p>
+            <div className="nm-flash pointer-events-none absolute inset-0 rounded-[18px]" style={{ boxShadow: `0 0 0 2px ${p.accent}, 0 0 60px 6px ${p.accent}`, "--delay": delays[i] } as Vars} />
           </div>
-        ))}
-      </div>
-      <span className="mt-2.5 block rounded-[8px] bg-mint-400 py-1.5 text-center text-[10px] font-semibold text-navy-900">New request</span>
-    </div>
+        );
+      })}
+    </>
   );
 }
 
-/** A request the product routed on its own. */
-function RoutedToast() {
+/** The glossy floor the products stand on. */
+function Floor({ cx, y, w }: { cx: number; y: number; w: number }) {
   return (
-    <div className={cn(slab, "flex h-full items-center gap-2.5 px-3")}>
-      <span className={iconTile}>
-        <Sparkles className="size-3.5" strokeWidth={2.25} />
-      </span>
-      <div className="min-w-0">
-        <p className="text-[11.5px] font-semibold whitespace-nowrap text-ink">RQ-2042 auto-routed</p>
-        <p className="font-mono text-[9.5px] text-ink-muted">to AK · in 0.4s</p>
-      </div>
-    </div>
+    <>
+      <div className="absolute h-[120px] rounded-[50%] blur-[16px]" style={{ left: cx - w / 2, top: y, width: w, background: "radial-gradient(closest-side, color-mix(in srgb, var(--nm-hue) 30%, transparent), transparent)", transform: "translateZ(-60px)" }} />
+      <div className="absolute h-px" style={{ left: cx - w / 2, top: y + 22, width: w, background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--nm-hue) 70%, transparent), transparent)", transform: "translateZ(-60px)" }} />
+    </>
   );
 }
 
-const wires = {
-  workflow: "M515 196 V 250 Q 515 256 509 256 H 450",
-  toast: "M280 434 V 466 Q 280 472 286 472 H 300",
-};
-const mobileWire = "M180 344 V 368 Q 180 374 186 374 H 190";
+/** A glowing pill under each side: "Your idea" and "Your product, live". */
+function Pill({ children, icon: Icon, accent }: { children: ReactNode; icon: LucideIcon; accent: string }) {
+  return (
+    <p className="flex justify-center whitespace-nowrap">
+      <span
+        className="font-display flex shrink-0 items-center gap-3 rounded-full border-2 py-2 pr-6 pl-2 text-[clamp(16px,1.6vw,23px)] font-semibold tracking-[0.02em] whitespace-nowrap text-white"
+        style={{ borderColor: accent, background: `${accent}1f`, boxShadow: `0 0 36px -4px ${accent}, inset 0 0 18px -6px ${accent}` }}
+      >
+        <span className="grid size-[clamp(30px,2.8vw,40px)] place-items-center rounded-full text-navy-900" style={{ background: `linear-gradient(135deg, ${accent}, ${accent}aa)`, boxShadow: `0 0 20px ${accent}` }}>
+          <Icon aria-hidden className="size-5" strokeWidth={2.5} />
+        </span>
+        <span className="whitespace-nowrap">{children}</span>
+      </span>
+    </p>
+  );
+}
+
+/** A word lit in its colour, for the two key ideas. */
+function Glow({ children, color }: { children: string; color: string }) {
+  return (
+    <span className="font-bold" style={{ color, textShadow: `0 0 18px ${color}` }}>
+      {children}
+    </span>
+  );
+}
+
+
+/** Twinkling dust, deterministic so server and client agree. */
+function Dust({ w, h, n }: { w: number; h: number; n: number }) {
+  return (
+    <>
+      {Array.from({ length: n }, (_, i) => {
+        const x = ((Math.sin(i * 12.9898) * 43758.5453) % 1 + 1) % 1;
+        const y = ((Math.sin(i * 78.233) * 12345.6789) % 1 + 1) % 1;
+        return (
+          <span
+            key={i}
+            className="nm-twinkle absolute size-[3px] rounded-full bg-white"
+            style={{ left: Math.round(x * w), top: Math.round(y * h), opacity: 0.4, "--dur": `${2.4 + (i % 5) * 0.6}s`, "--delay": `${-(i % 7) * 0.5}s`, transform: `translateZ(${-90 + (i % 4) * 20}px)` } as Vars}
+          />
+        );
+      })}
+    </>
+  );
+}
+
+/** Everything inside shares the 16s clock: the wrapper animates the accent colour. */
+function Clock({ children, className = "absolute inset-0 [transform-style:preserve-3d]" }: { children: ReactNode; className?: string }) {
+  return <div className={cn("nm-hue-cycle", className)}>{children}</div>;
+}
+
+const wideBeam = "M230 178 H 770";
 
 /**
- * Hero composition: the Relay dashboard, its intake automation and companion
- * phone on a tilted 3D stage, joined by the connected-node system. Assembles
- * from 360ms (after the headline), then sways and floats; still with reduced motion.
+ * Hero composition. Wide screens read left to right on a scaled stage, with
+ * the labels outside it so they stay one size. Narrow or portrait screens get
+ * one column: your idea, the brain, the four steps, then your product.
  */
 export function HeroVisual() {
+  const yourIdea = (
+    <Pill icon={Lightbulb} accent="#f6b26b">
+      <Glow color="#f6b26b">Your idea</Glow>
+    </Pill>
+  );
+  const yourProduct = (
+    <Pill icon={Rocket} accent="#6de1d2">
+      <Glow color="#6de1d2">Your product</Glow>, live
+    </Pill>
+  );
   return (
-    <figure className="relative m-0" aria-label="Product concept illustration: an operations dashboard, a mobile app view and an automation workflow for a sample product called Relay.">
-      {/* Phones: the dashboard and its routed request only, large enough to read. */}
-      <div className="sm:hidden">
-        <Scene width={440} height={400}>
-          <Glow x={60} y={40} size={300} />
-          <Wires id="hvm" width={440} height={400} paths={[mobileWire]} ends={[[190, 374]]} delay={1100} />
-          <Particle d={mobileWire} dur="1.6s" delay="2.2s" />
-          <Item x={10} y={0} w={420} h={344} enter={360} float="-3px" floatDur="8s">
-            <Dashboard id="hvm" />
-          </Item>
-          <Item x={190} y={350} w={230} h={48} z={50} enter={900} float="-7px" floatDelay="-2s">
-            <RoutedToast />
-          </Item>
-        </Scene>
+    <figure className="relative m-0" aria-label="You bring the idea: it goes through plan, design, build and launch, and comes out as your product, live: an MVP, a SaaS platform, an AI product or custom software.">
+      <div className="relative hidden lg:block">
+        <ScaledCanvas width={1200} height={356}>
+          <div aria-hidden className="absolute inset-0">
+            <Clock>
+              <div className="absolute top-0 left-[380px] size-[440px] rounded-full bg-mint-400/[0.08] blur-[90px]" />
+              <Dust w={1200} h={356} n={22} />
+              <Floor cx={985} y={320} w={500} />
+              <Item x={10} y={68} w={210} h={210} enter={200} float="-6px" floatDur="7s">
+                <IdeaBrain size={210} />
+              </Item>
+              <Beam d={wideBeam} w={1200} h={356} />
+              <Steps x={296} y={106} tile={90} text={21} />
+              <ProductCards box={{ left: 770, top: 10, width: 430, height: 335 }} />
+            </Clock>
+          </div>
+        </ScaledCanvas>
+        {/* the two labels on their own line, under the idea and under the product */}
+        <div className="relative mt-3 h-[3.75rem]">
+          <div className="absolute top-0 left-[10%] -translate-x-1/2">{yourIdea}</div>
+          <div className="absolute top-0 left-[82%] -translate-x-1/2">{yourProduct}</div>
+        </div>
       </div>
-      <div className="hidden sm:block">
-        <Scene width={600} height={500}>
-          <Glow x={140} y={80} size={340} />
-          <Glow x={0} y={280} size={240} tone="blue" />
-          <Wires id="hv" width={600} height={500} paths={Object.values(wires)} ends={[[450, 256], [300, 472]]} delay={1100} />
-          <Particle d={wires.workflow} dur="2.2s" delay="2.4s" />
-          <Particle d={wires.toast} dur="1.8s" delay="3.2s" />
-          <Item x={30} y={90} w={420} h={344} enter={360} float="-3px" floatDur="8s">
-            <Dashboard id="hv" />
-          </Item>
-          <Item x={430} y={0} w={170} h={196} z={50} enter={620} float="-8px" floatDur="7s" floatDelay="-2s">
-            <WorkflowCard />
-          </Item>
-          <Item x={0} y={256} w={150} h={244} z={70} enter={740} float="-10px" floatDur="6s" floatDelay="-1s">
-            <Phone />
-          </Item>
-          <Item x={300} y={448} w={240} h={48} z={40} enter={1000} float="-6px" floatDur="5.5s" floatDelay="-3s">
-            <RoutedToast />
-          </Item>
-        </Scene>
-      </div>
-      <ConceptBadge>Product concept illustration</ConceptBadge>
+
+      {/* Narrow or portrait screens: one column, top to bottom. */}
+      <Clock className="flex flex-col items-center lg:hidden">
+        {yourIdea}
+        <div aria-hidden className="mt-3 contents">
+          <IdeaBrain size={210} />
+          <Link />
+          <StepsColumn />
+          <Link />
+        </div>
+        {yourProduct}
+        <div aria-hidden className="relative mt-4 aspect-[4/3] w-full max-w-[520px]">
+          <ProductCards box={{ inset: 0 }} small />
+        </div>
+      </Clock>
     </figure>
   );
 }

@@ -43,8 +43,8 @@ export const projectStartHref: string | null = (() => {
   return emailHref;
 })();
 
-/** Header "Let's Talk" and hero "Discuss Your Product" go to the contact page, or the final CTA section until it exists. */
+/** Header "Let's Talk" and hero "Share Your Idea" go to the contact page, or the final CTA section until it exists. */
 export const talkHref = href("contact") ?? "/#contact";
 
-export const primaryCta = { label: "Discuss Your Product", href: talkHref };
-export const secondaryCta = { label: "Explore Our Expertise", href: href("services") ?? "/#services" };
+export const primaryCta = { label: "Share Your Idea", href: talkHref };
+export const secondaryCta = { label: "See Our Work", href: href("work") ?? "/#work" };

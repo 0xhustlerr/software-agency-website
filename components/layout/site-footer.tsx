@@ -65,7 +65,7 @@ export function SiteFooter() {
       <Container>
         <div className="flex flex-col gap-3 border-t border-line py-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-small text-ink-muted">
-            © <CopyrightYear /> {site.legalName}. Interface visuals on this site are illustrative concepts.
+            © <CopyrightYear /> {site.legalName}. Visuals and photos on this site are illustrative.
           </p>
           {legalNav.length ? (
             <ul className="flex gap-5">

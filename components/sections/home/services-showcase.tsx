@@ -4,8 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Service } from "@/content/types";
-import { ServiceVisual } from "@/components/illustrations/service-visuals";
-import { Badge3D } from "@/components/illustrations/scene";
+import { ServiceBadge, ServiceVisual } from "@/components/illustrations/service-visuals";
 import { cn } from "@/lib/utils";
 
 interface ServicesShowcaseProps {
@@ -32,7 +31,7 @@ export function ServicesShowcase({ services }: ServicesShowcaseProps) {
                 onMouseEnter={() => setActive(s.slug)}
                 onFocus={() => setActive(s.slug)}
                 className={cn(
-                  "group relative -mx-3 grid grid-cols-[2.5rem_minmax(0,1fr)_1.5rem] items-start gap-x-3 rounded-sm px-3 py-7 transition-colors duration-300 ease-studio sm:grid-cols-[4rem_minmax(0,1fr)_2rem] sm:py-9 lg:-mx-4 lg:px-4",
+                  "group relative -mx-3 grid grid-cols-[2.5rem_minmax(0,1fr)_1.5rem] items-start gap-x-3 rounded-sm px-3 py-4 transition-colors duration-300 ease-studio sm:grid-cols-[4rem_minmax(0,1fr)_2rem] sm:py-6 lg:-mx-4 lg:px-4",
                   on ? "hover:bg-surface lg:bg-surface" : "hover:bg-surface",
                 )}
               >
@@ -52,14 +51,14 @@ export function ServicesShowcase({ services }: ServicesShowcaseProps) {
                 <span className="min-w-0">
                   <span
                     className={cn(
-                      "font-display block text-[clamp(1.75rem,3.4vw,2.75rem)] leading-[1.05] font-semibold tracking-[-0.035em] transition-transform duration-300 ease-studio",
+                      "font-display block text-[clamp(1.5rem,2.4vw,2rem)] leading-[1.05] font-semibold tracking-[-0.035em] transition-transform duration-300 ease-studio",
                       "group-hover:translate-x-1 group-focus-visible:translate-x-1",
                       on && "lg:translate-x-1",
                     )}
                   >
                     {s.title}
                   </span>
-                  <span className="text-body mt-3 block max-w-[46ch] text-ink-muted">{s.benefit}</span>
+                  <span className="text-body-sm mt-1.5 block max-w-[46ch] text-ink-muted">{s.benefit}</span>
                   <span className="sr-only">{s.linkLabel}</span>
                 </span>
                 <ArrowRight
@@ -95,11 +94,11 @@ export function ServicesShowcase({ services }: ServicesShowcaseProps) {
                 )}
               >
                 <ServiceVisual slug={s.slug} className="w-full" />
+                <span className="absolute bottom-3 left-4">
+                  <ServiceBadge slug={s.slug} standalone />
+                </span>
               </div>
             ))}
-            <span className="absolute bottom-3 left-4">
-              <Badge3D>Interface concept</Badge3D>
-            </span>
           </div>
         </div>
       </div>

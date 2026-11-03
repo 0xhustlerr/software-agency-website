@@ -2,10 +2,15 @@ import { positioning } from "@/content/home";
 import { Section } from "@/components/layout/section";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Reveal } from "@/components/motion/reveal";
+import { FeatureTile } from "@/components/ui/tile-3d";
+import { Compass, Layers, Users } from "lucide-react";
+
+/** One icon per pillar: product direction, a foundation that grows, one team. */
+const icons = [Compass, Layers, Users];
 
 /**
  * Section 3 — editorial statement: heading left, argument right on the same
- * row (no dead quadrant), then three ruled pillars.
+ * row (no dead quadrant), then three pillars as raised tiles.
  */
 export function Positioning() {
   return (
@@ -21,12 +26,10 @@ export function Positioning() {
           <p className="text-lead text-ink-muted">{positioning.body}</p>
         </Reveal>
       </div>
-      <ol className="mt-16 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-3 lg:mt-24">
+      <ol className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-3 lg:mt-24 lg:gap-6">
         {positioning.pillars.map((p, i) => (
-          <Reveal as="li" key={p.title} delay={i * 0.07} className="border-t border-ink pt-5">
-            <p className="text-mono text-accent-ink">{String(i + 1).padStart(2, "0")}</p>
-            <h3 className="text-h3 mt-4 text-balance">{p.title}</h3>
-            <p className="text-body-sm mt-3 max-w-[36ch] text-ink-muted">{p.body}</p>
+          <Reveal as="li" key={p.title} delay={i * 0.07}>
+            <FeatureTile mark={String(i + 1).padStart(2, "0")} icon={icons[i]} title={p.title} body={p.body} />
           </Reveal>
         ))}
       </ol>

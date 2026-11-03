@@ -155,7 +155,7 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
   );
 
   return (
-    <form ref={formRef} action={formAction} onSubmit={onSubmit} noValidate aria-labelledby={id("title")} className="rounded-md border border-line bg-surface-raised p-6 shadow-frame sm:p-10">
+    <form ref={formRef} action={formAction} onSubmit={onSubmit} noValidate aria-labelledby={id("title")} className="rounded-md border border-line bg-surface-raised p-6 shadow-frame sm:p-8">
       <h2 id={id("title")} className="text-h3">
         Project inquiry
       </h2>
@@ -174,7 +174,7 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
         <input id={id("website")} name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="mt-7 grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
           <label htmlFor={id("name")} className="text-label">
             Full name <span aria-hidden className="font-normal text-ink-muted">*</span>
@@ -232,13 +232,13 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
             name="description"
             required
             maxLength={inquiryLimits.description}
-            rows={6}
+            rows={4}
             defaultValue={values.description}
             disabled={disabled}
             placeholder="What are you building, who is it for, and where is it today?"
             aria-invalid={errors.description ? true : undefined}
             aria-describedby={errors.description ? id("description-err") : id("description-hint")}
-            className={cn(inputCls, "min-h-37 resize-y py-3")}
+            className={cn(inputCls, "min-h-28 resize-y py-3")}
           />
           {errors.description ? (
             err("description")
@@ -250,7 +250,7 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
         </div>
       </div>
 
-      <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-6">
+      <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-line pt-5">
         <p className="text-small max-w-[46ch] text-ink-muted">
           We use these details only to reply to your inquiry.
           {privacyHref ? (
