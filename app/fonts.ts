@@ -19,3 +19,12 @@ export const inter = localFont({
   display: "swap",
   fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
 });
+
+/** Heavy display face for the NM letters of the navigation-bar logo only. */
+export const archivoBlack = localFont({
+  src: "./fonts/ArchivoBlack-Regular.woff2",
+  weight: "400",
+  variable: "--font-archivo-black",
+  display: "swap",
+  fallback: ["Arial Black", "ui-sans-serif", "sans-serif"],
+});

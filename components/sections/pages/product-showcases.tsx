@@ -448,7 +448,8 @@ export function ProductStrip({ items }: { items: ProductConcept[] }) {
         if (e.key === "ArrowRight") setOffset((o) => o - STEP);
         if (e.key === "ArrowLeft") setOffset((o) => o + STEP);
       }}
-      className={cn("relative -mx-[6vw] h-[600px] touch-pan-y overflow-hidden select-none focus-visible:outline-2 focus-visible:outline-mint-400", grabbing ? "cursor-grabbing" : "cursor-grab")}
+      // isolate: keeps the cards' z-index inside the line, so the product preview (z-50) always covers them
+      className={cn("relative isolate -mx-[6vw] h-[600px] touch-pan-y overflow-hidden select-none focus-visible:outline-2 focus-visible:outline-mint-400", grabbing ? "cursor-grabbing" : "cursor-grab")}
     >
       {items.map((c, i) => {
         // place on the loop: from one card before the left edge, wrapping round

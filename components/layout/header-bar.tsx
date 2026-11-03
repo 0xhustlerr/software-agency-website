@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Container } from "./container";
 import { MobileNav } from "./mobile-nav";
-import { Wordmark } from "./wordmark";
+import { NavLogo } from "./nav-logo";
 
 interface HeaderBarProps {
   items: NavItem[];
@@ -73,7 +73,7 @@ export function HeaderBar({ items, talkHref }: HeaderBarProps) {
       )}
     >
       <Container className="flex h-full items-center justify-between gap-6">
-        <Wordmark icon />
+        <NavLogo />
         <nav aria-label="Main" className="hidden lg:block">
           <ul className="flex items-center gap-1">
             {items.map((item) => {
