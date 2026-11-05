@@ -168,10 +168,12 @@ export function ContactForm({ enabled, devNotice, email, privacyHref }: ContactF
         {banner}
       </div>
 
-      {/* Honeypot: hidden from people and assistive tech; bots tend to fill it. */}
+      {/* Honeypot: hidden from people and assistive tech; bots tend to fill it.
+          Its name and label must not look like a known field ("website", "url", "phone"…),
+          or browser autofill fills it and real visitors get rejected. */}
       <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
-        <label htmlFor={id("website")}>Website</label>
-        <input id={id("website")} name="website" type="text" tabIndex={-1} autoComplete="off" />
+        <label htmlFor={id("nm_trap")}>Leave this empty</label>
+        <input id={id("nm_trap")} name="nm_trap" type="text" tabIndex={-1} autoComplete="off" data-1p-ignore data-lpignore="true" />
       </div>
 
       <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">

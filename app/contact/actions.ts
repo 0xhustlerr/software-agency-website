@@ -22,7 +22,9 @@ export async function submitInquiry(_prev: InquiryState, formData: FormData): Pr
   const values = Object.fromEntries(FIELDS.map((f) => [f, text(f)]));
 
   // Honeypot: a hidden field people never see. Bots that fill it get a plain failure.
-  if (text("website").trim() !== "") {
+  // (Named so browser autofill leaves it alone; see contact-form.tsx.)
+  if (text("nm_trap").trim() !== "") {
+    console.warn("[contact] Spam trap field was filled; message not sent.");
     return { status: "failed", values };
   }
 
