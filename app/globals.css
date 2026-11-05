@@ -499,107 +499,6 @@ html.js .nm-scaled:not([data-scaled]) {
     translate: 120% 0;
   }
 }
-/* Navigation-bar logo (components/layout/nav-logo.tsx): gold on the navy header. */
-.nm-logo-mark {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 60px;
-  height: 38px;
-}
-.nm-logo-glow {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  width: 46px;
-  height: 46px;
-  margin: -23px 0 0 -23px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgb(232 170 70 / 0.32), rgb(232 170 70 / 0.07) 55%, transparent 70%);
-}
-.nm-logo-sun {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  width: 66px;
-  height: 66px;
-  margin: -33px 0 0 -33px;
-  mask: radial-gradient(circle, #000 45%, transparent 68%);
-}
-.nm-logo-nm,
-.nm-logo-name {
-  position: relative;
-  white-space: nowrap;
-}
-.nm-logo-nm {
-  font: 400 27px/1 var(--font-archivo-black), "Arial Black", sans-serif;
-  letter-spacing: -0.04em;
-}
-.nm-logo-name {
-  font: 700 11px/1 var(--font-display);
-  letter-spacing: 0.24em;
-  margin-right: -0.24em;
-}
-.nm-logo-gold,
-.nm-logo-shine {
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-}
-.nm-logo-gold {
-  background-image: linear-gradient(180deg, #fbeab0 0%, #f2cc66 30%, #e2a33a 62%, #a9670f 100%);
-}
-/* depth: darker gold layers beneath, and a warm glow into the navy */
-.nm-logo-nm .nm-logo-gold {
-  filter: drop-shadow(0 1px 0 #a8650e) drop-shadow(0 1px 0 #87500a) drop-shadow(0 1px 0 #673c06) drop-shadow(0 0 6px rgb(232 170 70 / 0.5));
-}
-.nm-logo-name .nm-logo-gold {
-  filter: drop-shadow(0 1px 0 #6f4108) drop-shadow(0 1px 2px rgb(0 0 0 / 0.6));
-}
-/* a band of light that runs over the gold */
-.nm-logo-shine {
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(105deg, transparent 40%, rgb(255 250 230 / 0.85) 50%, transparent 60%);
-  background-repeat: no-repeat;
-  background-size: 300% 100%;
-  background-position: 100% 0;
-}
-@media (max-width: 1023px) {
-  .nm-logo-mark {
-    width: 54px;
-    height: 34px;
-  }
-  .nm-logo-nm {
-    font-size: 24px;
-  }
-  .nm-logo-name {
-    font-size: 10px;
-  }
-}
-@keyframes nm-logo-spin {
-  to {
-    rotate: 360deg;
-  }
-}
-@keyframes nm-logo-breathe {
-  0%,
-  100% {
-    opacity: 0.6;
-    scale: 0.85;
-  }
-  50% {
-    opacity: 1;
-    scale: 1.15;
-  }
-}
-@keyframes nm-logo-shine {
-  0% {
-    background-position: 100% 0;
-  }
-  55%,
-  100% {
-    background-position: 0% 0;
-  }
-}
 /* Services pictures: a band of light sliding across the photo. */
 @keyframes nm-flow-light {
   0% {
@@ -896,15 +795,6 @@ html.js .nm-scaled:not([data-scaled]) {
   translate: -120% 0;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .nm-logo-sun {
-    animation: nm-logo-spin 40s linear infinite;
-  }
-  .nm-logo-glow {
-    animation: nm-logo-breathe 4s ease-in-out infinite;
-  }
-  .nm-logo-shine {
-    animation: nm-logo-shine 5s ease-in-out infinite;
-  }
   .nm-flow-light {
     animation: nm-flow-light 6s ease-in-out var(--flow-delay, 0s) infinite;
   }

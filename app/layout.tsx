@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { MotionProvider } from "@/components/motion/motion-provider";
 import { RevealController } from "@/components/motion/reveal-controller";
 import { Analytics } from "@/components/analytics/analytics";
-import { archivoBlack, inter, spaceGrotesk } from "./fonts";
+import { inter, spaceGrotesk } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -36,7 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       data-theme="light"
       data-scroll-behavior="smooth"
-      className={`${spaceGrotesk.variable} ${inter.variable} ${archivoBlack.variable}`}
+      className={`${spaceGrotesk.variable} ${inter.variable}`}
       // The inline script below adds "js" before first paint; React must not undo it.
       suppressHydrationWarning
     >
